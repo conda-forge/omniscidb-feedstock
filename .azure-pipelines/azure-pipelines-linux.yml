@@ -12,6 +12,10 @@ jobs:
         CONFIG: linux_cuda_compiler_version9.2target_platformlinux-64
         UPLOAD_PACKAGES: 'True'
         DOCKER_IMAGE: condaforge/linux-anvil-cuda:9.2
+      linux_cuda_compiler_versionNonetarget_platformlinux-64:
+        CONFIG: linux_cuda_compiler_versionNonetarget_platformlinux-64
+        UPLOAD_PACKAGES: 'True'
+        DOCKER_IMAGE: condaforge/linux-anvil-comp7
     maxParallel: 8
   timeoutInMinutes: 360
 
@@ -23,17 +27,6 @@ jobs:
       ls /proc/sys/fs/binfmt_misc/
     condition: not(startsWith(variables['CONFIG'], 'linux_64'))
     displayName: Configure binfmt_misc
-
-  - script: |
-        export CI=azure
-        export GIT_BRANCH=$BUILD_SOURCEBRANCHNAME
-        rm -rf /opt/ghc
-        df -h
-    displayName: Manage disk space (rm /opt/ghc)
-    env:
-      BINSTAR_TOKEN: $(BINSTAR_TOKEN)
-      FEEDSTOCK_TOKEN: $(FEEDSTOCK_TOKEN)
-      STAGING_BINSTAR_TOKEN: $(STAGING_BINSTAR_TOKEN)
 
   - script: |
         export CI=azure
