@@ -2,13 +2,10 @@
 
 set -ex
 
-# Free some disk space
-rm -v /opt/conda/pkgs/*.tar.bz2
-
-# Temporary stuff:
+# Free some disk space, see also
+# https://github.com/conda-forge/omniscidb-feedstock/issues/5
+rm /opt/conda/pkgs/*.tar.bz2
 df -h
-du -sh /opt/conda/*
-#
 
 export EXTRA_CMAKE_OPTIONS=""
 
@@ -36,7 +33,7 @@ export EXTRA_CMAKE_OPTIONS="$EXTRA_CMAKE_OPTIONS -DCMAKE_C_COMPILER=${CC} -DCMAK
 #
 # Ideally, this should 2, but to save disk space, running sanity tests
 # will be disabled:
-export RUN_TESTS=0
+export RUN_TESTS=2
 
 if [[ ! -z "${cuda_compiler_version+x}" && "${cuda_compiler_version}" != "None" ]]
 then

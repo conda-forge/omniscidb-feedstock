@@ -27,8 +27,9 @@ jobs:
   - script: |
         export CI=azure
         export GIT_BRANCH=$BUILD_SOURCEBRANCHNAME
-        .scripts/manage_disk_space.sh
-    displayName: Manage disk space
+        rm -rf /opt/ghc
+        df -h
+    displayName: Manage disk space (rm /opt/ghc)
     env:
       BINSTAR_TOKEN: $(BINSTAR_TOKEN)
       FEEDSTOCK_TOKEN: $(FEEDSTOCK_TOKEN)
