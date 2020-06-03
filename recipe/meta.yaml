@@ -20,6 +20,13 @@ build:
   string: "{{ build_string }}"
   skip: true  # [cuda_compiler_version not in (undefined, "None", "9.2")]
   skip: true  # [not linux64]
+  # When temporarily disabling builds, run also
+  #  conda smithy rerender -c auto
+  # Temporarily disable cpu build:
+  skip: true  # [cuda_compiler_version in (undefined, "None")]
+  # Temporarily disable cuda build:
+  #skip: true  # [cuda_compiler_version in ("9.2")]
+
   missing_dso_whitelist:
     - "*/libcuda.*"  # [cuda_compiler_version not in (undefined, "None")]
   track_features:
