@@ -1,5 +1,5 @@
 {% set version = "5.2.2" %}
-{% set number = "0" %}
+{% set number = "1" %}
 {% set cuda_enabled = cuda_compiler_version is not undefined and cuda_compiler_version == '9.2' %}
 {% set build_ext_version = "1.0.0" %}
 {% set build_ext = "cuda" if cuda_enabled else "cpu" %}
@@ -63,21 +63,12 @@ requirements:
     - snappy
     - thrift-cpp
   run:
-    - arrow-cpp =0.16.*=*{{ build_ext }}
     - boost-cpp
     - bzip2
-    - clangxx
-    - double-conversion
-    - gflags
-    - glog
     # omnscidb Load-time UDF support calls clang++
     - gxx_{{ target_platform }}
-    - libgdal
-    - librdkafka
     - ncurses
     - openjdk 8
-    - openldap
-    - snappy
     - xz
     - zlib
   run_constrained:
