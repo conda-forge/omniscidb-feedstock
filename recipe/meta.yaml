@@ -1,5 +1,5 @@
-{% set version = "5.2.2" %}
-{% set number = "1" %}
+{% set version = "5.3.0" %}
+{% set number = "0" %}
 {% set cuda_enabled = cuda_compiler_version is not undefined and cuda_compiler_version == '9.2' %}
 {% set build_ext_version = "1.0.0" %}
 {% set build_ext = "cuda" if cuda_enabled else "cpu" %}
@@ -11,7 +11,7 @@ package:
 
 source:
   url: https://github.com/omnisci/omniscidb/archive/v{{ version }}.tar.gz
-  sha256: 7587ee6dfd900dc23b1ba1f6357c94bf65a997a25e21ee364b3e5d871dddd6fc
+  sha256: 90d7b431596912fcb9b11280dc6a7288e82da24cea530b7c22db77b982bbe6f7
   patches:
     - skip-boost-libs-install.patch
 
@@ -30,7 +30,7 @@ requirements:
     - {{ compiler('cgo') }}
     - {{ compiler('cxx') }}
     - {{ compiler("cuda") }}  # [cuda_compiler_version not in (undefined, "None")]
-    # omniscidb <=5.2.2 is not llvm 10+ ready
+    # omniscidb <=5.3 is not llvm 10+ ready
     - clangdev
     # clang++ is used for generating the bytecodes of extension functions
     - clangxx
@@ -39,7 +39,7 @@ requirements:
     - make
     - maven
   host:
-    # omniscidb <=5.2.2 is not arrow-cpp 0.17+ ready
+    # omniscidb <=5.3 is not arrow-cpp 0.17+ ready
     - arrow-cpp =0.16.*=*{{ build_ext }}
     - bisonpp
     - blosc
