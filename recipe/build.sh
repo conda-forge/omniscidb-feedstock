@@ -83,6 +83,12 @@ fi
 
 export EXTRA_CMAKE_OPTIONS="$EXTRA_CMAKE_OPTIONS -DBoost_NO_BOOST_CMAKE=on"
 
+# As clang is used in the build process to compile
+# bytecode, we need to make clang aware of the
+# C++ headers provided by conda's GCC toolchain.
+. ${RECIPE_DIR}/get_cxx_include_path.sh
+export CPLUS_INCLUDE_PATH=$(get_cxx_include_path)
+
 mkdir -p build
 cd build
 
@@ -103,12 +109,6 @@ make -j $CPU_COUNT
 
 if [[ "$RUN_TESTS" == "1" ]]
 then
-    # Omnisci UDF support uses CLangTool for parsing Load-time UDF C++
-    # code to AST. If the C++ code uses C++ std headers, we need to
-    # specify the locations of include directories:
-    . ${RECIPE_DIR}/get_cxx_include_path.sh
-    export CPLUS_INCLUDE_PATH=$(get_cxx_include_path)
-
     mkdir tmp
     $PREFIX/bin/initdb tmp
     make sanity_tests
