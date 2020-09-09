@@ -4,10 +4,10 @@ cuda_compiler:
   - nvcc
 cuda_compiler_version:
   - None
-  - 9.2
+  - 10.1
 docker_image:
   - condaforge/linux-anvil-comp7
-  - condaforge/linux-anvil-cuda:9.2
+  - condaforge/linux-anvil-cuda:10.1
 zip_keys:
   - - cuda_compiler_version
     - docker_image
