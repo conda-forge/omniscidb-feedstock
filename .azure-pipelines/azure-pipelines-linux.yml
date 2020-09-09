@@ -8,10 +8,6 @@ jobs:
     vmImage: ubuntu-16.04
   strategy:
     matrix:
-      linux_64_cuda_compiler_version9.2target_platformlinux-64:
-        CONFIG: linux_64_cuda_compiler_version9.2target_platformlinux-64
-        UPLOAD_PACKAGES: 'True'
-        DOCKER_IMAGE: condaforge/linux-anvil-cuda:9.2
       linux_64_cuda_compiler_versionNonetarget_platformlinux-64:
         CONFIG: linux_64_cuda_compiler_versionNonetarget_platformlinux-64
         UPLOAD_PACKAGES: 'True'
