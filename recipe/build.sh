@@ -32,7 +32,7 @@ export EXTRA_CMAKE_OPTIONS="$EXTRA_CMAKE_OPTIONS -DCMAKE_C_COMPILER=${CC} -DCMAK
 #   2 - detect if sanity tests can be run, then set 1, otherwise set 0
 #
 # Ideally, this should 2, but to save disk space, running sanity tests
-# will be disabled:
+# can be disabled:
 export RUN_TESTS=2
 
 if [[ ! -z "${cuda_compiler_version+x}" && "${cuda_compiler_version}" != "None" ]]
