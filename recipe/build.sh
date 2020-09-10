@@ -31,9 +31,10 @@ export EXTRA_CMAKE_OPTIONS="$EXTRA_CMAKE_OPTIONS -DCMAKE_C_COMPILER=${CC} -DCMAK
 #   1 - build and run the sanity tests
 #   2 - detect if sanity tests can be run, then set 1, otherwise set 0
 #
-# Ideally, this should 2, but to save disk space, running sanity tests
-# will be disabled:
-export RUN_TESTS=2
+# Ideally, this should be 2. However, the available conda-forge CI
+# disk space resourses are not sufficient for running the omniscidb
+# sanity tests in full. Hence we disable the tests:
+export RUN_TESTS=0
 
 if [[ ! -z "${cuda_compiler_version+x}" && "${cuda_compiler_version}" != "None" ]]
 then

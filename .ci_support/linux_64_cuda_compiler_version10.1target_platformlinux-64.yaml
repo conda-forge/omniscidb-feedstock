@@ -9,13 +9,13 @@ channel_targets:
 cuda_compiler:
 - nvcc
 cuda_compiler_version:
-- '9.2'
+- '10.1'
 cxx_compiler:
 - gxx
 cxx_compiler_version:
 - '7'
 docker_image:
-- condaforge/linux-anvil-cuda:9.2
+- condaforge/linux-anvil-cuda:10.1
 gflags:
 - '2.2'
 glog:
@@ -28,6 +28,8 @@ libkml:
 - '1.3'
 libpng:
 - '1.6'
+librdkafka:
+- '1.4'
 ncurses:
 - '6.2'
 openssl:
@@ -41,6 +43,8 @@ pin_run_as_build:
     max_pin: x.x
   libpng:
     max_pin: x.x
+  librdkafka:
+    max_pin: x.x.x
   ncurses:
     max_pin: x.x
   openssl:
