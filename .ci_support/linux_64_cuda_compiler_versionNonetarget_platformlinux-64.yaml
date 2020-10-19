@@ -1,5 +1,7 @@
 boost_cpp:
 - '1.72'
+cdt_name:
+- cos6
 cgo_compiler:
 - go-cgo
 channel_sources:
