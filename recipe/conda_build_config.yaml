@@ -8,6 +8,9 @@ cuda_compiler_version:
 docker_image:
   - condaforge/linux-anvil-comp7
   - condaforge/linux-anvil-cuda:10.1
+cdt_name:
+  - cos6
+  - cos6
 zip_keys:
   - - cuda_compiler_version
     - docker_image
