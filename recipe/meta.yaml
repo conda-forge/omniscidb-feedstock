@@ -1,5 +1,5 @@
 {% set version = "5.4.0" %}
-{% set number = "0" %}
+{% set number = "1" %}
 {% set cuda_enabled = cuda_compiler_version is not undefined and cuda_compiler_version == '10.1' %}
 {% set build_ext_version = "1.0.0" %}
 {% set build_ext = "cuda" if cuda_enabled else "cpu" %}
@@ -27,14 +27,17 @@ build:
 
 requirements:
   build:
+    # c compiler is specified here to get run constraint pins correct, presumably..
+    - {{ compiler('c') }}
     - {{ compiler('cgo') }}
     - {{ compiler('cxx') }}
     - {{ compiler("cuda") }}  # [cuda_compiler_version not in (undefined, "None")]
-    - clangdev
+    # omniscidb 5.4 is not LLVM 11 ready
+    - clangdev <11
     # clang++ is used for generating the bytecodes of extension functions
-    - clangxx
+    - clangxx <11
     - cmake
-    - llvmdev
+    - llvmdev <11
     - make
     - maven
   host:
@@ -42,13 +45,13 @@ requirements:
     - bisonpp
     - blosc
     - boost-cpp
-    - clangdev
+    - clangdev <11
     - double-conversion
     - flex
     - gflags
     - glog
-    - llvmdev
-    - llvm
+    - llvmdev <11
+    - llvm <11
     - libarchive
     - libgdal
     - libkml
@@ -66,7 +69,7 @@ requirements:
     - bzip2
     # omnscidb Load-time UDF support calls clang++
     - gxx_{{ target_platform }}
-    - libclang-cpp
+    - libclang-cpp <11
     - ncurses
     - openjdk 8
     - xz

@@ -1,5 +1,11 @@
 boost_cpp:
 - '1.72'
+c_compiler:
+- gcc
+c_compiler_version:
+- '7'
+cdt_name:
+- cos6
 cgo_compiler:
 - go-cgo
 channel_sources:
@@ -54,5 +60,7 @@ snappy:
 target_platform:
 - linux-64
 zip_keys:
+- - c_compiler_version
+  - cxx_compiler_version
 - - cuda_compiler_version
   - docker_image
