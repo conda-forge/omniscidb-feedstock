@@ -5,9 +5,13 @@ Home: https://www.omnisci.com/
 
 Package license: Apache-2.0
 
-Feedstock license: BSD-3-Clause
+Feedstock license: [BSD-3-Clause](https://github.com/conda-forge/omniscidb-feedstock/blob/master/LICENSE.txt)
 
 Summary: The OmniSci database
+
+Development: https://github.com/omnisci/omniscidb
+
+Documentation: https://www.omnisci.com/docs/latest/
 
 OmniSciDB is an in-memory, column store, SQL relational database
 that was designed from the ground up to run on GPUs.
