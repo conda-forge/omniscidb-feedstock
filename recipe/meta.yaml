@@ -33,11 +33,11 @@ requirements:
     - {{ compiler('cxx') }}
     - {{ compiler("cuda") }}  # [cuda_compiler_version not in (undefined, "None")]
     # omniscidb 5.4 is not LLVM 11 ready
-    - clangdev<11
+    - clangdev <11
     # clang++ is used for generating the bytecodes of extension functions
-    - clangxx<11
+    - clangxx <11
     - cmake
-    - llvmdev<11
+    - llvmdev <11
     - make
     - maven
   host:
@@ -45,13 +45,13 @@ requirements:
     - bisonpp
     - blosc
     - boost-cpp
-    - clangdev<11
+    - clangdev <11
     - double-conversion
     - flex
     - gflags
     - glog
-    - llvmdev<11
-    - llvm<11
+    - llvmdev <11
+    - llvm <11
     - libarchive
     - libgdal
     - libkml
@@ -69,7 +69,7 @@ requirements:
     - bzip2
     # omnscidb Load-time UDF support calls clang++
     - gxx_{{ target_platform }}
-    - libclang-cpp<11
+    - libclang-cpp <11
     - ncurses
     - openjdk 8
     - xz
