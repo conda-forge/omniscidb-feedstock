@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 set -ex
 
@@ -103,22 +103,21 @@ cmake -Wno-dev \
     -DENABLE_JAVA_REMOTE_DEBUG=off \
     -DENABLE_PROFILER=off \
     -DPREFER_STATIC_LIBS=off \
+    -GNinja \
     $EXTRA_CMAKE_OPTIONS \
     ..
-
-make -j $CPU_COUNT
 
 if [[ "$RUN_TESTS" == "1" ]]
 then
     mkdir tmp
     $PREFIX/bin/initdb tmp
-    make sanity_tests
+    ninja sanity_tests
     rm -rf tmp
 else
     echo "Skipping sanity tests"
 fi
 
-make install
+ninja install
 
 # Remove build directory to free about 2.5 GB of disk space
 cd -
