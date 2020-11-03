@@ -3,7 +3,7 @@ boost_cpp:
 c_compiler:
 - gcc
 c_compiler_version:
-- '7'
+- '8'
 cdt_name:
 - cos6
 cgo_compiler:
@@ -15,13 +15,13 @@ channel_targets:
 cuda_compiler:
 - nvcc
 cuda_compiler_version:
-- '10.1'
+- None
 cxx_compiler:
 - gxx
 cxx_compiler_version:
-- '7'
+- '8'
 docker_image:
-- condaforge/linux-anvil-cuda:10.1
+- condaforge/linux-anvil-comp7
 gflags:
 - '2.2'
 glog:
