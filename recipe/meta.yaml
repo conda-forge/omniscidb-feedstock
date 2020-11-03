@@ -1,5 +1,5 @@
-{% set version = "5.4.0" %}
-{% set number = "1" %}
+{% set version = "5.4.1" %}
+{% set number = "0" %}
 {% set cuda_enabled = cuda_compiler_version is not undefined and cuda_compiler_version == '10.1' %}
 {% set build_ext_version = "1.0.0" %}
 {% set build_ext = "cuda" if cuda_enabled else "cpu" %}
@@ -11,7 +11,7 @@ package:
 
 source:
   url: https://github.com/omnisci/omniscidb/archive/v{{ version }}.tar.gz
-  sha256: f26ffcb53b4a02dac03424bb8aca1aab5a584c6382fc6e284c42485ffc25aca3
+  sha256: bed677de5370ae6f69ad761390bcba3df8820cdcbd8f1e967b948e81421bd862
   patches:
     - skip-boost-libs-install.patch
 
