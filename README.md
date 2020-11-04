@@ -65,6 +65,7 @@ Current release info
 | Name | Downloads | Version | Platforms |
 | --- | --- | --- | --- |
 | [![Conda Recipe](https://img.shields.io/badge/recipe-omniscidb-green.svg)](https://anaconda.org/conda-forge/omniscidb) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/omniscidb.svg)](https://anaconda.org/conda-forge/omniscidb) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/omniscidb.svg)](https://anaconda.org/conda-forge/omniscidb) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/omniscidb.svg)](https://anaconda.org/conda-forge/omniscidb) |
+| [![Conda Recipe](https://img.shields.io/badge/recipe-pyomniscidb-green.svg)](https://anaconda.org/conda-forge/pyomniscidb) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/pyomniscidb.svg)](https://anaconda.org/conda-forge/pyomniscidb) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/pyomniscidb.svg)](https://anaconda.org/conda-forge/pyomniscidb) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/pyomniscidb.svg)](https://anaconda.org/conda-forge/pyomniscidb) |
 
 Installing omniscidb
 ====================
@@ -75,10 +76,10 @@ Installing `omniscidb` from the `conda-forge` channel can be achieved by adding 
 conda config --add channels conda-forge
 ```
 
-Once the `conda-forge` channel has been enabled, `omniscidb` can be installed with:
+Once the `conda-forge` channel has been enabled, `omniscidb, pyomniscidb` can be installed with:
 
 ```
-conda install omniscidb
+conda install omniscidb pyomniscidb
 ```
 
 It is possible to list all of the versions of `omniscidb` available on your platform with:
