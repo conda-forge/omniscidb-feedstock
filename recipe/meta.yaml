@@ -76,7 +76,7 @@ outputs:
         - {{ compiler('cgo') }}
         - {{ compiler('cxx') }}
         - {{ compiler("cuda") }}  # [cuda_compiler_version not in (undefined, "None")]
-        - cudatoolkit =10.1 # [cuda_compiler_version not in (undefined, "None")]
+        - cudatoolkit =10.1  # [cuda_compiler_version not in (undefined, "None")]
         # omniscidb 5.4 is not LLVM 11 ready
         - clangdev <11
         # clang++ is used for generating the bytecodes of extension functions
