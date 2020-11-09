@@ -11,8 +11,8 @@ package:
 
 # TODO(jclay): Bump to 5.5 before merging.
 source:
-  url: https://github.com/omnisci/omniscidb/archive/master.tar.gz
-  sha256: 473dbbb73e3f918a8f28643b7dbb4998f9c541ffb5bf796ea33a94a57634a62d
+  url: https://github.com/omnisci/omniscidb/archive/70db1e5ef56cbaf6ee1773f2b11afd523da83e5d.tar.gz
+  sha256: b5b0facdace269f7770a72b4225eae8ed8c97679cd27fb6b4560f56d0a78b343
   patches:
     - skip-boost-libs-install.patch
 
