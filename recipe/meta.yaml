@@ -147,13 +147,8 @@ outputs:
     build:
       string: "{{ py_build_string }}"
     requirements:
-      build:
-        - python
-        - cython
-        - {{ compiler('c') }}
       host:
         - python
-        - cython
         - setuptools_scm
         - packaging >=20.0
         - rbc >=0.2.2
