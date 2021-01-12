@@ -10,18 +10,6 @@ cgo_compiler:
   - go-cgo
 cuda_compiler:
   - nvcc
-cuda_compiler_version:
-  - None
-  - 10.1
-docker_image:
-  - condaforge/linux-anvil-comp7
-  - condaforge/linux-anvil-cuda:10.1
-cdt_name:
-  - cos6
-  - cos6
-zip_keys:
-  - - cuda_compiler_version
-    - docker_image
 boost_cpp:
   - 1.72
 pin_run_as_build:
