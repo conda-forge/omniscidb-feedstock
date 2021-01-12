@@ -14,13 +14,6 @@ export EXTRA_CMAKE_OPTIONS=""
 # machine code:
 export CXXFLAGS="`echo $CXXFLAGS | sed 's/-fPIC//'`"
 
-# Fixes https://github.com/Quansight/pearu-sandbox/issues/7
-#       https://github.com/omnisci/omniscidb/issues/374
-export CXXFLAGS="$CXXFLAGS -Dsecure_getenv=getenv"
-
-# Fixes `error: expected ')' before 'PRIxPTR'`
-export CXXFLAGS="$CXXFLAGS -D__STDC_FORMAT_MACROS"
-
 # Remove --as-needed to resolve undefined reference to `__vdso_clock_gettime@GLIBC_PRIVATE'
 export LDFLAGS="`echo $LDFLAGS | sed 's/-Wl,--as-needed//'`"
 
@@ -53,8 +46,6 @@ then
     fi
     export EXTRA_CMAKE_OPTIONS="$EXTRA_CMAKE_OPTIONS -DENABLE_CUDA=on"
     export EXTRA_CMAKE_OPTIONS="$EXTRA_CMAKE_OPTIONS -DCUDA_TOOLKIT_ROOT_DIR=$CUDA_HOME"
-    # Fixes NOTFOUND CUDA_CUDA_LIBRARY
-    export EXTRA_CMAKE_OPTIONS="$EXTRA_CMAKE_OPTIONS -DCMAKE_SYSROOT=$CONDA_BUILD_SYSROOT"
 
     if [[ "$RUN_TESTS" == "2" ]]
     then
@@ -103,10 +94,11 @@ cmake -Wno-dev \
     -DENABLE_JAVA_REMOTE_DEBUG=off \
     -DENABLE_PROFILER=off \
     -DPREFER_STATIC_LIBS=off \
+    -GNinja \
     $EXTRA_CMAKE_OPTIONS \
     ..
 
-make -j $CPU_COUNT
+ninja install
 
 if [[ "$RUN_TESTS" == "1" ]]
 then
@@ -117,8 +109,6 @@ then
 else
     echo "Skipping sanity tests"
 fi
-
-make install
 
 # Remove build directory to free about 2.5 GB of disk space
 cd -
