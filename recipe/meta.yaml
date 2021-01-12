@@ -1,5 +1,5 @@
-{% set version = "5.4.1" %}
-{% set number = "1" %}
+{% set version = "5.5.0" %}
+{% set number = "0" %}
 {% set cuda_enabled = cuda_compiler_version is not undefined and cuda_compiler_version == '10.1' %}
 {% set build_ext_version = "1.0.0" %}
 {% set build_ext = "cuda" if cuda_enabled else "cpu" %}
@@ -11,9 +11,7 @@ package:
 
 source:
   url: https://github.com/omnisci/omniscidb/archive/v{{ version }}.tar.gz
-  sha256: bed677de5370ae6f69ad761390bcba3df8820cdcbd8f1e967b948e81421bd862
-  patches:
-    - skip-boost-libs-install.patch
+  sha256: 4d0048a3a6dae852502cdceb33d60f392d967b89454ff7f627373f8acebb464a
 
 build:
   number: {{ number }}
@@ -34,26 +32,27 @@ requirements:
     - {{ compiler('cgo') }}
     - {{ compiler('cxx') }}
     - {{ compiler("cuda") }}  # [cuda_compiler_version not in (undefined, "None")]
-    # omniscidb 5.4 is not LLVM 11 ready
-    - clangdev <11
+    # omniscidb 5.5 is not LLVM 12 ready
+    - clangdev <12
     # clang++ is used for generating the bytecodes of extension functions
-    - clangxx <11
+    - clangxx <12
     - cmake
-    - llvmdev <11
+    - llvmdev <12
     - make
+    - ninja
     - maven
   host:
     - arrow-cpp =1.*=*{{ build_ext }}
     - bisonpp
     - blosc
     - boost-cpp
-    - clangdev <11
+    - clangdev <12
     - double-conversion
     - flex
     - gflags
     - glog
-    - llvmdev <11
-    - llvm <11
+    - llvmdev <12
+    - llvm <12
     - libarchive
     - libgdal
     - libkml
@@ -71,7 +70,7 @@ requirements:
     - bzip2
     # omnscidb Load-time UDF support calls clang++
     - gxx_{{ target_platform }}
-    - libclang-cpp <11
+    - libclang-cpp <12
     - ncurses
     - openjdk 8
     - xz
