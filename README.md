@@ -1,5 +1,5 @@
-About omniscidb
-===============
+About omniscidb-ext
+===================
 
 Home: https://www.omnisci.com/
 
@@ -51,6 +51,48 @@ Current build status
                   <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/omniscidb-feedstock?branchName=master&jobName=linux&configuration=linux_64_cuda_compiler_versionNone" alt="variant">
                 </a>
               </td>
+            </tr><tr>
+              <td>osx_64_python3.6.____cpython</td>
+              <td>
+                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=9937&branchName=master">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/omniscidb-feedstock?branchName=master&jobName=osx&configuration=osx_64_python3.6.____cpython" alt="variant">
+                </a>
+              </td>
+            </tr><tr>
+              <td>osx_64_python3.7.____cpython</td>
+              <td>
+                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=9937&branchName=master">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/omniscidb-feedstock?branchName=master&jobName=osx&configuration=osx_64_python3.7.____cpython" alt="variant">
+                </a>
+              </td>
+            </tr><tr>
+              <td>osx_64_python3.8.____cpython</td>
+              <td>
+                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=9937&branchName=master">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/omniscidb-feedstock?branchName=master&jobName=osx&configuration=osx_64_python3.8.____cpython" alt="variant">
+                </a>
+              </td>
+            </tr><tr>
+              <td>win_64_python3.6.____cpython</td>
+              <td>
+                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=9937&branchName=master">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/omniscidb-feedstock?branchName=master&jobName=win&configuration=win_64_python3.6.____cpython" alt="variant">
+                </a>
+              </td>
+            </tr><tr>
+              <td>win_64_python3.7.____cpython</td>
+              <td>
+                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=9937&branchName=master">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/omniscidb-feedstock?branchName=master&jobName=win&configuration=win_64_python3.7.____cpython" alt="variant">
+                </a>
+              </td>
+            </tr><tr>
+              <td>win_64_python3.8.____cpython</td>
+              <td>
+                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=9937&branchName=master">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/omniscidb-feedstock?branchName=master&jobName=win&configuration=win_64_python3.8.____cpython" alt="variant">
+                </a>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -65,20 +107,21 @@ Current release info
 | Name | Downloads | Version | Platforms |
 | --- | --- | --- | --- |
 | [![Conda Recipe](https://img.shields.io/badge/recipe-omniscidb-green.svg)](https://anaconda.org/conda-forge/omniscidb) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/omniscidb.svg)](https://anaconda.org/conda-forge/omniscidb) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/omniscidb.svg)](https://anaconda.org/conda-forge/omniscidb) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/omniscidb.svg)](https://anaconda.org/conda-forge/omniscidb) |
+| [![Conda Recipe](https://img.shields.io/badge/recipe-pyomniscidb-green.svg)](https://anaconda.org/conda-forge/pyomniscidb) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/pyomniscidb.svg)](https://anaconda.org/conda-forge/pyomniscidb) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/pyomniscidb.svg)](https://anaconda.org/conda-forge/pyomniscidb) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/pyomniscidb.svg)](https://anaconda.org/conda-forge/pyomniscidb) |
 
-Installing omniscidb
-====================
+Installing omniscidb-ext
+========================
 
-Installing `omniscidb` from the `conda-forge` channel can be achieved by adding `conda-forge` to your channels with:
+Installing `omniscidb-ext` from the `conda-forge` channel can be achieved by adding `conda-forge` to your channels with:
 
 ```
 conda config --add channels conda-forge
 ```
 
-Once the `conda-forge` channel has been enabled, `omniscidb` can be installed with:
+Once the `conda-forge` channel has been enabled, `omniscidb, pyomniscidb` can be installed with:
 
 ```
-conda install omniscidb
+conda install omniscidb pyomniscidb
 ```
 
 It is possible to list all of the versions of `omniscidb` available on your platform with:
@@ -126,17 +169,17 @@ Terminology
                   produce the finished article (built conda distributions)
 
 
-Updating omniscidb-feedstock
-============================
+Updating omniscidb-ext-feedstock
+================================
 
-If you would like to improve the omniscidb recipe or build a new
+If you would like to improve the omniscidb-ext recipe or build a new
 package version, please fork this repository and submit a PR. Upon submission,
 your changes will be run on the appropriate platforms to give the reviewer an
 opportunity to confirm that the changes result in a successful build. Once
 merged, the recipe will be re-built and uploaded automatically to the
 `conda-forge` channel, whereupon the built conda packages will be available for
 everybody to install and use from the `conda-forge` channel.
-Note that all branches in the conda-forge/omniscidb-feedstock are
+Note that all branches in the conda-forge/omniscidb-ext-feedstock are
 immediately built and any created packages are uploaded, so PRs should be based
 on branches in forks and branches in the main repository should only be used to
 build distinct package versions.

@@ -1,118 +1,181 @@
 {% set version = "5.5.0" %}
-{% set number = "0" %}
+{% set number = "1" %}
 {% set cuda_enabled = cuda_compiler_version is not undefined and cuda_compiler_version == '10.1' %}
 {% set build_ext_version = "1.0.0" %}
 {% set build_ext = "cuda" if cuda_enabled else "cpu" %}
 {% set build_string = "h{}_{}_{}".format(PKG_HASH, number, build_ext) %}
+{% set py_build_string = "py{}h{}_{}".format(CONDA_PY, PKG_HASH, number) %}
 
 package:
-  name: omniscidb
+  name: omniscidb-ext
   version: {{ version }}
 
 source:
   url: https://github.com/omnisci/omniscidb/archive/v{{ version }}.tar.gz
   sha256: 4d0048a3a6dae852502cdceb33d60f392d967b89454ff7f627373f8acebb464a
+  patches:
+    - pyomniscidb-5.5.0.patch
 
 build:
   number: {{ number }}
-  string: "{{ build_string }}"
   skip: true  # [cuda_compiler_version not in (undefined, "None", "10.1")]
-  skip: true  # [not linux64]
-  missing_dso_whitelist:
-    - "*/libcuda.*"  # [cuda_compiler_version not in (undefined, "None")]
-  track_features:
-    {{ "- arrow-cuda" if cuda_enabled else "" }}
-  ignore_run_exports:
-    - cudatoolkit
 
-requirements:
-  build:
-    # c compiler is specified here to get run constraint pins correct, presumably..
-    - {{ compiler('c') }}
-    - {{ compiler('cgo') }}
-    - {{ compiler('cxx') }}
-    - {{ compiler("cuda") }}  # [cuda_compiler_version not in (undefined, "None")]
-    # omniscidb 5.5 is not LLVM 12 ready
-    - clangdev <12
-    # clang++ is used for generating the bytecodes of extension functions
-    - clangxx <12
-    - cmake
-    - llvmdev <12
-    - make
-    - ninja
-    - maven
-  host:
-    - arrow-cpp =1.*=*{{ build_ext }}
-    - bisonpp
-    - blosc
-    - boost-cpp
-    - clangdev <12
-    - double-conversion
-    - flex
-    - gflags
-    - glog
-    - llvmdev <12
-    - llvm <12
-    - libarchive
-    - libgdal
-    - libkml
-    - libpng
-    - librdkafka
-    - ncurses
-    - openldap
-    - openssl
-    - snappy
-    - tbb
-    - tbb-devel
-    - thrift-cpp
-  run:
-    - boost-cpp
-    - bzip2
-    # omnscidb Load-time UDF support calls clang++
-    - gxx_{{ target_platform }}
-    - libclang-cpp <12
-    - ncurses
-    - openjdk 8
-    - xz
-    - zlib
-  run_constrained:
-    - arrow-cpp-proc * {{ build_ext }}
-    - cudatoolkit >=10.1  # [cuda_compiler_version not in (undefined, "None")]
+outputs:
 
-test:
-  commands:
-    # Verify the activation scripts are in-place.
-    {% for state in ["activate", "deactivate"] %}
-    - test -f "${PREFIX}/etc/conda/{{ state }}.d/{{ PKG_NAME }}_{{ state }}.sh"
-    {% endfor %}
-    # Try using the activation scripts.
-    - |
-      if [[ -x "$(command -v omnisql)" ]]
-      then
-        echo "Found omnisql in PATH"
-      else
-        echo "omnisql not found in PATH(=$PATH)" && exit 1
-      fi
-      source ${PREFIX}/etc/conda/deactivate.d/{{ PKG_NAME }}_deactivate.sh
-      if [[ -x "$(command -v omnisql)" ]]
-      then
-        echo "Unexpectedly found omnisql in PATH(=$PATH) after deactivation"  && exit 1
-      else
-        echo "omnisql not in PATH after deactivation"
-      fi
-      source ${PREFIX}/etc/conda/activate.d/{{ PKG_NAME }}_activate.sh
-    # Test installation
-    - omnisql -v
-    - which omnisci_initdb
-    - which omnisci_server
-    - |
-      if [ -x "$(command -v nvidia-smi)" ]; then  # [cuda_compiler_version not in (undefined, "None")]
-        mkdir data && omnisci_initdb data
-        omnisci_server --version
-        rm -rf data
-      fi                                          # [cuda_compiler_version not in (undefined, "None")]
-    - which omnisci_insert_sample_data
-    - which startomnisci
+  - name: omniscidb
+    version: {{ version }}
+    script: build-omniscidb.sh
+    build:
+      string: "{{ build_string }}"
+      skip: true  # [cuda_compiler_version not in (undefined, "None", "10.1")]
+      skip: true  # [not linux64]
+      missing_dso_whitelist:
+        - "*/libcuda.*"  # [cuda_compiler_version not in (undefined, "None")]
+      track_features:
+        {{ "- arrow-cuda" if cuda_enabled else "" }}
+      ignore_run_exports:
+        - cudatoolkit
+
+    requirements:
+      build:
+        # c compiler is specified here to get run constraint pins correct, presumably..
+        - {{ compiler('c') }}
+        - {{ compiler('cgo') }}
+        - {{ compiler('cxx') }}
+        - {{ compiler("cuda") }}  # [cuda_compiler_version not in (undefined, "None")]
+        # omniscidb 5.5 is not LLVM 12 ready
+        - clangdev <12
+        # clang++ is used for generating the bytecodes of extension functions
+        - clangxx <12
+        - cmake
+        - llvmdev <12
+        - make
+        - ninja
+        - maven
+      host:
+        - arrow-cpp =1.*=*{{ build_ext }}
+        - bisonpp
+        - blosc
+        - boost-cpp
+        - clangdev <12
+        - double-conversion
+        - flex
+        - gflags
+        - glog
+        - llvmdev <12
+        - llvm <12
+        - libarchive
+        - libgdal
+        - libkml
+        - libpng
+        - librdkafka
+        - ncurses
+        - openldap
+        - openssl
+        - snappy
+        - tbb
+        - tbb-devel
+        - thrift-cpp
+      run:
+        - boost-cpp
+        - bzip2
+        # omnscidb Load-time UDF support calls clang++
+        - gxx_{{ target_platform }}
+        - libclang-cpp <12
+        - ncurses
+        - openjdk 8
+        - xz
+        - zlib
+      run_constrained:
+        - arrow-cpp-proc * {{ build_ext }}
+        - cudatoolkit >=10.1  # [cuda_compiler_version not in (undefined, "None")]
+
+    test:
+      commands:
+        # Verify the activation scripts are in-place.
+        {% for state in ["activate", "deactivate"] %}
+        - test -f "${PREFIX}/etc/conda/{{ state }}.d/{{ PKG_NAME }}_{{ state }}.sh"
+        {% endfor %}
+        # Try using the activation scripts.
+        - |
+          if [[ -x "$(command -v omnisql)" ]]
+          then
+            echo "Found omnisql in PATH"
+          else
+            echo "omnisql not found in PATH(=$PATH)" && exit 1
+          fi
+          source ${PREFIX}/etc/conda/deactivate.d/{{ PKG_NAME }}_deactivate.sh
+          if [[ -x "$(command -v omnisql)" ]]
+          then
+            echo "Unexpectedly found omnisql in PATH(=$PATH) after deactivation"  && exit 1
+          else
+            echo "omnisql not in PATH after deactivation"
+          fi
+          source ${PREFIX}/etc/conda/activate.d/{{ PKG_NAME }}_activate.sh
+        # Test installation
+        - omnisql -v
+        - which omnisci_initdb
+        - which omnisci_server
+        - |
+          if [ -x "$(command -v nvidia-smi)" ]; then  # [cuda_compiler_version not in (undefined, "None")]
+            mkdir data && omnisci_initdb data
+            omnisci_server --version
+            rm -rf data
+          fi                                          # [cuda_compiler_version not in (undefined, "None")]
+        - which omnisci_insert_sample_data
+        - which startomnisci
+
+    about:
+      home: https://www.omnisci.com/
+      license: Apache-2.0
+      license_family: APACHE
+      license_file: LICENSE.md
+      summary: 'The OmniSci database'
+
+      description: |
+        OmniSciDB is an in-memory, column store, SQL relational database
+        that was designed from the ground up to run on GPUs.
+
+        This recipe provides both CUDA enabled and CUDA disabled omniscidb
+        packages.
+      doc_url: https://www.omnisci.com/docs/latest/
+      dev_url: https://github.com/omnisci/omniscidb
+
+  - name: pyomniscidb
+    version: {{ version }}
+    script: build-pyomniscidb.sh
+    build:
+      string: "{{ py_build_string }}"
+    requirements:
+      host:
+        - python
+        - setuptools_scm
+        - packaging >=20.0
+        - rbc >=0.2.2
+      run:
+        - python
+        - setuptools
+        - {{ pin_compatible('numpy', lower_bound='1.16') }}
+        - thrift 0.13.*
+        - packaging >=20.0
+        - sqlalchemy >=1.3
+        - rbc >=0.2.2
+        - requests
+
+    about:
+      home: http://github.com/omnisci/pyomnisci
+      license: Apache-2.0
+      license_family: Apache
+      license_file: ./python/LICENSE.md
+      summary: A python DB API 2 compatible client for OmniSci (formerly MapD).
+      description: |
+        A python DB API 2 compatible client for OmniSci (formerly MapD).
+      doc_url: https://pyomnisci.readthedocs.io
+      dev_url: https://github.com/omnisci/pyomnisci
+
+    test:
+      imports:
+       - omnisci.cursor
 
 about:
   home: https://www.omnisci.com/
