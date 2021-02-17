@@ -1,4 +1,4 @@
-{% set version = "5.5.0" %}
+{% set version = "5.5.1" %}
 {% set number = "1" %}
 {% set cuda_enabled = cuda_compiler_version is not undefined and cuda_compiler_version == '10.1' %}
 {% set build_ext_version = "1.0.0" %}
@@ -12,7 +12,7 @@ package:
 
 source:
   url: https://github.com/omnisci/omniscidb/archive/v{{ version }}.tar.gz
-  sha256: 4d0048a3a6dae852502cdceb33d60f392d967b89454ff7f627373f8acebb464a
+  sha256: 7d3bfbe4326088570c5ee5841891f1d86a7c4c52415327ea7008c53fa75a604e
   patches:
     - pyomniscidb-5.5.0.patch
 
@@ -26,13 +26,12 @@ outputs:
     version: {{ version }}
     script: build-omniscidb.sh
     build:
-      string: "{{ build_string }}"
+      string: {{ build_string }}
       skip: true  # [cuda_compiler_version not in (undefined, "None", "10.1")]
       skip: true  # [not linux64]
       missing_dso_whitelist:
-        - "*/libcuda.*"  # [cuda_compiler_version not in (undefined, "None")]
-      track_features:
-        {{ "- arrow-cuda" if cuda_enabled else "" }}
+        - '*/libcuda.*'  # [cuda_compiler_version not in (undefined, "None")]
+      track_features: {{ "- arrow-cuda" if cuda_enabled else "" }}
       ignore_run_exports:
         - cudatoolkit
 
@@ -130,7 +129,7 @@ outputs:
       license: Apache-2.0
       license_family: APACHE
       license_file: LICENSE.md
-      summary: 'The OmniSci database'
+      summary: The OmniSci database
 
       description: |
         OmniSciDB is an in-memory, column store, SQL relational database
@@ -145,7 +144,7 @@ outputs:
     version: {{ version }}
     script: build-pyomniscidb.sh
     build:
-      string: "{{ py_build_string }}"
+      string: {{ py_build_string }}
     requirements:
       host:
         - python
@@ -175,14 +174,14 @@ outputs:
 
     test:
       imports:
-       - omnisci.cursor
+        - omnisci.cursor
 
 about:
   home: https://www.omnisci.com/
   license: Apache-2.0
   license_family: APACHE
   license_file: LICENSE.md
-  summary: 'The OmniSci database'
+  summary: The OmniSci database
 
   description: |
     OmniSciDB is an in-memory, column store, SQL relational database
