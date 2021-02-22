@@ -1,4 +1,4 @@
-{% set version = "5.5.1" %}
+{% set version = "5.5.2" %}
 {% set number = "1" %}
 {% set cuda_enabled = cuda_compiler_version is not undefined and cuda_compiler_version == '10.1' %}
 {% set build_ext_version = "1.0.0" %}
@@ -12,7 +12,7 @@ package:
 
 source:
   url: https://github.com/omnisci/omniscidb/archive/v{{ version }}.tar.gz
-  sha256: 7d3bfbe4326088570c5ee5841891f1d86a7c4c52415327ea7008c53fa75a604e
+  sha256: a9b2b8aa167120cb26c7b897593980422d5ed859a732b5465009a5fbb2784476
   patches:
     - pyomniscidb-5.5.0.patch
 
