@@ -72,7 +72,7 @@ outputs:
         - snappy
         - tbb
         - tbb-devel
-        - thrift-cpp
+        - thrift-cpp 0.13
       run:
         - boost-cpp
         - bzip2
