@@ -1,3 +1,6 @@
+# We must use gcc version 8:
+#   cuda_runtime.h:83: cudagcc versions later than 8 are not supported!
+
 c_compiler:
   - gcc                        # [linux]
 c_compiler_version:            # [unix]
@@ -10,8 +13,9 @@ cgo_compiler:
   - go-cgo
 cuda_compiler:
   - nvcc
-boost_cpp:
-  - 1.72
+cuda_compiler_version:
+  - None
+  - 10.2                       # [linux64]
 pin_run_as_build:
   boost-cpp:
     max_pin: x.x.x

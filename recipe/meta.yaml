@@ -1,6 +1,6 @@
-{% set version = "5.5.1" %}
-{% set number = "1" %}
-{% set cuda_enabled = cuda_compiler_version is not undefined and cuda_compiler_version == '10.1' %}
+{% set version = "5.5.2" %}
+{% set number = "0" %}
+{% set cuda_enabled = cuda_compiler_version is not undefined and cuda_compiler_version == '10.2' %}
 {% set build_ext_version = "1.0.0" %}
 {% set build_ext = "cuda" if cuda_enabled else "cpu" %}
 {% set build_string = "h{}_{}_{}".format(PKG_HASH, number, build_ext) %}
@@ -12,13 +12,11 @@ package:
 
 source:
   url: https://github.com/omnisci/omniscidb/archive/v{{ version }}.tar.gz
-  sha256: 7d3bfbe4326088570c5ee5841891f1d86a7c4c52415327ea7008c53fa75a604e
-  patches:
-    - pyomniscidb-5.5.0.patch
+  sha256: a9b2b8aa167120cb26c7b897593980422d5ed859a732b5465009a5fbb2784476
 
 build:
   number: {{ number }}
-  skip: true  # [cuda_compiler_version not in (undefined, "None", "10.1")]
+  skip: true  # [cuda_compiler_version not in (undefined, "None", "10.2")]
 
 outputs:
 
@@ -27,11 +25,11 @@ outputs:
     script: build-omniscidb.sh
     build:
       string: {{ build_string }}
-      skip: true  # [cuda_compiler_version not in (undefined, "None", "10.1")]
-      skip: true  # [not linux64]
+      skip: true  # [cuda_compiler_version not in (undefined, "None", "10.2") or not linux64]
       missing_dso_whitelist:
         - '*/libcuda.*'  # [cuda_compiler_version not in (undefined, "None")]
-      track_features: {{ "- arrow-cuda" if cuda_enabled else "" }}
+      track_features:
+        {{ "- arrow-cuda" if cuda_enabled else "" }}
       ignore_run_exports:
         - cudatoolkit
 
@@ -52,7 +50,7 @@ outputs:
         - ninja
         - maven
       host:
-        - arrow-cpp =1.*=*{{ build_ext }}
+        - arrow-cpp =2.*=*{{ build_ext }}
         - bisonpp
         - blosc
         - boost-cpp
@@ -74,7 +72,7 @@ outputs:
         - snappy
         - tbb
         - tbb-devel
-        - thrift-cpp
+        - thrift-cpp 0.13
       run:
         - boost-cpp
         - bzip2
@@ -87,7 +85,7 @@ outputs:
         - zlib
       run_constrained:
         - arrow-cpp-proc * {{ build_ext }}
-        - cudatoolkit >=10.1  # [cuda_compiler_version not in (undefined, "None")]
+        - cudatoolkit >=10.2  # [cuda_compiler_version not in (undefined, "None")]
 
     test:
       commands:
@@ -144,6 +142,7 @@ outputs:
     version: {{ version }}
     script: build-pyomniscidb.sh
     build:
+      skip: true  # [cuda_compiler_version in ("10.2",)]
       string: {{ py_build_string }}
     requirements:
       host:
