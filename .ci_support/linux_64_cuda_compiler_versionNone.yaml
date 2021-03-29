@@ -35,7 +35,7 @@ libkml:
 libpng:
 - '1.6'
 librdkafka:
-- '1.4'
+- '1.6'
 ncurses:
 - '6.2'
 openssl:
