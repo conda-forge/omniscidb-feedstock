@@ -142,6 +142,7 @@ outputs:
     version: {{ version }}
     script: build-pyomniscidb.sh
     build:
+      skip: true  # [cuda_compiler_version in ("10.2",)]
       string: {{ py_build_string }}
     requirements:
       host:
