@@ -16,8 +16,12 @@ Documentation: https://www.omnisci.com/docs/latest/
 OmniSciDB is an in-memory, column store, SQL relational database
 that was designed from the ground up to run on GPUs.
 
-This recipe provides both CUDA enabled and CUDA disabled omniscidb
-packages.
+This recipe provides the following packages:
+  omniscidb-commong
+  CUDA-enabled omniscidb, cpu and cuda builds
+  pyomniscdb
+  omniscidb embedding library, cpu and cuda builds
+  omniscidb-embedded Python extension module
 
 
 Current build status
@@ -38,10 +42,10 @@ Current build status
         <table>
           <thead><tr><th>Variant</th><th>Status</th></tr></thead>
           <tbody><tr>
-              <td>linux_64_cuda_compiler_version10.2</td>
+              <td>linux_64_cuda_compiler_version11.0</td>
               <td>
                 <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=9937&branchName=master">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/omniscidb-feedstock?branchName=master&jobName=linux&configuration=linux_64_cuda_compiler_version10.2" alt="variant">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/omniscidb-feedstock?branchName=master&jobName=linux&configuration=linux_64_cuda_compiler_version11.0" alt="variant">
                 </a>
               </td>
             </tr><tr>
@@ -107,7 +111,10 @@ Current release info
 | Name | Downloads | Version | Platforms |
 | --- | --- | --- | --- |
 | [![Conda Recipe](https://img.shields.io/badge/recipe-omniscidb-green.svg)](https://anaconda.org/conda-forge/omniscidb) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/omniscidb.svg)](https://anaconda.org/conda-forge/omniscidb) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/omniscidb.svg)](https://anaconda.org/conda-forge/omniscidb) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/omniscidb.svg)](https://anaconda.org/conda-forge/omniscidb) |
+| [![Conda Recipe](https://img.shields.io/badge/recipe-omniscidb--common-green.svg)](https://anaconda.org/conda-forge/omniscidb-common) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/omniscidb-common.svg)](https://anaconda.org/conda-forge/omniscidb-common) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/omniscidb-common.svg)](https://anaconda.org/conda-forge/omniscidb-common) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/omniscidb-common.svg)](https://anaconda.org/conda-forge/omniscidb-common) |
+| [![Conda Recipe](https://img.shields.io/badge/recipe-omniscidbe-green.svg)](https://anaconda.org/conda-forge/omniscidbe) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/omniscidbe.svg)](https://anaconda.org/conda-forge/omniscidbe) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/omniscidbe.svg)](https://anaconda.org/conda-forge/omniscidbe) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/omniscidbe.svg)](https://anaconda.org/conda-forge/omniscidbe) |
 | [![Conda Recipe](https://img.shields.io/badge/recipe-pyomniscidb-green.svg)](https://anaconda.org/conda-forge/pyomniscidb) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/pyomniscidb.svg)](https://anaconda.org/conda-forge/pyomniscidb) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/pyomniscidb.svg)](https://anaconda.org/conda-forge/pyomniscidb) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/pyomniscidb.svg)](https://anaconda.org/conda-forge/pyomniscidb) |
+| [![Conda Recipe](https://img.shields.io/badge/recipe-pyomniscidbe-green.svg)](https://anaconda.org/conda-forge/pyomniscidbe) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/pyomniscidbe.svg)](https://anaconda.org/conda-forge/pyomniscidbe) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/pyomniscidbe.svg)](https://anaconda.org/conda-forge/pyomniscidbe) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/pyomniscidbe.svg)](https://anaconda.org/conda-forge/pyomniscidbe) |
 
 Installing omniscidb-ext
 ========================
@@ -116,12 +123,13 @@ Installing `omniscidb-ext` from the `conda-forge` channel can be achieved by add
 
 ```
 conda config --add channels conda-forge
+conda config --set channel_priority strict
 ```
 
-Once the `conda-forge` channel has been enabled, `omniscidb, pyomniscidb` can be installed with:
+Once the `conda-forge` channel has been enabled, `omniscidb, omniscidb-common, omniscidbe, pyomniscidb, pyomniscidbe` can be installed with:
 
 ```
-conda install omniscidb pyomniscidb
+conda install omniscidb omniscidb-common omniscidbe pyomniscidb pyomniscidbe
 ```
 
 It is possible to list all of the versions of `omniscidb` available on your platform with:

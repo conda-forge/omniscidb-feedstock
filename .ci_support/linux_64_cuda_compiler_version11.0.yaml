@@ -3,11 +3,13 @@ boost_cpp:
 c_compiler:
 - gcc
 c_compiler_version:
-- '8'
+- '9'
 cdt_name:
 - cos6
 cgo_compiler:
 - go-cgo
+cgo_compiler_version:
+- '1.15'
 channel_sources:
 - conda-forge,defaults
 channel_targets:
@@ -15,13 +17,15 @@ channel_targets:
 cuda_compiler:
 - nvcc
 cuda_compiler_version:
-- '10.2'
+- '11.0'
 cxx_compiler:
 - gxx
 cxx_compiler_version:
-- '8'
+- '9'
 docker_image:
-- quay.io/condaforge/linux-anvil-cuda:10.2
+- quay.io/condaforge/linux-anvil-cuda:11.0
+geos:
+- 3.9.1
 gflags:
 - '2.2'
 glog:
@@ -38,6 +42,10 @@ librdkafka:
 - '1.6'
 ncurses:
 - '6.2'
+numpy:
+- '1.17'
+- '1.17'
+- '1.17'
 openssl:
 - 1.1.1
 pin_run_as_build:
@@ -74,3 +82,5 @@ zip_keys:
 - - cuda_compiler_version
   - cdt_name
   - docker_image
+- - python
+  - numpy

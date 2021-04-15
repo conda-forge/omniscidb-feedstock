@@ -1,37 +1,121 @@
-{% set version = "5.5.2" %}
+{% set version = "5.7.0" %}
 {% set number = "0" %}
-{% set cuda_enabled = cuda_compiler_version is not undefined and cuda_compiler_version == '10.2' %}
+{% set cuda_enabled = cuda_compiler_version is not undefined and cuda_compiler_version == '11.0' %}
 {% set build_ext_version = "1.0.0" %}
 {% set build_ext = "cuda" if cuda_enabled else "cpu" %}
-{% set build_string = "h{}_{}_{}".format(PKG_HASH, number, build_ext) %}
-{% set py_build_string = "py{}h{}_{}".format(CONDA_PY, PKG_HASH, number) %}
+{% set build_string = "h{}_{}".format(PKG_HASH, number) %}
+{% set build_string_ext = "{}_{}".format(build_string, build_ext) %}
+{% set py_build_string_ext = "py{}{}_{}".format(CONDA_PY, build_string, build_ext) %}
+{% set py_build_string = "py{}{}".format(CONDA_PY, build_string) %}
+{% set install_base = "opt/omnisci" %}
+{% set arrow_version = "2.*" %}
+{% set thrift_version = "0.13.*" %}
+# omniscidb 5.5 is not LLVM 12 ready
+{% set llvm_version = "<12" %}
 
 package:
   name: omniscidb-ext
   version: {{ version }}
 
 source:
-  url: https://github.com/omnisci/omniscidb/archive/v{{ version }}.tar.gz
-  sha256: a9b2b8aa167120cb26c7b897593980422d5ed859a732b5465009a5fbb2784476
+  # url: https://github.com/omnisci/omniscidb/archive/master.tar.gz
+  url: https://github.com/pearu/omniscidb/archive/refs/heads/pearu/conda.tar.gz
+  # url: https://github.com/omnisci/omniscidb/archive/v{{ version }}.tar.gz
+  # sha256: a9b2b8aa167120cb26c7b897593980422d5ed859a732b5465009a5fbb2784476
 
 build:
   number: {{ number }}
-  skip: true  # [cuda_compiler_version not in (undefined, "None", "10.2")]
+  skip: true  # [cuda_compiler_version not in (undefined, "None", "11.0")]
 
 outputs:
+
+  - name: omniscidb-common
+    version: {{ version }}
+    script: build-omniscidb.sh
+    build:
+      string: {{ build_string }}
+      # cpu-only omniscidb-common for cuda is required only for
+      # building cuda-enabled omniscidb
+      skip: true  # [cuda_compiler_version not in (undefined, "None", "11.0") or not linux64]
+    requirements:
+      build:
+        # c compiler is specified here to get run constraint pins correct, presumably..
+        - {{ compiler('c') }}
+        # go required for ThirdParty/generate_cert
+        - {{ compiler('cgo') }}
+        - {{ compiler('cxx') }}
+        - clangdev {{ llvm_version }}
+        # clang++ is used for generating the bytecodes of extension functions
+        - clangxx {{ llvm_version }}
+        - cmake
+        - llvmdev {{ llvm_version }}
+        - ninja
+        - maven
+      host:
+        # omniscidb-common does not depend on build_ext, arrow-cpp
+        # (and other dependencies) is required just for the presence
+        # so that one could run cmake for generating *.bc, and other
+        # common data files.
+        - arrow-cpp ={{ arrow_version }}=*cpu
+        - bisonpp
+        - blosc
+        - boost-cpp
+        - clangdev {{ llvm_version }}
+        - double-conversion
+        - flex
+        - geos
+        - glog
+        - llvmdev {{ llvm_version }}
+        - llvm {{ llvm_version }}
+        - libarchive
+        - libgdal
+        - libpng
+        - librdkafka
+        - thrift-cpp {{ thrift_version }}
+    test:
+      commands:
+        # Test installation
+        # doc
+        - test -f ${PREFIX}/share/doc/omnisci/LICENSE.md
+        # data
+        - test -d ${PREFIX}/{{ install_base }}/ThirdParty/gdal-data
+        # thrift
+        - test -f ${PREFIX}/{{ install_base }}/completion_hints.thrift
+        - test -f ${PREFIX}/{{ install_base }}/omnisci.thrift
+        - test -f ${PREFIX}/{{ install_base }}/common.thrift
+        - test -f ${PREFIX}/{{ install_base }}/QueryEngine/serialized_result_set.thrift
+        - test -f ${PREFIX}/{{ install_base }}/QueryEngine/extension_functions.thrift
+        # includes
+        - test -f ${PREFIX}/include/omnisci/Shared/funcannotations.h
+        - test -f ${PREFIX}/include/omnisci/Shared/InlineNullValues.h
+        - test -f ${PREFIX}/include/omnisci/Logger/Logger.h
+        # QE
+        - test -f ${PREFIX}/include/omnisci/QueryEngine/OmniSciTypes.h
+        - test -f ${PREFIX}/{{ install_base }}/QueryEngine/RuntimeFunctions.bc
+        - test -f ${PREFIX}/{{ install_base }}/QueryEngine/RuntimeFunctions.bc
+        - test -f ${PREFIX}/{{ install_base }}/QueryEngine/ExtensionFunctions.ast
+        # jar
+        - test -f ${PREFIX}/{{ install_base }}/bin/omnisci-utility-{{ version }}-SNAPSHOT.jar
+        - test -f ${PREFIX}/{{ install_base }}/bin/omnisci-jdbc-{{ version }}-SNAPSHOT.jar
+        - test -f ${PREFIX}/{{ install_base }}/bin/calcite-1.0-SNAPSHOT-jar-with-dependencies.jar
+        # Unspecified
+        - test -f ${PREFIX}/{{ install_base }}/bin/startomnisci
+        - test -f ${PREFIX}/{{ install_base }}/bin/omnisci_insert_sample_data
+        #
+        - test -f ${PREFIX}/{{ install_base }}/bin/generate_cert
 
   - name: omniscidb
     version: {{ version }}
     script: build-omniscidb.sh
     build:
-      string: {{ build_string }}
-      skip: true  # [cuda_compiler_version not in (undefined, "None", "10.2") or not linux64]
+      string: {{ build_string_ext }}
+      skip: true  # [cuda_compiler_version not in (undefined, "None", "11.0") or not linux64]
       missing_dso_whitelist:
         - '*/libcuda.*'  # [cuda_compiler_version not in (undefined, "None")]
       track_features:
         {{ "- arrow-cuda" if cuda_enabled else "" }}
       ignore_run_exports:
-        - cudatoolkit
+        - cudatoolkit    # [cuda_compiler_version not in (undefined, "None")]
 
     requirements:
       build:
@@ -40,27 +124,26 @@ outputs:
         - {{ compiler('cgo') }}
         - {{ compiler('cxx') }}
         - {{ compiler("cuda") }}  # [cuda_compiler_version not in (undefined, "None")]
-        # omniscidb 5.5 is not LLVM 12 ready
-        - clangdev <12
+        - clangdev {{ llvm_version }}
         # clang++ is used for generating the bytecodes of extension functions
-        - clangxx <12
+        - clangxx {{ llvm_version }}
         - cmake
-        - llvmdev <12
+        - llvmdev {{ llvm_version }}
         - make
         - ninja
         - maven
       host:
-        - arrow-cpp =2.*=*{{ build_ext }}
+        - arrow-cpp ={{ arrow_version }}=*{{ build_ext }}
         - bisonpp
         - blosc
         - boost-cpp
-        - clangdev <12
+        - clangdev {{ llvm_version }}
         - double-conversion
         - flex
         - gflags
         - glog
-        - llvmdev <12
-        - llvm <12
+        - llvmdev {{ llvm_version }}
+        - llvm {{ llvm_version }}
         - libarchive
         - libgdal
         - libkml
@@ -72,23 +155,31 @@ outputs:
         - snappy
         - tbb
         - tbb-devel
-        - thrift-cpp 0.13
+        - thrift-cpp {{ thrift_version }}
       run:
+        - arrow-cpp-proc {{ arrow_version }} {{ build_ext }}
         - boost-cpp
         - bzip2
         # omnscidb Load-time UDF support calls clang++
         - gxx_{{ target_platform }}
-        - libclang-cpp <12
+        - libclang-cpp {{ llvm_version }}
         - ncurses
-        - openjdk 8
+        - openjdk 8.*
         - xz
         - zlib
+        - {{ pin_subpackage('omniscidb-common',  max_pin='x.x.x') }}
       run_constrained:
-        - arrow-cpp-proc * {{ build_ext }}
-        - cudatoolkit >=10.2  # [cuda_compiler_version not in (undefined, "None")]
+        - arrow-cpp-proc {{ arrow_version }} {{ build_ext }}
+        - cudatoolkit >=11.0  # [cuda_compiler_version not in (undefined, "None")]
 
     test:
       commands:
+        - test -f ${PREFIX}/{{ install_base }}/bin/omnisci_server
+        - test -f ${PREFIX}/{{ install_base }}/bin/omnisci_initdb
+        - test -f ${PREFIX}/{{ install_base }}/bin/omnisql
+        - test -f ${PREFIX}/{{ install_base }}/bin/KafkaImporter
+        - test -f ${PREFIX}/{{ install_base }}/bin/StreamImporter
+
         # Verify the activation scripts are in-place.
         {% for state in ["activate", "deactivate"] %}
         - test -f "${PREFIX}/etc/conda/{{ state }}.d/{{ PKG_NAME }}_{{ state }}.sh"
@@ -119,6 +210,7 @@ outputs:
             omnisci_server --version
             rm -rf data
           fi                                          # [cuda_compiler_version not in (undefined, "None")]
+        # these are provided by omniscidb-common package:
         - which omnisci_insert_sample_data
         - which startomnisci
 
@@ -142,7 +234,7 @@ outputs:
     version: {{ version }}
     script: build-pyomniscidb.sh
     build:
-      skip: true  # [cuda_compiler_version in ("10.2",)]
+      skip: true  # [cuda_compiler_version in ("11.0",)]
       string: {{ py_build_string }}
     requirements:
       host:
@@ -150,11 +242,12 @@ outputs:
         - setuptools_scm
         - packaging >=20.0
         - rbc >=0.2.2
+        - pytest
       run:
         - python
         - setuptools
         - {{ pin_compatible('numpy', lower_bound='1.16') }}
-        - thrift 0.13.*
+        - thrift {{ thrift_version }}
         - packaging >=20.0
         - sqlalchemy >=1.3
         - rbc >=0.2.2
@@ -175,6 +268,178 @@ outputs:
       imports:
         - omnisci.cursor
 
+  - name: omniscidbe
+    version: {{ version }}
+    script: build-omniscidb.sh
+    build:
+      string: {{ build_string_ext }}
+      skip: true  # [cuda_compiler_version not in (undefined, "None", "11.0") or not linux64]
+      missing_dso_whitelist:
+        - '*/libcuda.*'  # [cuda_compiler_version not in (undefined, "None")]
+      track_features:
+        {{ "- arrow-cuda" if cuda_enabled else "" }}
+      ignore_run_exports:
+        - cudatoolkit    # [cuda_compiler_version not in (undefined, "None")]
+    requirements:
+      build:
+        # c compiler is specified here to get run constraint pins correct, presumably..
+        - {{ compiler('c') }}
+        - {{ compiler('cgo') }}
+        - {{ compiler('cxx') }}
+        - {{ compiler("cuda") }}  # [cuda_compiler_version not in (undefined, "None")]
+        - clangdev {{ llvm_version }}
+        # clang++ is used for generating the bytecodes of extension functions
+        - clangxx {{ llvm_version }}
+        - cmake
+        - llvmdev {{ llvm_version }}
+        - make
+        - ninja
+        - maven
+      host:
+        - arrow-cpp ={{ arrow_version }}=*{{ build_ext }}
+        - bisonpp
+        - blosc
+        - boost-cpp
+        - clangdev {{ llvm_version }}
+        - double-conversion
+        - flex
+        - glog
+        - llvmdev {{ llvm_version }}
+        - llvm {{ llvm_version }}
+        - libarchive
+        - libgdal
+        - libpng
+        - librdkafka
+        - tbb
+        - tbb-devel
+        - thrift-cpp {{ thrift_version }}
+      run:
+        - arrow-cpp-proc {{ arrow_version }} {{ build_ext }}
+        - boost-cpp
+        - bzip2
+        # omnscidb Load-time UDF support calls clang++
+        - gxx_{{ target_platform }}
+        - libclang-cpp {{ llvm_version }}
+        - ncurses
+        - openjdk 8.*
+        - xz
+        - zlib
+        - {{ pin_subpackage('omniscidb-common',  max_pin='x.x.x') }}
+      run_constrained:
+        - arrow-cpp-proc * {{ build_ext }}
+        - cudatoolkit >=11.0  # [cuda_compiler_version not in (undefined, "None")]
+
+    test:
+      commands:
+        # Test installation
+        - test -f ${PREFIX}/lib/libDBEngine.so
+        # Verify the activation scripts are in-place.
+        {% for state in ["activate", "deactivate"] %}
+        - test -f "${PREFIX}/etc/conda/{{ state }}.d/{{ PKG_NAME }}_{{ state }}.sh"
+        {% endfor %}
+        - |
+          source ${PREFIX}/etc/conda/activate.d/{{ PKG_NAME }}_activate.sh
+          test -n "${OMNISCI_ROOT_PATH+x}"
+
+    about:
+      home: https://www.omnisci.com/
+      license: Apache-2.0
+      license_family: APACHE
+      license_file: LICENSE.md
+      summary: The OmniSci database
+
+      description: |
+        OmniSciDB is an in-memory, column store, SQL relational database
+        that was designed from the ground up to run on GPUs.
+      doc_url: https://www.omnisci.com/docs/latest/
+      dev_url: https://github.com/omnisci/omniscidb
+
+  - name: pyomniscidbe
+    version: {{ version }}
+    script: build-omniscidb.sh
+    build:
+      string: {{ py_build_string_ext }}
+      skip: true  # [cuda_compiler_version not in (undefined, "None", "11.0") or not linux64]
+      missing_dso_whitelist:
+        - '*/libcuda.*'  # [cuda_compiler_version not in (undefined, "None")]
+      track_features:
+        {{ "- arrow-cuda" if cuda_enabled else "" }}
+      ignore_run_exports:
+        - cudatoolkit    # [cuda_compiler_version not in (undefined, "None")]
+    requirements:
+      build:
+        # c compiler is specified here to get run constraint pins correct, presumably..
+        - {{ compiler('c') }}
+        - {{ compiler('cgo') }}
+        - {{ compiler('cxx') }}
+        - {{ compiler("cuda") }}  # [cuda_compiler_version not in (undefined, "None")]
+        - clangdev {{ llvm_version }}
+        # clang++ is used for generating the bytecodes of extension functions
+        - clangxx {{ llvm_version }}
+        - cmake
+        - llvmdev {{ llvm_version }}
+        - make
+        - ninja
+        - maven
+      host:
+        - arrow-cpp ={{ arrow_version }}=*{{ build_ext }}
+        - bisonpp
+        - blosc
+        - boost-cpp
+        - clangdev {{ llvm_version }}
+        - cython
+        - double-conversion
+        - flex
+        - glog
+        - llvmdev {{ llvm_version }}
+        - llvm {{ llvm_version }}
+        - libarchive
+        - libgdal
+        - libpng
+        - librdkafka
+        - numpy
+        - pyarrow ={{ arrow_version }}=*{{ build_ext }}
+        - python
+        - tbb
+        - tbb-devel
+        - thrift-cpp {{ thrift_version }}
+        - {{ pin_subpackage('omniscidbe', exact=True) }}
+      run:
+        - arrow-cpp-proc {{ arrow_version }} {{ build_ext }}
+        - pyarrow ={{ arrow_version }}=*{{ build_ext }}
+        - python
+        - tbb4py
+        - {{ pin_subpackage('omniscidbe', exact=True) }}
+
+      run_constrained:
+        - arrow-cpp-proc {{ arrow_version }} {{ build_ext }}
+        - cudatoolkit >=11.0  # [cuda_compiler_version not in (undefined, "None")]
+
+    test:
+      requires:
+        - pytest
+        - numpy
+        - pandas
+      imports:
+        - omniscidbe
+      source_files:
+        - Embedded/test/test_exceptions.py
+      commands:
+        - pytest -sv Embedded/test/test_exceptions.py
+
+    about:
+      home: https://www.omnisci.com/
+      license: Apache-2.0
+      license_family: APACHE
+      license_file: LICENSE.md
+      summary: The OmniSci database
+
+      description: |
+        OmniSciDB is an in-memory, column store, SQL relational database
+        that was designed from the ground up to run on GPUs.
+      doc_url: https://www.omnisci.com/docs/latest/
+      dev_url: https://github.com/omnisci/omniscidb
+
 about:
   home: https://www.omnisci.com/
   license: Apache-2.0
@@ -186,8 +451,12 @@ about:
     OmniSciDB is an in-memory, column store, SQL relational database
     that was designed from the ground up to run on GPUs.
 
-    This recipe provides both CUDA enabled and CUDA disabled omniscidb
-    packages.
+    This recipe provides the following packages:
+      omniscidb-commong
+      CUDA-enabled omniscidb, cpu and cuda builds
+      pyomniscdb
+      omniscidb embedding library, cpu and cuda builds
+      omniscidb-embedded Python extension module
   doc_url: https://www.omnisci.com/docs/latest/
   dev_url: https://github.com/omnisci/omniscidb
 
