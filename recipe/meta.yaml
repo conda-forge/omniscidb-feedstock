@@ -1,4 +1,4 @@
-{% set version = "5.5.2" %}
+{% set version = "5.6.0" %}
 {% set number = "0" %}
 {% set cuda_enabled = cuda_compiler_version is not undefined and cuda_compiler_version == '10.2' %}
 {% set build_ext_version = "1.0.0" %}
@@ -12,7 +12,7 @@ package:
 
 source:
   url: https://github.com/omnisci/omniscidb/archive/v{{ version }}.tar.gz
-  sha256: a9b2b8aa167120cb26c7b897593980422d5ed859a732b5465009a5fbb2784476
+  sha256: fbd85adbb35095e6bf4d4f9dace882e20bc2ff13c0de3a26ae7d6d07ce08bfc9
 
 build:
   number: {{ number }}
@@ -28,8 +28,7 @@ outputs:
       skip: true  # [cuda_compiler_version not in (undefined, "None", "10.2") or not linux64]
       missing_dso_whitelist:
         - '*/libcuda.*'  # [cuda_compiler_version not in (undefined, "None")]
-      track_features:
-        {{ "- arrow-cuda" if cuda_enabled else "" }}
+      track_features: {{ "- arrow-cuda" if cuda_enabled else "" }}
       ignore_run_exports:
         - cudatoolkit
 
