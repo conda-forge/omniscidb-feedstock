@@ -20,6 +20,9 @@ package:
 source:
   url: https://github.com/omnisci/omniscidb/archive/v{{ version }}.tar.gz
   sha256: fbd85adbb35095e6bf4d4f9dace882e20bc2ff13c0de3a26ae7d6d07ce08bfc9
+  patches:
+    # omniscidb v 5.6.0 lacks a large portion of DBE support changes
+    - omniscidb-missing-dbe-and-more.patch
 
 build:
   number: {{ number }}
@@ -93,8 +96,8 @@ outputs:
         - test -f ${PREFIX}/{{ install_base }}/QueryEngine/RuntimeFunctions.bc
         - test -f ${PREFIX}/{{ install_base }}/QueryEngine/ExtensionFunctions.ast
         # jar
-        - test -f ${PREFIX}/{{ install_base }}/bin/omnisci-utility-{{ version }}-SNAPSHOT.jar
-        - test -f ${PREFIX}/{{ install_base }}/bin/omnisci-jdbc-{{ version }}-SNAPSHOT.jar
+        - test -f ${PREFIX}/{{ install_base }}/bin/omnisci-utility-{{ version }}.jar
+        - test -f ${PREFIX}/{{ install_base }}/bin/omnisci-jdbc-{{ version }}.jar
         - test -f ${PREFIX}/{{ install_base }}/bin/calcite-1.0-SNAPSHOT-jar-with-dependencies.jar
         # Unspecified
         - test -f ${PREFIX}/{{ install_base }}/bin/startomnisci
