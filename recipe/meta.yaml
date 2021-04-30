@@ -1,4 +1,4 @@
-{% set version = "5.6.0" %}
+{% set version = "5.7.0" %}
 {% set number = "0" %}
 {% set cuda_enabled = cuda_compiler_version is not undefined and cuda_compiler_version == '11.0' %}
 {% set build_ext_version = "1.0.0" %}
@@ -18,11 +18,8 @@ package:
   version: {{ version }}
 
 source:
-  url: https://github.com/omnisci/omniscidb/archive/v{{ version }}.tar.gz
-  sha256: fbd85adbb35095e6bf4d4f9dace882e20bc2ff13c0de3a26ae7d6d07ce08bfc9
-  patches:
-    # omniscidb v 5.6.0 lacks a large portion of DBE support changes
-    - omniscidb-missing-dbe-and-more.patch
+  url: https://github.com/omnisci/omniscidb/archive/v{{ version }}dev-20210429.tar.gz
+  sha256: 980f79da6b7c5f22cfe6a9592d2330bcefc8474a939c1b163b11e557065370a1
 
 build:
   number: {{ number }}
@@ -327,7 +324,7 @@ outputs:
         - zlib
         - {{ pin_subpackage('omniscidb-common',  max_pin='x.x.x') }}
       run_constrained:
-        - arrow-cpp-proc * {{ build_ext }}
+        - arrow-cpp-proc {{ arrow_version }} {{ build_ext }}
         - cudatoolkit >=11.0  # [cuda_compiler_version not in (undefined, "None")]
 
     test:
