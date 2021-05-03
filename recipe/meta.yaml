@@ -243,6 +243,7 @@ outputs:
         - setuptools
         - {{ pin_compatible('numpy', lower_bound='1.16') }}
         - thrift {{ thrift_version }}
+        - packaging >=20.0
         - sqlalchemy >=1.3
         - requests
 
