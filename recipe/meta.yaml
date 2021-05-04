@@ -238,6 +238,7 @@ outputs:
       host:
         - python
         - setuptools_scm
+        - packaging >=20.0
       run:
         - python
         - setuptools
