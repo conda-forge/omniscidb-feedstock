@@ -1,4 +1,6 @@
-{% set version = "5.7.0" %}
+{% set version = "5.7.0.dev20210429" %}  # PEP 386
+{% set source_version = "5.7.0dev-20210429" %}
+{% set base_version = "5.7.0" %}
 {% set number = "0" %}
 {% set cuda_enabled = cuda_compiler_version is not undefined and cuda_compiler_version == '11.0' %}
 {% set build_ext_version = "1.0.0" %}
@@ -18,7 +20,7 @@ package:
   version: {{ version }}
 
 source:
-  url: https://github.com/omnisci/omniscidb/archive/v{{ version }}dev-20210429.tar.gz
+  url: https://github.com/omnisci/omniscidb/archive/v{{ source_version }}.tar.gz
   sha256: 980f79da6b7c5f22cfe6a9592d2330bcefc8474a939c1b163b11e557065370a1
 
 build:
@@ -93,8 +95,8 @@ outputs:
         - test -f ${PREFIX}/{{ install_base }}/QueryEngine/RuntimeFunctions.bc
         - test -f ${PREFIX}/{{ install_base }}/QueryEngine/ExtensionFunctions.ast
         # jar
-        - test -f ${PREFIX}/{{ install_base }}/bin/omnisci-utility-{{ version }}-SNAPSHOT.jar
-        - test -f ${PREFIX}/{{ install_base }}/bin/omnisci-jdbc-{{ version }}-SNAPSHOT.jar
+        - test -f ${PREFIX}/{{ install_base }}/bin/omnisci-utility-{{ base_version }}-SNAPSHOT.jar
+        - test -f ${PREFIX}/{{ install_base }}/bin/omnisci-jdbc-{{ base_version }}-SNAPSHOT.jar
         - test -f ${PREFIX}/{{ install_base }}/bin/calcite-1.0-SNAPSHOT-jar-with-dependencies.jar
         # Unspecified
         - test -f ${PREFIX}/{{ install_base }}/bin/startomnisci
