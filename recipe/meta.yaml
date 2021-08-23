@@ -1,6 +1,7 @@
-{% set version = "5.7.0.dev20210429" %}  # PEP 386
-{% set source_version = "5.7.0dev-20210429" %}
-{% set base_version = "5.7.0" %}
+{% set version = "5.6.4" %}  # PEP 386
+{% set source_version = "5.6.4" %}
+{% set base_version = "5.6.4" %}
+{% set dbe_disabled = true %}
 {% set number = "1" %}
 {% set cuda_enabled = cuda_compiler_version is not undefined and cuda_compiler_version == '11.0' %}
 {% set build_ext_version = "1.0.0" %}
@@ -12,7 +13,7 @@
 {% set install_base = "opt/omnisci" %}
 {% set arrow_version = "2.*" %}
 {% set thrift_version = "0.13.*" %}
-# omniscidb 5.7 is not LLVM 12 ready
+# omniscidb 5.6 is not LLVM 12 ready
 {% set llvm_version = "<12" %}
 
 package:
@@ -21,7 +22,7 @@ package:
 
 source:
   url: https://github.com/omnisci/omniscidb/archive/v{{ source_version }}.tar.gz
-  sha256: 980f79da6b7c5f22cfe6a9592d2330bcefc8474a939c1b163b11e557065370a1
+  sha256: 00425a61ec411d8b5b1c903db714df09628963d228d92092991e761aab4f27bc
 
 build:
   number: {{ number }}
@@ -95,8 +96,8 @@ outputs:
         - test -f ${PREFIX}/{{ install_base }}/QueryEngine/RuntimeFunctions.bc
         - test -f ${PREFIX}/{{ install_base }}/QueryEngine/ExtensionFunctions.ast
         # jar
-        - test -f ${PREFIX}/{{ install_base }}/bin/omnisci-utility-{{ base_version }}-SNAPSHOT.jar
-        - test -f ${PREFIX}/{{ install_base }}/bin/omnisci-jdbc-{{ base_version }}-SNAPSHOT.jar
+        - test -f ${PREFIX}/{{ install_base }}/bin/omnisci-utility-{{ base_version }}.jar
+        - test -f ${PREFIX}/{{ install_base }}/bin/omnisci-jdbc-{{ base_version }}.jar
         - test -f ${PREFIX}/{{ install_base }}/bin/calcite-1.0-SNAPSHOT-jar-with-dependencies.jar
         # Unspecified
         - test -f ${PREFIX}/{{ install_base }}/bin/startomnisci
@@ -270,6 +271,7 @@ outputs:
     script: build-omniscidb.sh
     build:
       string: {{ build_string_ext }}
+      skip: {{ dbe_disabled }}
       skip: true  # [cuda_compiler_version not in (undefined, "None", "11.0") or not linux64]
       missing_dso_whitelist:
         - '*/libcuda.*'  # [cuda_compiler_version not in (undefined, "None")]
@@ -356,6 +358,7 @@ outputs:
     script: build-omniscidb.sh
     build:
       string: {{ py_build_string_ext }}
+      skip: {{ dbe_disabled }}
       skip: true  # [cuda_compiler_version not in (undefined, "None", "11.0") or not linux64]
       missing_dso_whitelist:
         - '*/libcuda.*'  # [cuda_compiler_version not in (undefined, "None")]
