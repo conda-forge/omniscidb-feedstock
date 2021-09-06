@@ -402,6 +402,7 @@ outputs:
         - numpy
         - pyarrow ={{ arrow_version }}=*{{ build_ext }}
         - python
+        - pytest
         - tbb
         - tbb-devel
         - thrift-cpp {{ thrift_version }}
