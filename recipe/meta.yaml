@@ -2,7 +2,7 @@
 {% set source_version = "5.7.0" %}
 {% set base_version = "5.7.0" %}
 {% set dbe_disabled = false %}
-{% set number = "0" %}
+{% set number = "1" %}
 {% set cuda_enabled = cuda_compiler_version is not undefined and cuda_compiler_version == '11.0' %}
 {% set build_ext_version = "1.0.0" %}
 {% set build_ext = "cuda" if cuda_enabled else "cpu" %}
