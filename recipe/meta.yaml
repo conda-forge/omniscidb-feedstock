@@ -2,7 +2,7 @@
 {% set source_version = "5.7.0" %}
 {% set base_version = "5.7.0" %}
 {% set dbe_disabled = false %}
-{% set number = "1" %}
+{% set number = "2" %}
 {% set cuda_enabled = cuda_compiler_version is not undefined and cuda_compiler_version == '11.0' %}
 {% set build_ext_version = "1.0.0" %}
 {% set build_ext = "cuda" if cuda_enabled else "cpu" %}
@@ -341,6 +341,7 @@ outputs:
         - |
           source ${PREFIX}/etc/conda/activate.d/{{ PKG_NAME }}_activate.sh
           test -n "${OMNISCI_ROOT_PATH+x}"
+          ldd ${PREFIX}/lib/libDBEngine.so
 
     about:
       home: https://www.omnisci.com/
