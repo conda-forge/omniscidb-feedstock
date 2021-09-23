@@ -1,4 +1,4 @@
-# We must use gcc version 8 with cuda <11:
+# gcc version 8 is required with cuda <11:
 #   cuda_runtime.h:83: cudagcc versions later than 8 are not supported!
 c_compiler:
   - gcc                        # [linux]
@@ -20,6 +20,6 @@ cuda_compiler_version:
 pin_run_as_build:
   boost-cpp:
     max_pin: x.x.x
-docker_image:                                   # [linux64]
-  - quay.io/condaforge/linux-anvil-comp7  # [linux64]
-  - quay.io/condaforge/linux-anvil-cuda:11.0    # [linux64]
+docker_image:                                  # [linux64]
+ - quay.io/condaforge/linux-anvil-comp7        # [linux64]
+ - quay.io/condaforge/linux-anvil-cuda:11.0    # [linux64]

@@ -1,8 +1,7 @@
-{% set version = "5.7.0" %}  # PEP 386
-{% set source_version = "5.7.0" %}
-{% set base_version = "5.7.0" %}
-{% set dbe_disabled = false %}
-{% set number = "1" %}
+{% set version = "5.7.1" %}  # PEP 386
+{% set source_version = "5.7.1" %}
+{% set base_version = "5.7.1" %}
+{% set number = "0" %}
 {% set cuda_enabled = cuda_compiler_version is not undefined and cuda_compiler_version == '11.0' %}
 {% set build_ext_version = "1.0.0" %}
 {% set build_ext = "cuda" if cuda_enabled else "cpu" %}
@@ -12,7 +11,8 @@
 {% set py_build_string = "py{}{}".format(CONDA_PY, build_string) %}
 {% set install_base = "opt/omnisci" %}
 {% set arrow_version = "3.*" %}
-{% set thrift_version = "0.13.*" %}
+{% set pythrift_version = "0.13.*" %}
+{% set thrift_version = "0.14.*" %}
 # omniscidb 5.7 is not LLVM 12 ready
 {% set llvm_version = "<12" %}
 
@@ -22,9 +22,7 @@ package:
 
 source:
   url: https://github.com/omnisci/omniscidb/archive/v{{ source_version }}.tar.gz
-  sha256: 97cdf42f3aa3304fd46bc1246f58586e3c7a86430b53bb4620c4126e0ba1873e
-  patches:
-    - omniscidb-dbe-update.patch
+  sha256: 395448687140e8c42f507f4466ceb074e7c0b354369f89f84bfbd80342f4a003
 
 build:
   number: {{ number }}
@@ -66,6 +64,7 @@ outputs:
         - clangdev {{ llvm_version }}
         - double-conversion
         - flex
+        - fmt
         - geos
         - glog
         - llvmdev {{ llvm_version }}
@@ -119,7 +118,6 @@ outputs:
         {{ "- arrow-cuda" if cuda_enabled else "" }}
       ignore_run_exports:
         - cudatoolkit    # [cuda_compiler_version not in (undefined, "None")]
-
     requirements:
       build:
         # c compiler is specified here to get run constraint pins correct, presumably..
@@ -143,6 +141,7 @@ outputs:
         - clangdev {{ llvm_version }}
         - double-conversion
         - flex
+        - fmt
         - gflags
         - glog
         - llvmdev {{ llvm_version }}
@@ -239,6 +238,7 @@ outputs:
     build:
       skip: true  # [cuda_compiler_version in ("11.0",)]
       string: {{ py_build_string }}
+      noarch: python
     requirements:
       host:
         - python
@@ -248,7 +248,7 @@ outputs:
         - python
         - setuptools
         - {{ pin_compatible('numpy', lower_bound='1.16') }}
-        - thrift {{ thrift_version }}
+        - thrift {{ pythrift_version }}
         - packaging >=20.0
         - sqlalchemy >=1.3
         - requests
@@ -273,7 +273,6 @@ outputs:
     script: build-omniscidb.sh
     build:
       string: {{ build_string_ext }}
-      skip: {{ dbe_disabled }}
       skip: true  # [cuda_compiler_version not in (undefined, "None", "11.0") or not linux64]
       missing_dso_whitelist:
         - '*/libcuda.*'  # [cuda_compiler_version not in (undefined, "None")]
@@ -281,6 +280,10 @@ outputs:
         {{ "- arrow-cuda" if cuda_enabled else "" }}
       ignore_run_exports:
         - cudatoolkit    # [cuda_compiler_version not in (undefined, "None")]
+      rpaths:
+        - lib/
+        # fixes "not found" in `ldd $PREFIX/lib/libDBEngine.so` output
+        - {{ install_base }}/lib
     requirements:
       build:
         # c compiler is specified here to get run constraint pins correct, presumably..
@@ -304,6 +307,7 @@ outputs:
         - clangdev {{ llvm_version }}
         - double-conversion
         - flex
+        - fmt
         - glog
         - llvmdev {{ llvm_version }}
         - llvm {{ llvm_version }}
@@ -341,6 +345,7 @@ outputs:
         - |
           source ${PREFIX}/etc/conda/activate.d/{{ PKG_NAME }}_activate.sh
           test -n "${OMNISCI_ROOT_PATH+x}"
+          ldd ${PREFIX}/lib/libDBEngine.so
 
     about:
       home: https://www.omnisci.com/
@@ -360,7 +365,6 @@ outputs:
     script: build-omniscidb.sh
     build:
       string: {{ py_build_string_ext }}
-      skip: {{ dbe_disabled }}
       skip: true  # [cuda_compiler_version not in (undefined, "None", "11.0") or not linux64]
       missing_dso_whitelist:
         - '*/libcuda.*'  # [cuda_compiler_version not in (undefined, "None")]
@@ -392,6 +396,7 @@ outputs:
         - cython
         - double-conversion
         - flex
+        - fmt
         - glog
         - llvmdev {{ llvm_version }}
         - llvm {{ llvm_version }}

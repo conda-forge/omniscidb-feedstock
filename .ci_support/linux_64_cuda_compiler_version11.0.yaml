@@ -24,6 +24,8 @@ cxx_compiler_version:
 - '9'
 docker_image:
 - quay.io/condaforge/linux-anvil-cuda:11.0
+fmt:
+- '8'
 geos:
 - 3.9.1
 gflags:
@@ -60,8 +62,6 @@ pin_run_as_build:
     max_pin: x.x
   ncurses:
     max_pin: x.x
-  openssl:
-    max_pin: x.x.x
   python:
     min_pin: x.x
     max_pin: x.x
