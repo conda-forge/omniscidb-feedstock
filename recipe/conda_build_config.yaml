@@ -20,3 +20,6 @@ cuda_compiler_version:
 pin_run_as_build:
   boost-cpp:
     max_pin: x.x.x
+docker_image:                                  # [linux64]
+ - quay.io/condaforge/linux-anvil-comp7        # [linux64]
+ - quay.io/condaforge/linux-anvil-cuda:11.0    # [linux64]
