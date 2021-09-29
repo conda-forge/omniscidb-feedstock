@@ -41,7 +41,7 @@ libkml:
 libpng:
 - '1.6'
 librdkafka:
-- '1.6'
+- '1.7'
 ncurses:
 - '6.2'
 numpy:
