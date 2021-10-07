@@ -324,7 +324,7 @@ outputs:
         - bzip2
         # omnscidb Load-time UDF support calls clang++
         - gxx_{{ target_platform }}
-        - libclang-cpp {{ llvm_version }}
+        - {{ pin_compatible('libclang-cpp') }}
         - ncurses
         - openjdk 8.*
         - xz
@@ -333,7 +333,6 @@ outputs:
       run_constrained:
         - arrow-cpp-proc {{ arrow_version }} {{ build_ext }}
         - cudatoolkit >=11.0  # [cuda_compiler_version not in (undefined, "None")]
-        - libclang-cpp {{ llvm_version }}
 
     test:
       commands:
