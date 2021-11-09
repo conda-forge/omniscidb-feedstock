@@ -10,7 +10,7 @@
 {% set py_build_string_ext = "py{}{}_{}".format(CONDA_PY, build_string, build_ext) %}
 {% set py_build_string = "py{}{}".format(CONDA_PY, build_string) %}
 {% set install_base = "opt/omnisci" %}
-{% set arrow_version = "3.*" %}
+{% set arrow_version = "5.*" %}
 {% set pythrift_version = "0.13.*" %}
 {% set thrift_version = "0.14.*" %}
 # omniscidb 5.8 is not LLVM 12 ready
