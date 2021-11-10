@@ -41,7 +41,7 @@ outputs:
       skip: true  # [cuda_compiler_version not in (undefined, "None", "11.0") or not linux64]
     requirements:
       build:
-        # c compiler is specified here to get run constraint pins correct, presumably..
+        # c compiler is specified here to get run constraint pins correct, presumably...
         - {{ compiler('c') }}
         # go required for ThirdParty/generate_cert
         - {{ compiler('cgo') }}
