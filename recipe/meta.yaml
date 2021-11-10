@@ -10,7 +10,8 @@
 {% set py_build_string_ext = "py{}{}_{}".format(CONDA_PY, build_string, build_ext) %}
 {% set py_build_string = "py{}{}".format(CONDA_PY, build_string) %}
 {% set install_base = "opt/omnisci" %}
-{% set arrow_version = "3.*" %}
+{% set arrow_version = "5.*" %}
+{% set arrow_proc_version = "3.*" %}
 {% set pythrift_version = "0.13.*" %}
 {% set thrift_version = "0.14.*" %}
 # omniscidb 5.8 is not LLVM 12 ready
@@ -40,7 +41,7 @@ outputs:
       skip: true  # [cuda_compiler_version not in (undefined, "None", "11.0") or not linux64]
     requirements:
       build:
-        # c compiler is specified here to get run constraint pins correct, presumably..
+        # c compiler is specified here to get run constraint pins correct, presumably...
         - {{ compiler('c') }}
         # go required for ThirdParty/generate_cert
         - {{ compiler('cgo') }}
@@ -159,7 +160,7 @@ outputs:
         - tbb-devel
         - thrift-cpp {{ thrift_version }}
       run:
-        - arrow-cpp-proc {{ arrow_version }} {{ build_ext }}
+        - arrow-cpp-proc {{ arrow_proc_version }} {{ build_ext }}
         - boost-cpp
         - bzip2
         # omnscidb Load-time UDF support calls clang++
@@ -171,7 +172,7 @@ outputs:
         - zlib
         - {{ pin_subpackage('omniscidb-common',  max_pin='x.x.x') }}
       run_constrained:
-        - arrow-cpp-proc {{ arrow_version }} {{ build_ext }}
+        - arrow-cpp-proc {{ arrow_proc_version }} {{ build_ext }}
         - cudatoolkit >=11.0  # [cuda_compiler_version not in (undefined, "None")]
 
     test:
@@ -319,7 +320,7 @@ outputs:
         - tbb-devel
         - thrift-cpp {{ thrift_version }}
       run:
-        - arrow-cpp-proc {{ arrow_version }} {{ build_ext }}
+        - arrow-cpp-proc {{ arrow_proc_version }} {{ build_ext }}
         - boost-cpp
         - bzip2
         # omnscidb Load-time UDF support calls clang++
@@ -331,7 +332,7 @@ outputs:
         - zlib
         - {{ pin_subpackage('omniscidb-common',  max_pin='x.x.x') }}
       run_constrained:
-        - arrow-cpp-proc {{ arrow_version }} {{ build_ext }}
+        - arrow-cpp-proc {{ arrow_proc_version }} {{ build_ext }}
         - cudatoolkit >=11.0  # [cuda_compiler_version not in (undefined, "None")]
 
     test:
@@ -413,7 +414,7 @@ outputs:
         - thrift-cpp {{ thrift_version }}
         - {{ pin_subpackage('omniscidbe', exact=True) }}
       run:
-        - arrow-cpp-proc {{ arrow_version }} {{ build_ext }}
+        - arrow-cpp-proc {{ arrow_proc_version }} {{ build_ext }}
         - pyarrow ={{ arrow_version }}=*{{ build_ext }}
         - python
         - tbb4py
