@@ -39,6 +39,22 @@ outputs:
       # cpu-only omniscidb-common for cuda is required only for
       # building cuda-enabled omniscidb
       skip: true  # [cuda_compiler_version not in (undefined, "None", "11.0") or not linux64]
+      run_exports:
+        - {{ pin_subpackage('omniscidb-common',  max_pin='x.x.x') }}
+      ignore_run_exports:
+        - arrow-cpp {{ arrow_version }}
+        - blosc
+        - double-conversion
+        - fmt
+        - geos
+        - glog
+        - libarchive
+        - libgdal
+        - libllvm{{ llvm_version }}
+        - libpng
+        - librdkafka
+        - libstdcxx-ng
+        - libthrift
     requirements:
       build:
         # c compiler is specified here to get run constraint pins correct, presumably...
@@ -119,6 +135,8 @@ outputs:
         {{ "- arrow-cuda" if cuda_enabled else "" }}
       ignore_run_exports:
         - cudatoolkit    # [cuda_compiler_version not in (undefined, "None")]
+      run_exports:
+        - {{ pin_subpackage('omniscidb',  max_pin='x.x.x') }}
     requirements:
       build:
         # c compiler is specified here to get run constraint pins correct, presumably..
@@ -241,6 +259,8 @@ outputs:
       skip: true  # [cuda_compiler_version in ("11.0",)]
       string: {{ py_build_string }}
       noarch: python
+      run_exports:
+        - {{ pin_subpackage('pyomniscidb',  max_pin='x.x.x') }}
     requirements:
       host:
         - python
@@ -286,6 +306,8 @@ outputs:
         - lib/
         # fixes "not found" in `ldd $PREFIX/lib/libDBEngine.so` output
         - {{ install_base }}/lib
+      run_exports:
+        - {{ pin_subpackage('omniscidbe',  max_pin='x.x.x') }}
     requirements:
       build:
         # c compiler is specified here to get run constraint pins correct, presumably..
@@ -374,6 +396,9 @@ outputs:
         {{ "- arrow-cuda" if cuda_enabled else "" }}
       ignore_run_exports:
         - cudatoolkit    # [cuda_compiler_version not in (undefined, "None")]
+        - fmt
+      run_exports:
+        - {{ pin_subpackage('pyomniscidbe',  max_pin='x.x.x') }}
     requirements:
       build:
         # c compiler is specified here to get run constraint pins correct, presumably..
@@ -419,9 +444,7 @@ outputs:
         - pyarrow ={{ arrow_version }}=*{{ build_ext }}
         - python
         - tbb4py
-        - {{ pin_subpackage('omniscidb-common',  max_pin='x.x.x') }}
         - {{ pin_subpackage('omniscidbe', exact=True) }}
-
     test:
       requires:
         - pytest
