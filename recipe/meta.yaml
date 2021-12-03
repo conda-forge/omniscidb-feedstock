@@ -1,7 +1,7 @@
-{% set version = "5.8.0" %}  # PEP 386
-{% set source_version = "5.8.0" %}
-{% set base_version = "5.8.0" %}
-{% set number = "1" %}
+{% set version = "5.8.1" %}  # PEP 386
+{% set source_version = "5.8.1" %}
+{% set base_version = "5.8.1" %}
+{% set number = "0" %}
 {% set cuda_enabled = cuda_compiler_version is not undefined and cuda_compiler_version == '11.0' %}
 {% set build_ext_version = "1.0.0" %}
 {% set build_ext = "cuda" if cuda_enabled else "cpu" %}
@@ -10,10 +10,10 @@
 {% set py_build_string_ext = "py{}{}_{}".format(CONDA_PY, build_string, build_ext) %}
 {% set py_build_string = "py{}{}".format(CONDA_PY, build_string) %}
 {% set install_base = "opt/omnisci" %}
-{% set arrow_version = "5.*" %}
+{% set arrow_version = "6.*" %}
 {% set arrow_proc_version = "3.*" %}
-{% set pythrift_version = "0.13.*" %}
-{% set thrift_version = "0.14.*" %}
+{% set pythrift_version = "0.15.*" %}
+{% set thrift_version = "0.15.*" %}
 # omniscidb 5.8 is not LLVM 12 ready
 {% set llvm_version = "11" %}
 
@@ -23,7 +23,7 @@ package:
 
 source:
   url: https://github.com/omnisci/omniscidb/archive/v{{ source_version }}.tar.gz
-  sha256: efce38e4d999f9acffbdbe6579ad5fbd04fa1b6d1919620214dfeb220d4f6feb
+  sha256: 35b0780181562396c1771ec39cf472cf580d3a02d9b4a59a6c5c486a9a14c297
 
 build:
   number: {{ number }}
@@ -154,7 +154,8 @@ outputs:
         - librdkafka
         - ncurses
         - openldap
-        - openssl
+        # Workaround https://github.com/mamba-org/boa/issues/119 :
+        - openssl 1.1.1*
         - snappy
         - tbb
         - tbb-devel
