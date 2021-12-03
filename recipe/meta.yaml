@@ -419,6 +419,7 @@ outputs:
         - pyarrow ={{ arrow_version }}=*{{ build_ext }}
         - python
         - tbb4py
+        - {{ pin_subpackage('omniscidb-common',  max_pin='x.x.x') }}
         - {{ pin_subpackage('omniscidbe', exact=True) }}
 
     test:
