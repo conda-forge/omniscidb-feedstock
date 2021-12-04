@@ -1,6 +1,6 @@
-{% set version = "5.8.1" %}  # PEP 386
-{% set source_version = "5.8.1" %}
-{% set base_version = "5.8.1" %}
+{% set version = "5.9.0" %}  # PEP 386
+{% set source_version = "5.9.0" %}
+{% set base_version = "5.9.0" %}
 {% set number = "0" %}
 {% set cuda_enabled = cuda_compiler_version is not undefined and cuda_compiler_version == '11.0' %}
 {% set build_ext_version = "1.0.0" %}
@@ -23,7 +23,7 @@ package:
 
 source:
   url: https://github.com/omnisci/omniscidb/archive/v{{ source_version }}.tar.gz
-  sha256: 35b0780181562396c1771ec39cf472cf580d3a02d9b4a59a6c5c486a9a14c297
+  sha256: 2a4069cffe0c807f7770b1b748e101b7f1a0de34e86d810935742305b47ac57c
 
 build:
   number: {{ number }}
@@ -135,6 +135,14 @@ outputs:
         {{ "- arrow-cuda" if cuda_enabled else "" }}
       ignore_run_exports:
         - cudatoolkit    # [cuda_compiler_version not in (undefined, "None")]
+        - fmt
+        - gflags
+        - glog
+        - libclang-cpp
+        - libkml
+        - ncurses
+        - openldap
+        - zlib
       run_exports:
         - {{ pin_subpackage('omniscidb',  max_pin='x.x.x') }}
     requirements:
@@ -302,6 +310,12 @@ outputs:
         {{ "- arrow-cuda" if cuda_enabled else "" }}
       ignore_run_exports:
         - cudatoolkit    # [cuda_compiler_version not in (undefined, "None")]
+        - fmt
+        - glog
+        - libclang-cpp
+        - librdkafka
+        - ncurses
+        - zlib
       rpaths:
         - lib/
         # fixes "not found" in `ldd $PREFIX/lib/libDBEngine.so` output
@@ -395,8 +409,21 @@ outputs:
       track_features:
         {{ "- arrow-cuda" if cuda_enabled else "" }}
       ignore_run_exports:
+        - arrow-cpp {{ arrow_version }}
+        - blosc
         - cudatoolkit    # [cuda_compiler_version not in (undefined, "None")]
+        - double-conversion
         - fmt
+        - glog
+        - libarchive
+        - libgdal
+        - libllvm{{ llvm_version }}
+        - libpng
+        - librdkafka
+        - libthrift {{ thrift_version }}
+        - pyarrow {{ arrow_version }}
+        - python
+        - tbb
       run_exports:
         - {{ pin_subpackage('pyomniscidbe',  max_pin='x.x.x') }}
     requirements:
