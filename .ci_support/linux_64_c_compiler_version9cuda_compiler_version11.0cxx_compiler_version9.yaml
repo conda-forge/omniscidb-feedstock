@@ -5,7 +5,7 @@ c_compiler:
 c_compiler_version:
 - '9'
 cdt_name:
-- cos6
+- cos7
 cgo_compiler:
 - go-cgo
 cgo_compiler_version:
@@ -42,14 +42,14 @@ libpng:
 - '1.6'
 librdkafka:
 - '1.7'
+libthrift:
+- 0.15.0
 ncurses:
 - '6.2'
 numpy:
 - '1.18'
 - '1.18'
 - '1.19'
-openssl:
-- 1.1.1
 pin_run_as_build:
   boost-cpp:
     max_pin: x.x.x
@@ -79,7 +79,7 @@ tbb_devel:
 zip_keys:
 - - c_compiler_version
   - cxx_compiler_version
-- - cuda_compiler_version
+  - cuda_compiler_version
   - cdt_name
   - docker_image
 - - python
