@@ -1,0 +1,24 @@
+From 3c811909ab45762de2c11e2cff2cc3dd5c668526 Mon Sep 17 00:00:00 2001
+From: Pearu Peterson <pearu.peterson@gmail.com>
+Date: Tue, 11 Jan 2022 22:35:49 +0200
+Subject: [PATCH] Fix DBE build.
+
+---
+ OSDependent/Unix/omnisci_path.cpp | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/OSDependent/Unix/omnisci_path.cpp b/OSDependent/Unix/omnisci_path.cpp
+index e6b9a15b6..f6fa4a249 100644
+--- a/OSDependent/Unix/omnisci_path.cpp
++++ b/OSDependent/Unix/omnisci_path.cpp
+@@ -23,6 +23,7 @@
+ #endif
+ #include <unistd.h>
+ 
++#include <boost/filesystem/operations.hpp>
+ #include <boost/filesystem/path.hpp>
+ 
+ #include "Logger/Logger.h"
+-- 
+2.17.1
+
