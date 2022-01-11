@@ -1,6 +1,6 @@
-{% set version = "5.9.0" %}  # PEP 386
-{% set source_version = "5.9.0" %}
-{% set base_version = "5.9.0" %}
+{% set version = "5.10.0" %}  # PEP 386
+{% set source_version = "5.10.0" %}
+{% set base_version = "5.10.0" %}
 {% set number = "0" %}
 {% set cuda_enabled = cuda_compiler_version is not undefined and cuda_compiler_version == '11.0' %}
 {% set build_ext_version = "1.0.0" %}
@@ -14,7 +14,7 @@
 {% set arrow_proc_version = "3.*" %}
 {% set pythrift_version = "0.15.*" %}
 {% set thrift_version = "0.15.*" %}
-# omniscidb 5.8 is not LLVM 12 ready
+# omniscidb 5.10 is not LLVM 12 ready
 {% set llvm_version = "11" %}
 
 package:
@@ -23,7 +23,9 @@ package:
 
 source:
   url: https://github.com/omnisci/omniscidb/archive/v{{ source_version }}.tar.gz
-  sha256: 2a4069cffe0c807f7770b1b748e101b7f1a0de34e86d810935742305b47ac57c
+  sha256: 4a1e5e1dc5c4b4bc632bf781772f09b44847411ab2e28c7bdd21011c7419e74c
+  patches:
+    - 0001-Fix-DBE-build.patch
 
 build:
   number: {{ number }}
