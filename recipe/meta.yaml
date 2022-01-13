@@ -35,7 +35,8 @@ outputs:
 
   - name: omniscidb-common
     version: {{ version }}
-    script: build-omniscidb.sh
+    script: build-omniscidb.sh  # [not win]
+    script: build-omniscidb.bat  # [win]
     build:
       string: {{ build_string }}
       # cpu-only omniscidb-common for cuda is required only for
