@@ -55,6 +55,20 @@ Current build status
                   <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/omniscidb-feedstock?branchName=master&jobName=linux&configuration=linux_64_c_compiler_version9cuda_compiler_versionNonecxx_compiler_version9" alt="variant">
                 </a>
               </td>
+            </tr><tr>
+              <td>win_64_cuda_compiler_version11.0</td>
+              <td>
+                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=9937&branchName=master">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/omniscidb-feedstock?branchName=master&jobName=win&configuration=win_64_cuda_compiler_version11.0" alt="variant">
+                </a>
+              </td>
+            </tr><tr>
+              <td>win_64_cuda_compiler_versionNone</td>
+              <td>
+                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=9937&branchName=master">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/omniscidb-feedstock?branchName=master&jobName=win&configuration=win_64_cuda_compiler_versionNone" alt="variant">
+                </a>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -162,6 +176,7 @@ Feedstock Maintainers
 =====================
 
 * [@andrewseidl](https://github.com/andrewseidl/)
+* [@guilhermeleobas](https://github.com/guilhermeleobas/)
 * [@jclay](https://github.com/jclay/)
 * [@pearu](https://github.com/pearu/)
 * [@xmnlab](https://github.com/xmnlab/)
