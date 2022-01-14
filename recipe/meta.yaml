@@ -41,7 +41,9 @@ outputs:
       string: {{ build_string }}
       # cpu-only omniscidb-common for cuda is required only for
       # building cuda-enabled omniscidb
-      skip: true  # [cuda_compiler_version not in (undefined, "None", "11.0") or osx]
+      skip: true  # [cuda_compiler_version not in (undefined, "None", "11.0")]
+      skip: true  # [osx]
+      skip: true  # [win and cuda_compiler_version != "None"]
       run_exports:
         - {{ pin_subpackage('omniscidb-common',  max_pin='x.x.x') }}
       ignore_run_exports:
@@ -78,12 +80,12 @@ outputs:
         # so that one could run cmake for generating *.bc, and other
         # common data files.
         - arrow-cpp ={{ arrow_version }}=*cpu
-        - bisonpp
+        - bisonpp  # [not win]
         - blosc
         - boost-cpp
         - clangdev {{ llvm_version }}
         - double-conversion
-        - flex
+        - flex  # [not win]
         - fmt
         - geos
         - glog
@@ -94,6 +96,7 @@ outputs:
         - libpng
         - librdkafka
         - thrift-cpp {{ thrift_version }}
+        - winflexbison  # [win]
     test:
       commands:
         # Test installation
