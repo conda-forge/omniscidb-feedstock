@@ -41,7 +41,7 @@ outputs:
       string: {{ build_string }}
       # cpu-only omniscidb-common for cuda is required only for
       # building cuda-enabled omniscidb
-      skip: true  # [cuda_compiler_version not in (undefined, "None", "11.0") or not linux64]
+      skip: true  # [cuda_compiler_version not in (undefined, "None", "11.0") or not (linux64, win)]
       run_exports:
         - {{ pin_subpackage('omniscidb-common',  max_pin='x.x.x') }}
       ignore_run_exports:
