@@ -96,6 +96,7 @@ outputs:
         - libpng
         - librdkafka
         - thrift-cpp {{ thrift_version }}
+        - vcpkg  # [win]
         - winflexbison  # [win]
     test:
       commands:
