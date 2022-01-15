@@ -6,7 +6,6 @@ pushd "%SRC_DIR%"\build
 COPY %CONDA_PREFIX%\Library\lib\thriftmd.lib %CONDA_PREFIX%\Library\bin\thriftmd.lib
 
 cmake -G "Ninja" ^
-      -DCMAKE_TOOLCHAIN_FILE=%VCPKG_ROOT%\scripts\buildsystems\vcpkg.cmake ^
       -DCMAKE_PREFIX_PATH=%CONDA_PREFIX% ^
       -DCMAKE_LIBRARY_PATH=%CONDA_PREFIX%\Library\lib ^
       -DCMAKE_INCLUDE_PATH=%CONDA_PREFIX%\Library\include ^
