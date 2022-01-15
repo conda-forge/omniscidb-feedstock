@@ -5,8 +5,6 @@ pushd "%SRC_DIR%"\build
 
 COPY %CONDA_PREFIX%\Library\lib\thriftmd.lib %CONDA_PREFIX%\Library\bin\thriftmd.lib
 
-CALL vcpkg install --triplet x64-windows libarchive
-
 cmake -G "Ninja" ^
       -DCMAKE_TOOLCHAIN_FILE=%VCPKG_ROOT%\scripts\buildsystems\vcpkg.cmake ^
       -DCMAKE_PREFIX_PATH=%CONDA_PREFIX% ^
