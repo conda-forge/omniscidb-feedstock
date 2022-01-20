@@ -14,17 +14,17 @@ cmake -G "NMake Makefiles" ^
       -DLibArchive_LIBRARY=%PREFIX%\Library\lib\archive.lib ^
       -DLZMA_LIBRARY=%PREFIX%\Library\lib\liblzma.lib ^
       -DBZ2_LIBRARY=%PREFIX%\Library\lib\libbz2.lib ^
-      -DENABLE_FOLLY:BOOL=OFF ^
-      -DENABLE_TESTS:BOOL=OFF ^
-      -DENABLE_CUDA:BOOL=OFF ^
-      -DENABLE_GEOS:BOOL=OFF ^
-      -DENABLE_FSI_ODBC:BOOL=OFF ^
-      -DENABLE_AWS_S3:BOOL=OFF ^
-      -DENABLE_LDAP:BOOL=OFF ^
-      -DMAPD_EDITION:STRING=EE ^
+      -DENABLE_FOLLY=OFF ^
+      -DENABLE_TESTS=OFF ^
+      -DENABLE_CUDA=OFF ^
+      -DENABLE_GEOS=OFF ^
+      -DENABLE_FSI_ODBC=OFF ^
+      -DENABLE_AWS_S3=OFF ^
+      -DENABLE_LDAP=OFF ^
+      -DMAPD_EDITION=EE ^
       -DCMAKE_BUILD_TYPE=Release ^
-      -DBoost_NO_BOOST_CMAKE:BOOL=OFF ^
-      ..
+      -DBoost_NO_BOOST_CMAKE=OFF ^
+      "%SRC_DIR%"
 if errorlevel 1 exit 1
 
 cmake --build . --target install --config Release
