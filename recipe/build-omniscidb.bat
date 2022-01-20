@@ -3,17 +3,17 @@
 mkdir "%SRC_DIR%"\build
 pushd "%SRC_DIR%"\build
 
-COPY %CONDA_PREFIX%\Library\lib\thriftmd.lib %CONDA_PREFIX%\Library\bin\thriftmd.lib
+COPY %PREFIX%\Library\lib\thriftmd.lib %PREFIX%\Library\bin\thriftmd.lib
 
 cmake -G "NMake Makefiles" ^
-      -DCMAKE_INSTALL_PREFIX=%CONDA_PREFIX% ^
-      -DCMAKE_PREFIX_PATH=%CONDA_PREFIX% ^
-      -DCMAKE_LIBRARY_PATH=%CONDA_PREFIX%\Library\lib ^
-      -DCMAKE_INCLUDE_PATH=%CONDA_PREFIX%\Library\include ^
-      -DLibArchive_INCLUDE_DIR=%CONDA_PREFIX\include ^
-      -DLibArchive_LIBRARY=%CONDA_PREFIX%\Library\lib\archive.lib ^
-      -DLZMA_LIBRARY=%CONDA_PREFIX%\Library\lib\liblzma.lib ^
-      -DBZ2_LIBRARY=%CONDA_PREFIX%\Library\lib\libbz2.lib ^
+      -DCMAKE_INSTALL_PREFIX=%PREFIX% ^
+      -DCMAKE_PREFIX_PATH=%PREFIX% ^
+      -DCMAKE_LIBRARY_PATH=%PREFIX%\Library\lib ^
+      -DCMAKE_INCLUDE_PATH=%PREFIX%\Library\include ^
+      -DLibArchive_INCLUDE_DIR=%PREFIX\include ^
+      -DLibArchive_LIBRARY=%PREFIX%\Library\lib\archive.lib ^
+      -DLZMA_LIBRARY=%PREFIX%\Library\lib\liblzma.lib ^
+      -DBZ2_LIBRARY=%PREFIX%\Library\lib\libbz2.lib ^
       -DENABLE_FOLLY:BOOL=OFF ^
       -DENABLE_TESTS:BOOL=OFF ^
       -DENABLE_CUDA:BOOL=OFF ^
