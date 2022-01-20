@@ -92,6 +92,7 @@ outputs:
         - llvmdev {{ llvm_version }}
         - llvm {{ llvm_version }}
         - libarchive
+        - libevent  # [win]
         - libgdal
         - libpng
         - librdkafka
