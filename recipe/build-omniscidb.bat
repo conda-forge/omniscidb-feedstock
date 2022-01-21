@@ -25,7 +25,9 @@ cmake -G "NMake Makefiles" ^
       "%SRC_DIR%"
 if errorlevel 1 exit 1
 
-nmake
+@Rem build calcite first
+cmake --build . --target Calcite --config Release
+cmake --build . --target all --config Release
 if errorlevel 1 exit 1
 
 popd
