@@ -184,8 +184,8 @@ outputs:
         - libkml
         - libpng
         - librdkafka
-        - ncurses
-        - openldap
+        - ncurses   # [not win]
+        - openldap  # [not win]
         # Workaround https://github.com/mamba-org/boa/issues/119 :
         - openssl 1.1.1*
         - snappy
