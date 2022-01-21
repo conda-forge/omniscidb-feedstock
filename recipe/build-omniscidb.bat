@@ -27,8 +27,7 @@ cmake -G "Ninja" ^
       "%SRC_DIR%"
 if errorlevel 1 exit 1
 
-@REM cmake --build . --target install --config Release
-ninja
+cmake --build . --target install --config Release
 if errorlevel 1 exit 1
 
 popd
