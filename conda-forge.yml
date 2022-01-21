@@ -1,3 +1,4 @@
 conda_forge_output_validation: true
 azure:
   store_build_artifacts: True
+build_with_mambabuild: True
