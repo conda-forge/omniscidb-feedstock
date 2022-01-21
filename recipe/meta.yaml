@@ -271,7 +271,7 @@ outputs:
     version: {{ version }}
     script: build-pyomniscidb.sh
     build:
-      skip: true  # [cuda_compiler_version in ("11.0",)]
+      skip: true  # [cuda_compiler_version in ("11.0",) or not linux64]
       string: {{ py_build_string }}
       noarch: python
       run_exports:
