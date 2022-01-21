@@ -1,7 +1,7 @@
 boost_cpp:
 - 1.74.0
 c_compiler:
-- vs2019
+- vs2017
 cgo_compiler:
 - go-cgo
 channel_sources:
@@ -11,7 +11,7 @@ channel_targets:
 cuda_compiler_version:
 - None
 cxx_compiler:
-- vs2019
+- vs2017
 fmt:
 - '8'
 gflags:

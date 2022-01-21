@@ -2,12 +2,10 @@
 #   cuda_runtime.h:83: cudagcc versions later than 8 are not supported!
 c_compiler:
   - gcc                        # [linux]
-  - vs2019                     # [win]
 c_compiler_version:            # [unix]
   - 9                          # [linux64]
 cxx_compiler:
   - gxx                        # [linux]
-  - vs2019                     # [win]
 cxx_compiler_version:          # [unix]
   - 9                          # [linux64]
 cgo_compiler:
