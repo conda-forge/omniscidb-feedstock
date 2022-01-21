@@ -6,14 +6,14 @@ pushd "%SRC_DIR%"\build
 COPY %PREFIX%\Library\lib\thriftmd.lib %PREFIX%\Library\bin\thriftmd.lib
 
 cmake -G "Ninja" ^
-      -DCMAKE_INSTALL_PREFIX=%CONDA_PREFIX% ^
-      -DCMAKE_PREFIX_PATH=%CONDA_PREFIX% ^
+      -DCMAKE_INSTALL_PREFIX=%PREFIX% ^
+      -DCMAKE_PREFIX_PATH=%PREFIX% ^
       -DCMAKE_LIBRARY_PATH=%PREFIX%\Library\lib ^
       -DCMAKE_INCLUDE_PATH=%PREFIX%\Library\include ^
       -DLibArchive_INCLUDE_DIR=%PREFIX\include ^
       -DLibArchive_LIBRARY=%PREFIX%\Library\lib\archive.lib ^
-      -DLZMA_LIBRARY=%CONDA_PREFIX%\Library\lib\liblzma.lib ^
-      -DBZ2_LIBRARY=%CONDA_PREFIX%\Library\lib\libbz2.lib ^
+      -DLZMA_LIBRARY=%PREFIX%\Library\lib\liblzma.lib ^
+      -DBZ2_LIBRARY=%PREFIX%\Library\lib\libbz2.lib ^
       -DENABLE_FOLLY=OFF ^
       -DENABLE_TESTS=OFF ^
       -DENABLE_CUDA=OFF ^
