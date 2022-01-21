@@ -5,7 +5,7 @@ pushd "%SRC_DIR%"\build
 
 COPY %PREFIX%\Library\lib\thriftmd.lib %PREFIX%\Library\bin\thriftmd.lib
 
-cmake -G "NMake Makefiles" ^
+cmake -G "Ninja" ^
       -DCMAKE_INSTALL_PREFIX=%PREFIX% ^
       -DCMAKE_PREFIX_PATH=%PREFIX% ^
       -DCMAKE_LIBRARY_PATH=%PREFIX%\Library\lib ^
@@ -27,7 +27,8 @@ cmake -G "NMake Makefiles" ^
       "%SRC_DIR%"
 if errorlevel 1 exit 1
 
-cmake --build . --target install --config Release
+@REM cmake --build . --target install --config Release
+ninja
 if errorlevel 1 exit 1
 
 popd
