@@ -26,7 +26,8 @@ cmake -G "NMake Makefiles" ^
 if errorlevel 1 exit 1
 
 @Rem build calcite first
-cmake --build . --target Calcite --config Release
+cmake --build . --target calciteserver_thrift
+dir Calcite
 cmake --build . --target all --config Release
 if errorlevel 1 exit 1
 
