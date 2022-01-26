@@ -24,6 +24,8 @@ package:
 source:
   url: https://github.com/omnisci/omniscidb/archive/v{{ source_version }}.tar.gz
   sha256: 73340011e93cc76f644e60a45e0205bba7684c969af43bf675026675029387c6
+  patches:
+    - 0001-Fix-DBE-build.patch
 
 build:
   number: {{ number }}
