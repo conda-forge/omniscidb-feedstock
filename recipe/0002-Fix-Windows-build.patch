@@ -1,0 +1,86 @@
+From 35fd8299f9de291bcff5e24454d1af04d49f8ec5 Mon Sep 17 00:00:00 2001
+From: Guilherme Leobas <guilhermeleobas@gmail.com>
+Date: Fri, 4 Feb 2022 18:05:40 -0300
+Subject: [PATCH] fixes for conda-forge windows build
+
+---
+ Archive/Archive.h                     | 1 +
+ CMakeLists.txt                        | 4 +++-
+ DataMgr/BufferMgr/BufferMgr.h         | 3 +++
+ StringDictionary/DictRef.h            | 1 +
+ StringDictionary/StringDictionary.cpp | 6 ++++++
+ 5 files changed, 14 insertions(+), 1 deletion(-)
+
+diff --git a/Archive/Archive.h b/Archive/Archive.h
+index a5161f18a..e17ac1bd8 100644
+--- a/Archive/Archive.h
++++ b/Archive/Archive.h
+@@ -20,6 +20,7 @@
+ #include <map>
+ #include <regex>
+ #include <string>
++#include <map>
+ 
+ #if defined(_WIN32) && !defined(WIN32_LEAN_AND_MEAN)
+ // One of these archive includes on win32 includes Windows.h
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 7f3791780..78b735e25 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -16,7 +16,9 @@ if(DEFINED ENV{CONDA_PREFIX})
+   # Adding formating macros
+   add_definitions("-D__STDC_FORMAT_MACROS=1")
+   # fixes always_inline attribute errors
+-  add_compile_options("$<$<COMPILE_LANGUAGE:CXX>:-fno-semantic-interposition>")
++  if (DEFINED MSVC)
++    add_compile_options("$<$<COMPILE_LANGUAGE:CXX>:-fno-semantic-interposition>")
++  endif()
+   # Adding `--sysroot=...` resolves `no member named 'signbit' in the global namespace` error:
+   set(CMAKE_SYSROOT "$ENV{CONDA_BUILD_SYSROOT}")
+ endif(DEFINED ENV{CONDA_PREFIX})
+diff --git a/DataMgr/BufferMgr/BufferMgr.h b/DataMgr/BufferMgr/BufferMgr.h
+index 1df594918..cfbdad415 100644
+--- a/DataMgr/BufferMgr/BufferMgr.h
++++ b/DataMgr/BufferMgr/BufferMgr.h
+@@ -34,6 +34,9 @@
+ #include "DataMgr/AbstractBuffer.h"
+ #include "DataMgr/AbstractBufferMgr.h"
+ #include "DataMgr/BufferMgr/BufferSeg.h"
++#if defined(_WIN32)
++#include <WinSock2.h>
++#endif
+ #include "Shared/boost_stacktrace.hpp"
+ #include "Shared/types.h"
+ 
+diff --git a/StringDictionary/DictRef.h b/StringDictionary/DictRef.h
+index 1a9206a16..873e598de 100644
+--- a/StringDictionary/DictRef.h
++++ b/StringDictionary/DictRef.h
+@@ -4,6 +4,7 @@
+ #include <cstdint>
+ #include <cstdlib>
+ #include <functional>
++#include <string>
+ 
+ struct dict_ref_t {
+   int32_t dbId;
+diff --git a/StringDictionary/StringDictionary.cpp b/StringDictionary/StringDictionary.cpp
+index 16bb9040c..a26d08388 100644
+--- a/StringDictionary/StringDictionary.cpp
++++ b/StringDictionary/StringDictionary.cpp
+@@ -48,6 +48,12 @@
+ #include "LeafHostInfo.h"
+ #include "gen-cpp/string_dictionary_types.h"
+ 
++#ifdef _WIN32
++#if defined(ERROR) || defined(INFO) || defined(WARNING) || defined(FATAL)
++#include "Shared/cleanup_global_namespace.h"
++#endif
++#endif
++
+ bool g_cache_string_hash{true};
+ 
+ namespace {
+-- 
+2.33.0.windows.1
+

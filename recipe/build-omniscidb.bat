@@ -21,13 +21,13 @@ cmake -G "NMake Makefiles" ^
       -DENABLE_AWS_S3=OFF ^
       -DENABLE_LDAP=OFF ^
       -DMAPD_EDITION=EE ^
+      -DENABLE_DISTRIBUTED_5_0=OFF ^
       -DCMAKE_BUILD_TYPE=Release ^
       "%SRC_DIR%"
 if errorlevel 1 exit 1
 
 @Rem build calcite first
 cmake --build . --target calciteserver_thrift
-dir Calcite
 cmake --build . --target all --config Release
 if errorlevel 1 exit 1
 
