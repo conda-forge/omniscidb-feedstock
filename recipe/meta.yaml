@@ -26,7 +26,7 @@ source:
   sha256: 4a1e5e1dc5c4b4bc632bf781772f09b44847411ab2e28c7bdd21011c7419e74c
   patches:
     - 0001-Fix-DBE-build.patch
-    - 0002-Fix-Windows-build.patch
+    - 0002-Fix-Windows-build.patch  # [win]
 
 build:
   number: {{ number }}
