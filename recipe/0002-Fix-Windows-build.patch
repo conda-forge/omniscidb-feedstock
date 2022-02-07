@@ -1,6 +1,6 @@
-From 87e5c9c5ed9ced5aaa075a115e9e4e19b72566e0 Mon Sep 17 00:00:00 2001
+From 61dd2906682ac7b03188c39a75ffae4e89944086 Mon Sep 17 00:00:00 2001
 From: Guilherme Leobas <guilhermeleobas@gmail.com>
-Date: Mon, 7 Feb 2022 13:55:55 -0300
+Date: Mon, 7 Feb 2022 14:40:06 -0300
 Subject: [PATCH] Fix Windows build
 
 ---
@@ -13,7 +13,7 @@ Subject: [PATCH] Fix Windows build
  6 files changed, 32 insertions(+), 3 deletions(-)
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index dfda618784..f021184a16 100644
+index dfda618784..a63a2e5be6 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -16,7 +16,9 @@ if(DEFINED ENV{CONDA_PREFIX})
@@ -32,7 +32,7 @@ index dfda618784..f021184a16 100644
    add_compile_definitions("NOMINMAX")
    if(ENABLE_NO_WINWARNINGS)
 -    add_compile_definitions("_STL_EXTRA_DISABLED_WARNINGS=4146 4242 4244 4267 4355 4365 4458 4624 4820 4996 5204 5219" "NOMINMAX")
-+    add_compile_definitions("_STL_EXTRA_DISABLED_WARNINGS=4146 4242 4244 4267 4355 4365 4458 4624 4820 4996 5204 5219 4571 4625 4626 4710 4711 5026 5027" "NOMINMAX")
++    add_compile_definitions("_STL_EXTRA_DISABLED_WARNINGS=4146 4242 4244 4267 4355 4365 4458 4624 4820 4996 5204 5219 4571 4582 4623 4625 4626 4710 4711 4774 5026 5027" "NOMINMAX")
      # disable 4702 unreachable code warning
      # with /Qspectre set, disable the warning C5045
      add_compile_options(/W0 /wd4702 /wd5045)
