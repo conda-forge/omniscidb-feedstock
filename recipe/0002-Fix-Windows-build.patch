@@ -1,17 +1,19 @@
-From 9cea9b7fbb818af186042e32a63d3944a3adaf9b Mon Sep 17 00:00:00 2001
+From 87e5c9c5ed9ced5aaa075a115e9e4e19b72566e0 Mon Sep 17 00:00:00 2001
 From: Guilherme Leobas <guilhermeleobas@gmail.com>
-Date: Sat, 5 Feb 2022 17:39:58 -0300
-Subject: [PATCH] Fixes for windows build on conda-forge
+Date: Mon, 7 Feb 2022 13:55:55 -0300
+Subject: [PATCH] Fix Windows build
 
 ---
- CMakeLists.txt                        | 4 +++-
- DataMgr/BufferMgr/BufferMgr.h         | 3 +++
- StringDictionary/DictRef.h            | 1 +
- StringDictionary/StringDictionary.cpp | 6 ++++++
- 4 files changed, 13 insertions(+), 1 deletion(-)
+ CMakeLists.txt                            |  6 ++++--
+ Catalog/OptionsContainer.h                |  2 +-
+ DataMgr/BufferMgr/BufferMgr.h             |  3 +++
+ StringDictionary/DictRef.h                |  1 +
+ StringDictionary/StringDictionary.cpp     |  6 ++++++
+ ThirdParty/rapidjson/rapidjson/document.h | 17 +++++++++++++++++
+ 6 files changed, 32 insertions(+), 3 deletions(-)
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index dfda618784..a902c6472e 100644
+index dfda618784..f021184a16 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -16,7 +16,9 @@ if(DEFINED ENV{CONDA_PREFIX})
@@ -25,6 +27,28 @@ index dfda618784..a902c6472e 100644
    # Adding `--sysroot=...` resolves `no member named 'signbit' in the global namespace` error:
    set(CMAKE_SYSROOT "$ENV{CONDA_BUILD_SYSROOT}")
  endif(DEFINED ENV{CONDA_PREFIX})
+@@ -389,7 +391,7 @@ if(MSVC)
+   option(ENABLE_NO_WINWARNINGS "disable most windows warnings" ON)
+   add_compile_definitions("NOMINMAX")
+   if(ENABLE_NO_WINWARNINGS)
+-    add_compile_definitions("_STL_EXTRA_DISABLED_WARNINGS=4146 4242 4244 4267 4355 4365 4458 4624 4820 4996 5204 5219" "NOMINMAX")
++    add_compile_definitions("_STL_EXTRA_DISABLED_WARNINGS=4146 4242 4244 4267 4355 4365 4458 4624 4820 4996 5204 5219 4571 4625 4626 4710 4711 5026 5027" "NOMINMAX")
+     # disable 4702 unreachable code warning
+     # with /Qspectre set, disable the warning C5045
+     add_compile_options(/W0 /wd4702 /wd5045)
+diff --git a/Catalog/OptionsContainer.h b/Catalog/OptionsContainer.h
+index da92e454b0..9a6ba6d55c 100644
+--- a/Catalog/OptionsContainer.h
++++ b/Catalog/OptionsContainer.h
+@@ -71,7 +71,7 @@ struct OptionsContainer {
+     if (clear) {
+       options.clear();
+     }
+-    for (const auto& member : ddl_options.GetObject()) {
++    for (const auto& member : ddl_options.GetObj()) {
+       std::string key = to_upper(member.name.GetString());
+       options[key] = member.value.GetString();
+     }
 diff --git a/DataMgr/BufferMgr/BufferMgr.h b/DataMgr/BufferMgr/BufferMgr.h
 index 1df594918b..cfbdad4159 100644
 --- a/DataMgr/BufferMgr/BufferMgr.h
@@ -68,6 +92,47 @@ index 23cf7262b1..4cb401ade7 100644
  bool g_cache_string_hash{true};
  
  namespace {
+diff --git a/ThirdParty/rapidjson/rapidjson/document.h b/ThirdParty/rapidjson/rapidjson/document.h
+index eb4be3a38e..90bb46ed92 100644
+--- a/ThirdParty/rapidjson/rapidjson/document.h
++++ b/ThirdParty/rapidjson/rapidjson/document.h
+@@ -44,6 +44,15 @@ RAPIDJSON_DIAG_OFF(terminate) // ignore throwing RAPIDJSON_ASSERT in RAPIDJSON_N
+ #endif
+ #endif // __GNUC__
+ 
++#ifdef GetObject
++// see https://github.com/Tencent/rapidjson/issues/1448
++// a former included windows.h might have defined a macro called GetObject, which affects
++// GetObject defined here. This ensures the macro does not get applied
++#pragma push_macro("GetObject")
++#define RAPIDJSON_WINDOWS_GETOBJECT_WORKAROUND_APPLIED
++#undef GetObject
++#endif
++
+ #ifndef RAPIDJSON_NOMEMBERITERATORCLASS
+ #include <iterator> // std::iterator, std::random_access_iterator_tag
+ #endif
+@@ -1456,7 +1465,9 @@ public:
+     }
+ 
+     Object GetObject() { RAPIDJSON_ASSERT(IsObject()); return Object(*this); }
++    Object GetObj() { RAPIDJSON_ASSERT(IsObject()); return Object(*this); }
+     ConstObject GetObject() const { RAPIDJSON_ASSERT(IsObject()); return ConstObject(*this); }
++    ConstObject GetObj() const { RAPIDJSON_ASSERT(IsObject()); return ConstObject(*this); }
+ 
+     //@}
+ 
+@@ -2584,4 +2595,10 @@ private:
+ RAPIDJSON_NAMESPACE_END
+ RAPIDJSON_DIAG_POP
+ 
++
++#ifdef RAPIDJSON_WINDOWS_GETOBJECT_WORKAROUND_APPLIED
++#pragma pop_macro("GetObject")
++#undef RAPIDJSON_WINDOWS_GETOBJECT_WORKAROUND_APPLIED
++#endif
++
+ #endif // RAPIDJSON_DOCUMENT_H_
 -- 
 2.33.0.windows.1
 
