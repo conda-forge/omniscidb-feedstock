@@ -26,6 +26,7 @@ cmake -G "NMake Makefiles" ^
       -DENABLE_LDAP=OFF ^
       -DMAPD_EDITION=EE ^
       -DCMAKE_BUILD_TYPE=Release ^
+      -DENABLE_NO_WINWARNINGS=ON ^
       "%SRC_DIR%"
 if errorlevel 1 exit 1
 
