@@ -5,6 +5,10 @@ pushd "%SRC_DIR%"\build
 
 COPY %PREFIX%\Library\lib\thriftmd.lib %PREFIX%\Library\bin\thriftmd.lib
 
+@REM Contains a patch for arrow-cpp
+@REM https://github.com/apache/arrow/pull/11806
+COPY aligned_storage.h %PREFIX%\Library\include\arrow\util\aligned_storage.h
+
 cmake -G "NMake Makefiles" ^
       -DCMAKE_PREFIX_PATH=%PREFIX% ^
       -DCMAKE_LIBRARY_PATH=%PREFIX%\Library\lib ^
@@ -21,7 +25,6 @@ cmake -G "NMake Makefiles" ^
       -DENABLE_AWS_S3=OFF ^
       -DENABLE_LDAP=OFF ^
       -DMAPD_EDITION=EE ^
-      -DENABLE_DISTRIBUTED_5_0=OFF ^
       -DCMAKE_BUILD_TYPE=Release ^
       "%SRC_DIR%"
 if errorlevel 1 exit 1
