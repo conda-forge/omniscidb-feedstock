@@ -1,27 +1,39 @@
-From 61dd2906682ac7b03188c39a75ffae4e89944086 Mon Sep 17 00:00:00 2001
+From a26300e5f87e87d261f6850026fa49e24387d3e7 Mon Sep 17 00:00:00 2001
 From: Guilherme Leobas <guilhermeleobas@gmail.com>
-Date: Mon, 7 Feb 2022 14:40:06 -0300
+Date: Thu, 17 Feb 2022 16:32:13 -0300
 Subject: [PATCH] Fix Windows build
 
 ---
- CMakeLists.txt                            |  6 ++++--
- Catalog/OptionsContainer.h                |  2 +-
- DataMgr/BufferMgr/BufferMgr.h             |  3 +++
- StringDictionary/DictRef.h                |  1 +
- StringDictionary/StringDictionary.cpp     |  6 ++++++
- ThirdParty/rapidjson/rapidjson/document.h | 17 +++++++++++++++++
- 6 files changed, 32 insertions(+), 3 deletions(-)
+ CMakeLists.txt                                 | 10 ++++++----
+ Catalog/OptionsContainer.h                     |  2 +-
+ DataMgr/BufferMgr/BufferMgr.h                  |  3 +++
+ DataMgr/ForeignStorage/ArrowForeignStorage.cpp |  8 ++++----
+ StringDictionary/DictRef.h                     |  1 +
+ StringDictionary/StringDictionary.cpp          |  6 ++++++
+ ThirdParty/rapidjson/rapidjson/document.h      | 17 +++++++++++++++++
+ ThirdParty/sqlite3/CMakeLists.txt              |  2 +-
+ ThirdParty/sqlite3/sqlite3.c                   |  2 +-
+ 9 files changed, 40 insertions(+), 11 deletions(-)
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index dfda618784..a63a2e5be6 100644
+index dfda618784..8e212d9eab 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
+@@ -8,7 +8,7 @@ if(DEFINED ENV{CONDA_PREFIX})
+   set(ENABLE_CONDA ON)
+   list(APPEND CMAKE_PREFIX_PATH "$ENV{CONDA_PREFIX}")
+   # resolves link issue for zlib 
+-  link_directories("$ENV{CONDA_PREFIX}/lib")
++  link_directories("$ENV{CONDA_PREFIX}/lib" "$ENV{CONDA_PREFIX}/Library/lib")
+   # various fixes and workarounds
+   add_definitions("-Dsecure_getenv=getenv")
+   # fixes `undefined reference to `boost::system::detail::system_category_instance'`:
 @@ -16,7 +16,9 @@ if(DEFINED ENV{CONDA_PREFIX})
    # Adding formating macros
    add_definitions("-D__STDC_FORMAT_MACROS=1")
    # fixes always_inline attribute errors
 -  add_compile_options("-fno-semantic-interposition")
-+  if (NOT DEFINED MSVC)
++  if (DEFINED MSVC)
 +    add_compile_options("$<$<COMPILE_LANGUAGE:CXX>:-fno-semantic-interposition>")
 +  endif()
    # Adding `--sysroot=...` resolves `no member named 'signbit' in the global namespace` error:
@@ -32,10 +44,19 @@ index dfda618784..a63a2e5be6 100644
    add_compile_definitions("NOMINMAX")
    if(ENABLE_NO_WINWARNINGS)
 -    add_compile_definitions("_STL_EXTRA_DISABLED_WARNINGS=4146 4242 4244 4267 4355 4365 4458 4624 4820 4996 5204 5219" "NOMINMAX")
-+    add_compile_definitions("_STL_EXTRA_DISABLED_WARNINGS=4146 4242 4244 4267 4355 4365 4458 4624 4820 4996 5204 5219 4571 4582 4623 4625 4626 4710 4711 4774 5026 5027" "NOMINMAX")
++    add_compile_definitions("_STL_EXTRA_DISABLED_WARNINGS=4146 4242 4244 4267 4355 4365 4458 4624 4820 4996 5204 5219 4571 4582 4583 4623 4625 4626 4710 4711 4774 5026 5027" "NOMINMAX")
      # disable 4702 unreachable code warning
      # with /Qspectre set, disable the warning C5045
      add_compile_options(/W0 /wd4702 /wd5045)
+@@ -922,7 +924,7 @@ add_custom_target(rerun_cmake ALL
+   )
+ add_dependencies(omnisci_server rerun_cmake)
+ 
+-target_link_libraries(omnisci_server mapd_thrift thrift_handler ${MAPD_LIBRARIES} ${Boost_LIBRARIES} ${CMAKE_DL_LIBS} ${CUDA_LIBRARIES} ${PROFILER_LIBS} ${ZLIB_LIBRARIES} ${LOCALE_LINK_FLAG})
++target_link_libraries(omnisci_server mapd_thrift thrift_handler sqlite3 ${MAPD_LIBRARIES} ${Boost_LIBRARIES} ${CMAKE_DL_LIBS} ${CUDA_LIBRARIES} ${PROFILER_LIBS} ${ZLIB_LIBRARIES} ${LOCALE_LINK_FLAG})
+ 
+ target_link_libraries(initdb mapd_thrift thrift_handler ${MAPD_LIBRARIES} ${Boost_LIBRARIES} ${CMAKE_DL_LIBS}
+     ${CUDA_LIBRARIES} ${PROFILER_LIBS} ${ZLIB_LIBRARIES} ${BLOSC_LIBRARIES}
 diff --git a/Catalog/OptionsContainer.h b/Catalog/OptionsContainer.h
 index da92e454b0..9a6ba6d55c 100644
 --- a/Catalog/OptionsContainer.h
@@ -63,6 +84,26 @@ index 1df594918b..cfbdad4159 100644
  #include "Shared/boost_stacktrace.hpp"
  #include "Shared/types.h"
  
+diff --git a/DataMgr/ForeignStorage/ArrowForeignStorage.cpp b/DataMgr/ForeignStorage/ArrowForeignStorage.cpp
+index 2ac4b41d4f..a68f46d3e6 100644
+--- a/DataMgr/ForeignStorage/ArrowForeignStorage.cpp
++++ b/DataMgr/ForeignStorage/ArrowForeignStorage.cpp
+@@ -978,11 +978,11 @@ void ArrowCsvForeignStorage::registerTable(Catalog_Namespace::Catalog* catalog,
+     df_td = df_td_owned.get();
+   }
+ 
+-#ifdef ENABLE_ARROW_4
++// #ifdef ENABLE_ARROW_4
+   auto io_context = arrow::io::default_io_context();
+-#else
+-  auto io_context = arrow::default_memory_pool();
+-#endif
++// #else
++//   auto io_context = arrow::default_memory_pool();
++// #endif
+   auto arrow_parse_options = arrow::csv::ParseOptions::Defaults();
+   arrow_parse_options.quoting = false;
+   arrow_parse_options.escaping = false;
 diff --git a/StringDictionary/DictRef.h b/StringDictionary/DictRef.h
 index 62456859ee..5e9f8cb1dc 100644
 --- a/StringDictionary/DictRef.h
@@ -133,6 +174,30 @@ index eb4be3a38e..90bb46ed92 100644
 +#endif
 +
  #endif // RAPIDJSON_DOCUMENT_H_
+diff --git a/ThirdParty/sqlite3/CMakeLists.txt b/ThirdParty/sqlite3/CMakeLists.txt
+index 8cc388235e..660e141fc9 100644
+--- a/ThirdParty/sqlite3/CMakeLists.txt
++++ b/ThirdParty/sqlite3/CMakeLists.txt
+@@ -6,5 +6,5 @@ else()
+   set_source_files_properties(sqlite3.c PROPERTIES COMPILE_FLAGS "-O0 -Wno-unused-value")
+ endif()
+ 
+-add_library(sqlite3 sqlite3.c sqlite3.h)
++add_library(sqlite3 SHARED sqlite3.c sqlite3.h)
+ target_link_libraries(sqlite3 ${CMAKE_DL_LIBS})
+diff --git a/ThirdParty/sqlite3/sqlite3.c b/ThirdParty/sqlite3/sqlite3.c
+index 38874ce409..31125ebdc1 100644
+--- a/ThirdParty/sqlite3/sqlite3.c
++++ b/ThirdParty/sqlite3/sqlite3.c
+@@ -1097,7 +1097,7 @@ extern "C" {
+ # define SQLITE_EXTERN extern
+ #endif
+ #ifndef SQLITE_API
+-# define SQLITE_API
++# define SQLITE_API __declspec(dllexport)
+ #endif
+ #ifndef SQLITE_CDECL
+ # define SQLITE_CDECL
 -- 
 2.33.0.windows.1
 
