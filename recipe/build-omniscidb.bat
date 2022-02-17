@@ -1,13 +1,14 @@
 @echo on
 
+@REM Contains a patch for arrow-cpp
+@REM https://github.com/apache/arrow/pull/11806
+COPY arrow_aligned_storage.h %PREFIX%\Library\include\arrow\util\aligned_storage.h
+if errorlevel 1 exit 1
+
 mkdir "%SRC_DIR%"\build
 pushd "%SRC_DIR%"\build
 
 COPY %PREFIX%\Library\lib\thriftmd.lib %PREFIX%\Library\bin\thriftmd.lib
-
-@REM Contains a patch for arrow-cpp
-@REM https://github.com/apache/arrow/pull/11806
-COPY aligned_storage.h %PREFIX%\Library\include\arrow\util\aligned_storage.h
 
 cmake -G "NMake Makefiles" ^
       -DCMAKE_PREFIX_PATH=%PREFIX% ^

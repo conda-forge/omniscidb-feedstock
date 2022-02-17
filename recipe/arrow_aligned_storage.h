@@ -43,6 +43,7 @@ namespace arrow
 #else
             T *get() noexcept
             {
+                // Use fully qualified name to avoid ambiguities with MSVC (ARROW-14800)
                 return arrow::internal::launder(reinterpret_cast<T *>(&data_));
             }
 #endif
