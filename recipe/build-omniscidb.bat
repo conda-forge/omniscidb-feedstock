@@ -17,6 +17,10 @@ cmake -G "NMake Makefiles" ^
       -DLibArchive_LIBRARY=%PREFIX%\Library\lib\archive.lib ^
       -DLZMA_LIBRARY=%PREFIX%\Library\lib\liblzma.lib ^
       -DBZ2_LIBRARY=%PREFIX%\Library\lib\libbz2.lib ^
+      -DGDAL_LIBRARIES=%CONDA_PREFIX%\Library\lib\gdal_i.lib^
+      -DGDAL_INCLUDE_DIR=%CONDA_PREFIX%\Library\include ^
+      -DCMAKE_CXX_FLAGS="/MP -DBOOST_ALL_DYN_LINK=1 -DBOOST_PROGRAM_OPTIONS_DYN_LINK=1" ^
+      -DBoost_USE_STATIC_LIBS=OFF ^
       -DENABLE_FOLLY=OFF ^
       -DENABLE_TESTS=OFF ^
       -DENABLE_CUDA=OFF ^
@@ -26,6 +30,7 @@ cmake -G "NMake Makefiles" ^
       -DENABLE_LDAP=OFF ^
       -DMAPD_EDITION=EE ^
       -DCMAKE_BUILD_TYPE=Release ^
+      -DCMAKE_VERBOSE_MAKEFILE=OFF ^
       -DENABLE_NO_WINWARNINGS=ON ^
       "%SRC_DIR%"
 if errorlevel 1 exit 1
