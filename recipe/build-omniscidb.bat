@@ -2,7 +2,7 @@
 
 @REM Contains a patch for arrow-cpp
 @REM https://github.com/apache/arrow/pull/11806
-COPY arrow_aligned_storage.h %PREFIX%\Library\include\arrow\util\aligned_storage.h
+COPY %RECIPE_DIR%\arrow_aligned_storage.h %PREFIX%\Library\include\arrow\util\aligned_storage.h
 if errorlevel 1 exit 1
 
 mkdir "%SRC_DIR%"\build
