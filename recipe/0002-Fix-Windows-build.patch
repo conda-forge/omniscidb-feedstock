@@ -94,7 +94,7 @@ index 2967a01631..746093175d 100644
  std::string append_file_path(const std::optional<std::string>& base,
                               const std::optional<std::string>& subdirectory) {
 -  const std::string separator{boost::filesystem::path::preferred_separator};
-+  const std::string separator = boost::filesystem::path::preferred_separator;
++  const std::string separator{char(boost::filesystem::path::preferred_separator)};
    return std::regex_replace(
        (base ? *base + separator : "") + (subdirectory ? *subdirectory : ""),
        std::regex{separator + "{2,}"},
@@ -103,7 +103,7 @@ index 2967a01631..746093175d 100644
    CHECK(storage_type);
  
 -  const std::string separator{boost::filesystem::path::preferred_separator};
-+  const std::string separator = boost::filesystem::path::preferred_separator;
++  const std::string separator{char(boost::filesystem::path::preferred_separator)};
    if (*storage_type == LOCAL_FILE_STORAGE_TYPE) {
      base_path = foreign_server->getOption(BASE_PATH_KEY);
    }
