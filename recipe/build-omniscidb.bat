@@ -18,8 +18,8 @@ cmake -G "NMake Makefiles" ^
       -DLibArchive_LIBRARY=%PREFIX%\Library\lib\archive.lib ^
       -DLZMA_LIBRARY=%PREFIX%\Library\lib\liblzma.lib ^
       -DBZ2_LIBRARY=%PREFIX%\Library\lib\libbz2.lib ^
-      -DGDAL_LIBRARIES=%CONDA_PREFIX%\Library\lib\gdal_i.lib^
-      -DGDAL_INCLUDE_DIR=%CONDA_PREFIX%\Library\include ^
+      -DGDAL_LIBRARIES=%PREFIX%\Library\lib\gdal_i.lib^
+      -DGDAL_INCLUDE_DIR=%PREFIX%\Library\include ^
       -DCMAKE_CXX_FLAGS="/MP /w /wd4596 -DBOOST_ALL_DYN_LINK=1 -DBOOST_PROGRAM_OPTIONS_DYN_LINK=1" ^
       -DBoost_USE_STATIC_LIBS=OFF ^
       -DENABLE_FOLLY=OFF ^
