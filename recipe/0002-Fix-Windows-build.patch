@@ -1,6 +1,6 @@
-From d6e55d6eeb21c578c87b3d59ed118df10ec5f35a Mon Sep 17 00:00:00 2001
+From effcdcbf8968ae8d79759c6f0a11ed1372b13d04 Mon Sep 17 00:00:00 2001
 From: Guilherme Leobas <guilhermeleobas@gmail.com>
-Date: Wed, 23 Feb 2022 15:59:35 -0300
+Date: Wed, 23 Feb 2022 17:31:58 -0300
 Subject: [PATCH] Fix Windows build
 
 ---
@@ -14,8 +14,9 @@ Subject: [PATCH] Fix Windows build
  ThirdParty/rapidjson/rapidjson/document.h       | 17 +++++++++++++++++
  ThirdParty/sqlite3/CMakeLists.txt               |  2 +-
  ThirdParty/sqlite3/sqlite3.c                    |  2 +-
+ ThriftHandler/CommandLineOptions.cpp            |  1 +
  UdfCompiler/UdfCompiler.cpp                     |  2 +-
- 11 files changed, 43 insertions(+), 14 deletions(-)
+ 12 files changed, 44 insertions(+), 14 deletions(-)
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
 index dfda618784..8e212d9eab 100644
@@ -222,6 +223,18 @@ index 38874ce409..31125ebdc1 100644
  #endif
  #ifndef SQLITE_CDECL
  # define SQLITE_CDECL
+diff --git a/ThriftHandler/CommandLineOptions.cpp b/ThriftHandler/CommandLineOptions.cpp
+index 4705a5a60d..e76474497c 100644
+--- a/ThriftHandler/CommandLineOptions.cpp
++++ b/ThriftHandler/CommandLineOptions.cpp
+@@ -31,6 +31,7 @@
+ 
+ #ifdef _WIN32
+ #include <io.h>
++#include <process.h>
+ #endif
+ 
+ const std::string CommandLineOptions::nodeIds_token = {"node_id"};
 diff --git a/UdfCompiler/UdfCompiler.cpp b/UdfCompiler/UdfCompiler.cpp
 index 52acbcfc88..c540311a12 100644
 --- a/UdfCompiler/UdfCompiler.cpp
