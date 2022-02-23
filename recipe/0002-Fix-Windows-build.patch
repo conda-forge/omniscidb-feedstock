@@ -1,6 +1,6 @@
-From 49d6d2f21a781bd16e0114ed0a11ce3f457fe32d Mon Sep 17 00:00:00 2001
+From 90affd90ad564dc595f7ffbceba9c279606439f4 Mon Sep 17 00:00:00 2001
 From: Guilherme Leobas <guilhermeleobas@gmail.com>
-Date: Thu, 17 Feb 2022 21:30:11 -0300
+Date: Wed, 23 Feb 2022 14:52:56 -0300
 Subject: [PATCH] Fix Windows build
 
 ---
@@ -14,7 +14,8 @@ Subject: [PATCH] Fix Windows build
  ThirdParty/rapidjson/rapidjson/document.h       | 17 +++++++++++++++++
  ThirdParty/sqlite3/CMakeLists.txt               |  2 +-
  ThirdParty/sqlite3/sqlite3.c                    |  2 +-
- 10 files changed, 42 insertions(+), 13 deletions(-)
+ UdfCompiler/UdfCompiler.cpp                     |  2 +-
+ 11 files changed, 43 insertions(+), 14 deletions(-)
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
 index dfda618784..8e212d9eab 100644
@@ -86,7 +87,7 @@ index 1df594918b..cfbdad4159 100644
  #include "Shared/types.h"
  
 diff --git a/DataMgr/ForeignStorage/AbstractFileStorageDataWrapper.cpp b/DataMgr/ForeignStorage/AbstractFileStorageDataWrapper.cpp
-index 2967a01631..746093175d 100644
+index 2967a01631..3ff43960d1 100644
 --- a/DataMgr/ForeignStorage/AbstractFileStorageDataWrapper.cpp
 +++ b/DataMgr/ForeignStorage/AbstractFileStorageDataWrapper.cpp
 @@ -77,7 +77,7 @@ void AbstractFileStorageDataWrapper::validateFilePath(const ForeignTable* foreig
@@ -94,7 +95,7 @@ index 2967a01631..746093175d 100644
  std::string append_file_path(const std::optional<std::string>& base,
                               const std::optional<std::string>& subdirectory) {
 -  const std::string separator{boost::filesystem::path::preferred_separator};
-+  const std::string separator{char(boost::filesystem::path::preferred_separator)};
++  const std::string separator = char(boost::filesystem::path::preferred_separator);
    return std::regex_replace(
        (base ? *base + separator : "") + (subdirectory ? *subdirectory : ""),
        std::regex{separator + "{2,}"},
@@ -103,7 +104,7 @@ index 2967a01631..746093175d 100644
    CHECK(storage_type);
  
 -  const std::string separator{boost::filesystem::path::preferred_separator};
-+  const std::string separator{char(boost::filesystem::path::preferred_separator)};
++  const std::string separator = char(boost::filesystem::path::preferred_separator);
    if (*storage_type == LOCAL_FILE_STORAGE_TYPE) {
      base_path = foreign_server->getOption(BASE_PATH_KEY);
    }
@@ -221,6 +222,19 @@ index 38874ce409..31125ebdc1 100644
  #endif
  #ifndef SQLITE_CDECL
  # define SQLITE_CDECL
+diff --git a/UdfCompiler/UdfCompiler.cpp b/UdfCompiler/UdfCompiler.cpp
+index 52acbcfc88..c540311a12 100644
+--- a/UdfCompiler/UdfCompiler.cpp
++++ b/UdfCompiler/UdfCompiler.cpp
+@@ -254,7 +254,7 @@ UdfClangDriver::UdfClangDriver(
+   clang_resource_dir.erase(
+       std::find_if(clang_resource_dir.rbegin(),
+                    clang_resource_dir.rend(),
+-                   [](unsigned char ch) { return !std::isspace(ch); })
++                   [](unsigned char ch) { return !::isspace(ch); })
+           .base(),
+       clang_resource_dir.end());
+ 
 -- 
 2.33.0.windows.1
 
