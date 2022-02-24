@@ -9,6 +9,7 @@ mkdir "%SRC_DIR%"\build
 pushd "%SRC_DIR%"\build
 
 COPY %PREFIX%\Library\lib\thriftmd.lib %PREFIX%\Library\bin\thriftmd.lib
+COPY %PREFIX%\Library\lib\xerces-c_3.lib %PREFIX%\Library\lib\xerces-c.lib
 
 cmake -G "NMake Makefiles" ^
       -DCMAKE_PREFIX_PATH=%PREFIX% ^
