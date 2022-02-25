@@ -39,7 +39,7 @@ if errorlevel 1 exit 1
 
 @Rem build calcite first
 cmake --build . --target calciteserver_thrift
-cmake --build . --target all --config Release
+cmake --build . --target initdb omnisci_server --config Release
 if errorlevel 1 exit 1
 
 popd
