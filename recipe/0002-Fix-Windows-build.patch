@@ -1,22 +1,23 @@
-From effcdcbf8968ae8d79759c6f0a11ed1372b13d04 Mon Sep 17 00:00:00 2001
+From 09940da0ae6d3653e664ebb80f2a427835d59231 Mon Sep 17 00:00:00 2001
 From: Guilherme Leobas <guilhermeleobas@gmail.com>
-Date: Wed, 23 Feb 2022 17:31:58 -0300
+Date: Fri, 25 Feb 2022 01:09:14 -0300
 Subject: [PATCH] Fix Windows build
 
 ---
- CMakeLists.txt                                  | 10 ++++++----
- Catalog/OptionsContainer.h                      |  2 +-
- DataMgr/BufferMgr/BufferMgr.h                   |  3 +++
- .../AbstractFileStorageDataWrapper.cpp          |  4 ++--
- DataMgr/ForeignStorage/ArrowForeignStorage.cpp  |  8 ++++----
- StringDictionary/DictRef.h                      |  1 +
- StringDictionary/StringDictionary.cpp           |  6 ++++++
- ThirdParty/rapidjson/rapidjson/document.h       | 17 +++++++++++++++++
- ThirdParty/sqlite3/CMakeLists.txt               |  2 +-
- ThirdParty/sqlite3/sqlite3.c                    |  2 +-
- ThriftHandler/CommandLineOptions.cpp            |  1 +
- UdfCompiler/UdfCompiler.cpp                     |  2 +-
- 12 files changed, 44 insertions(+), 14 deletions(-)
+ CMakeLists.txt                                 | 10 ++++++----
+ Catalog/OptionsContainer.h                     |  2 +-
+ DataMgr/BufferMgr/BufferMgr.h                  |  3 +++
+ .../AbstractFileStorageDataWrapper.cpp         |  4 ++--
+ DataMgr/ForeignStorage/ArrowForeignStorage.cpp |  8 ++++----
+ Shared/ThriftClient.cpp                        | 18 ++++++++++--------
+ StringDictionary/DictRef.h                     |  1 +
+ StringDictionary/StringDictionary.cpp          |  6 ++++++
+ ThirdParty/rapidjson/rapidjson/document.h      | 17 +++++++++++++++++
+ ThirdParty/sqlite3/CMakeLists.txt              |  2 +-
+ ThirdParty/sqlite3/sqlite3.c                   |  2 +-
+ ThriftHandler/CommandLineOptions.cpp           |  1 +
+ UdfCompiler/UdfCompiler.cpp                    |  2 +-
+ 13 files changed, 54 insertions(+), 22 deletions(-)
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
 index dfda618784..8e212d9eab 100644
@@ -129,6 +130,39 @@ index 2ac4b41d4f..a68f46d3e6 100644
    auto arrow_parse_options = arrow::csv::ParseOptions::Defaults();
    arrow_parse_options.quoting = false;
    arrow_parse_options.escaping = false;
+diff --git a/Shared/ThriftClient.cpp b/Shared/ThriftClient.cpp
+index 546369c2d5..ba703be814 100644
+--- a/Shared/ThriftClient.cpp
++++ b/Shared/ThriftClient.cpp
+@@ -132,18 +132,20 @@ class ProxyTHttpClient : public THttpClient {
+     uint32_t len;
+     writeBuffer_.getBuffer(&buf, &len);
+ 
++    constexpr static const char* CRLF = "\r\n";
++
+     std::ostringstream h;
+-    h << "POST " << path_ << " HTTP/1.1" << THttpClient::CRLF << "Host: " << host_
+-      << THttpClient::CRLF << "Content-Type: application/x-thrift" << THttpClient::CRLF
+-      << "Content-Length: " << len << THttpClient::CRLF << "Accept: application/x-thrift"
+-      << THttpClient::CRLF << "User-Agent: Thrift/" << THRIFT_PACKAGE_VERSION
+-      << " (C++/THttpClient)" << THttpClient::CRLF << "Connection: keep-alive"
+-      << THttpClient::CRLF;
++    h << "POST " << path_ << " HTTP/1.1" << CRLF << "Host: " << host_
++      << CRLF << "Content-Type: application/x-thrift" << CRLF
++      << "Content-Length: " << len << CRLF << "Accept: application/x-thrift"
++      << CRLF << "User-Agent: Thrift/" << THRIFT_PACKAGE_VERSION
++      << " (C++/THttpClient)" << CRLF << "Connection: keep-alive"
++      << CRLF;
+     if (!cookies_.empty()) {
+       std::string cookie = "Cookie:" + boost::algorithm::join(cookies_, ";");
+-      h << cookie << THttpClient::CRLF;
++      h << cookie << CRLF;
+     }
+-    h << THttpClient::CRLF;
++    h << CRLF;
+ 
+     cookies_.clear();
+     std::string header = h.str();
 diff --git a/StringDictionary/DictRef.h b/StringDictionary/DictRef.h
 index 62456859ee..5e9f8cb1dc 100644
 --- a/StringDictionary/DictRef.h
