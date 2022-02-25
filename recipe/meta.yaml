@@ -199,13 +199,13 @@ outputs:
         - boost-cpp
         - bzip2
         # omnscidb Load-time UDF support calls clang++
-        - gxx_{{ target_platform }}
+        - gxx_{{ target_platform }}  # [not win]
         - libclang-cpp {{ llvm_version }}
-        - ncurses
+        - ncurses  # [not win]
         - openjdk 8.*
         - xz
         - zlib
-        - {{ pin_subpackage('omniscidb-common',  max_pin='x.x.x') }}
+        - {{ pin_subpackage('omniscidb-common',  max_pin='x.x.x') }}  # [not win]
       run_constrained:
         - arrow-cpp-proc {{ arrow_proc_version }} {{ build_ext }}
         - cudatoolkit >=11.0  # [cuda_compiler_version not in (undefined, "None")]
