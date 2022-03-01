@@ -1,4 +1,4 @@
-{% set version = "5.10.1" %}  # PEP 386
+{% set version = "5.10.2" %}  # PEP 386
 {% set source_version = "5.10.1" %}
 {% set base_version = "5.10.1" %}
 {% set number = "0" %}
@@ -23,7 +23,7 @@ package:
 
 source:
   url: https://github.com/omnisci/omniscidb/archive/v{{ source_version }}.tar.gz
-  sha256: 73340011e93cc76f644e60a45e0205bba7684c969af43bf675026675029387c6
+  sha256: a41099704792cf928c9bc8e7f1c6ede1a400b0c024a8d22e8c4daaff329bd451
   patches:
     - 0001-Fix-DBE-build.patch
     - 0002-Fix-Windows-build.patch  # [win]
