@@ -11,6 +11,9 @@ pushd "%SRC_DIR%"\build
 COPY %PREFIX%\Library\lib\thriftmd.lib %PREFIX%\Library\bin\thriftmd.lib
 COPY %PREFIX%\Library\lib\xerces-c_3.lib %PREFIX%\Library\lib\xerces-c.lib
 
+
+:: /wd4711 and /wd4710 disables warning C4711/C4710
+
 cmake -G "NMake Makefiles" ^
       -DCMAKE_INSTALL_PREFIX="%LIBRARY_PREFIX%" ^
       -DCMAKE_PREFIX_PATH=%PREFIX% ^
