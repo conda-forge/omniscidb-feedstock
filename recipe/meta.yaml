@@ -212,18 +212,22 @@ outputs:
 
     test:
       commands:
-        - test -f ${PREFIX}/{{ install_base }}/bin/omnisci_server
-        - test -f ${PREFIX}/{{ install_base }}/bin/omnisci_initdb
-        - test -f ${PREFIX}/{{ install_base }}/bin/omnisql
-        - test -f ${PREFIX}/{{ install_base }}/bin/KafkaImporter
-        - test -f ${PREFIX}/{{ install_base }}/bin/StreamImporter
+        # binary
+        - test -f ${PREFIX}/{{ install_base }}/bin/omnisci_server  # [unix]
+        - test -f ${PREFIX}/{{ install_base }}/bin/omnisci_initdb  # [unix]
+        - test -f ${PREFIX}/{{ install_base }}/bin/omnisql         # [unix]
+        - test -f ${PREFIX}/{{ install_base }}/bin/KafkaImporter   # [unix]
+        - test -f ${PREFIX}/{{ install_base }}/bin/StreamImporter  # [unix]
+        - if not exist %LIBRARY_BIN%\\omnisci_server exit 1        # [win]
+        - if not exist %LIBRARY_BIN%\\initdb exit 1                # [win]
+        - if not exist %LIBRARY_BIN%\\omnisql exit 1               # [win]
 
         # Verify the activation scripts are in-place.
         {% for state in ["activate", "deactivate"] %}
-        - test -f "${PREFIX}/etc/conda/{{ state }}.d/{{ PKG_NAME }}_{{ state }}.sh"
+        - test -f "${PREFIX}/etc/conda/{{ state }}.d/{{ PKG_NAME }}_{{ state }}.sh"  # [unix]
         {% endfor %}
         # Try using the activation scripts.
-        - |
+        - |  # [unix]
           if [[ -x "$(command -v omnisql)" ]]
           then
             echo "Found omnisql in PATH"
@@ -240,17 +244,20 @@ outputs:
           source ${PREFIX}/etc/conda/activate.d/{{ PKG_NAME }}_activate.sh
         # Test installation
         - omnisql -v
-        - which omnisci_initdb
-        - which omnisci_server
-        - |
+        - which omnisci_initdb  # [unix]
+        - which omnisci_server  # [unix]
+        - gcm omnisci_server    # [win]
+        - gcm initdb            # [win]
+        - gcm omnisql           # [win]
+        - |  # [unix]
           if [ -x "$(command -v nvidia-smi)" ]; then  # [cuda_compiler_version not in (undefined, "None")]
             mkdir data && omnisci_initdb data
             omnisci_server --version
             rm -rf data
           fi                                          # [cuda_compiler_version not in (undefined, "None")]
         # these are provided by omniscidb-common package:
-        - which omnisci_insert_sample_data
-        - which startomnisci
+        - which omnisci_insert_sample_data  # [unix]
+        - which startomnisci  # [unix]
 
     about:
       home: https://www.omnisci.com/
