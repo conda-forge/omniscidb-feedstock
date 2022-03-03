@@ -1,7 +1,7 @@
 {% set version = "5.10.2" %}  # PEP 386
-{% set source_version = "5.10.1" %}
-{% set base_version = "5.10.1" %}
-{% set number = "0" %}
+{% set source_version = version %}
+{% set base_version = version %}
+{% set number = "1" %}
 {% set cuda_enabled = cuda_compiler_version is not undefined and cuda_compiler_version == '11.0' %}
 {% set build_ext_version = "1.0.0" %}
 {% set build_ext = "cuda" if cuda_enabled else "cpu" %}
@@ -23,9 +23,7 @@ package:
 
 source:
   url: https://github.com/omnisci/omniscidb/archive/v{{ source_version }}.tar.gz
-  sha256: a41099704792cf928c9bc8e7f1c6ede1a400b0c024a8d22e8c4daaff329bd451
-  patches:
-    - 0001-Fix-DBE-build.patch
+  sha256: c800f768c52a06bc6c1f9140cae427becc3adea0bd3947b80cc703afdeef91b8
 
 build:
   number: {{ number }}
