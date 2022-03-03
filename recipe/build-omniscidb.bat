@@ -41,7 +41,7 @@ cmake -G "NMake Makefiles" ^
       "%SRC_DIR%"
 if errorlevel 1 exit 1
 
-cmake --build . --target calciteserver_thrift initdb omnisci_server omnisql mapd_java_components ExecuteTest --config Release
+cmake --build . --target calciteserver_thrift initdb omnisci_server omnisql mapd_java_components --config Release
 if errorlevel 1 exit 1
 
 popd
