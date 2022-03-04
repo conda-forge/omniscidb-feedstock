@@ -226,8 +226,8 @@ outputs:
         - test -f "${PREFIX}/etc/conda/{{ state }}.d/{{ PKG_NAME }}_{{ state }}.sh"  # [unix]
         {% endfor %}
         # Try using the activation scripts.
-        - |  # [unix]
-          if [[ -x "$(command -v omnisql)" ]]
+        - |
+          if [[ -x "$(command -v omnisql)" ]]  # [unix]
           then
             echo "Found omnisql in PATH"
           else
@@ -248,12 +248,12 @@ outputs:
         - gcm omnisci_server    # [win]
         - gcm initdb            # [win]
         - gcm omnisql           # [win]
-        - |  # [unix]
-          if [ -x "$(command -v nvidia-smi)" ]; then  # [cuda_compiler_version not in (undefined, "None")]
+        - |
+          if [ -x "$(command -v nvidia-smi)" ]; then  # [unix and cuda_compiler_version not in (undefined, "None")]
             mkdir data && omnisci_initdb data
             omnisci_server --version
             rm -rf data
-          fi                                          # [cuda_compiler_version not in (undefined, "None")]
+          fi                                          # [unix and cuda_compiler_version not in (undefined, "None")]
         # these are provided by omniscidb-common package:
         - which omnisci_insert_sample_data  # [unix]
         - which startomnisci  # [unix]
