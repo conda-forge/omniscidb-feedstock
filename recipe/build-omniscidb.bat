@@ -43,7 +43,9 @@ if errorlevel 1 exit 1
 
 cmake --build . --target calciteserver_thrift initdb omnisci_server omnisql mapd_java_components --config Release
 if errorlevel 1 exit 1
-cmake --install .  --component "exe" --prefix %LIBRARY_BIN%
+cmake --install .  --component omnisci_server --prefix %LIBRARY_BIN%
+cmake --install .  --component omnisql --prefix %LIBRARY_BIN%
+cmake --install .  --component initdb --prefix %LIBRARY_BIN%
 if errorlevel 1 exit 1
 
 popd
