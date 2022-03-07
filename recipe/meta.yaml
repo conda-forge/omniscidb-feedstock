@@ -217,9 +217,9 @@ outputs:
         - test -f ${PREFIX}/{{ install_base }}/bin/omnisql         # [unix]
         - test -f ${PREFIX}/{{ install_base }}/bin/KafkaImporter   # [unix]
         - test -f ${PREFIX}/{{ install_base }}/bin/StreamImporter  # [unix]
-        - if not exist %LIBRARY_BIN%\omnisci_server exit 1         # [win]
-        - if not exist %LIBRARY_BIN%\initdb exit 1                 # [win]
-        - if not exist %LIBRARY_BIN%\omnisql exit 1                # [win]
+        - if not exist %LIBRARY_BIN%\omnisci_server.exe exit 1     # [win]
+        - if not exist %LIBRARY_BIN%\omnisci_initdb.exe exit 1     # [win]
+        - if not exist %LIBRARY_BIN%\omnisql.exe exit 1            # [win]
 
         # Verify the activation scripts are in-place.
         {% for state in ["activate", "deactivate"] %}
