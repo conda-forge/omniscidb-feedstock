@@ -15,7 +15,7 @@ COPY %PREFIX%\Library\lib\xerces-c_3.lib %PREFIX%\Library\lib\xerces-c.lib
 :: /wd4711 and /wd4710 disables warning C4711/C4710
 
 cmake -G "NMake Makefiles" ^
-      -DCMAKE_INSTALL_PREFIX=%PREFIX% ^
+      -DCMAKE_INSTALL_PREFIX=%PREFIX%\Library\bin ^
       -DCMAKE_PREFIX_PATH=%PREFIX% ^
       -DCMAKE_LIBRARY_PATH=%PREFIX%\Library\lib ^
       -DCMAKE_INCLUDE_PATH=%PREFIX%\Library\include ^
