@@ -43,7 +43,7 @@ if errorlevel 1 exit 1
 
 cmake --build . --target calciteserver_thrift initdb omnisci_server omnisql mapd_java_components StreamImporter KafkaImporter --config Release
 if errorlevel 1 exit 1
-cmake --install . --component "exe" --prefix %PREFIX%\Library
+cmake --install . --component "exe" --prefix %PREFIX%\Library\bin
 MOVE %PREFIX%\Library\bin\initdb.exe %PREFIX\Library\bin\omnisci_initdb.exe
 if errorlevel 1 exit 1
 
