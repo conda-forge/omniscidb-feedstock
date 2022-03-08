@@ -251,9 +251,9 @@ outputs:
         - gcm omnisql           # [win]
         - |
           if [ -x "$(command -v nvidia-smi)" ]; then  # [unix and cuda_compiler_version not in (undefined, "None")]
-            mkdir data && omnisci_initdb data
-            omnisci_server --version
-            rm -rf data
+            mkdir data && omnisci_initdb data         # [unix and cuda_compiler_version not in (undefined, "None")]
+            omnisci_server --version                  # [unix and cuda_compiler_version not in (undefined, "None")]
+            rm -rf data                               # [unix and cuda_compiler_version not in (undefined, "None")]
           fi                                          # [unix and cuda_compiler_version not in (undefined, "None")]
         # these are provided by omniscidb-common package:
         - which omnisci_insert_sample_data  # [unix]
