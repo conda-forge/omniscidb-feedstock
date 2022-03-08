@@ -229,16 +229,16 @@ outputs:
         - |
           if [[ -x "$(command -v omnisql)" ]]                                                 # [unix]
           then                                                                                # [unix]
-            echo "Found omnisql in PATH"
+            echo "Found omnisql in PATH"                                                      # [unix]
           else                                                                                # [unix]
-            echo "omnisql not found in PATH(=$PATH)" && exit 1
+            echo "omnisql not found in PATH(=$PATH)" && exit 1                                # [unix]
           fi                                                                                  # [unix]
           source ${PREFIX}/etc/conda/deactivate.d/{{ PKG_NAME }}_deactivate.sh                # [unix]
           if [[ -x "$(command -v omnisql)" ]]                                                 # [unix]
           then                                                                                # [unix]
-            echo "Unexpectedly found omnisql in PATH(=$PATH) after deactivation"  && exit 1
+            echo "Unexpectedly found omnisql in PATH(=$PATH) after deactivation"  && exit 1   # [unix]
           else                                                                                # [unix]
-            echo "omnisql not in PATH after deactivation"
+            echo "omnisql not in PATH after deactivation"                                     # [unix]
           fi                                                                                  # [unix]
           source ${PREFIX}/etc/conda/activate.d/{{ PKG_NAME }}_activate.sh                    # [unix]
         # Test installation
