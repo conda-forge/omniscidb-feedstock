@@ -15,7 +15,7 @@ COPY %PREFIX%\Library\lib\xerces-c_3.lib %PREFIX%\Library\lib\xerces-c.lib
 :: /wd4711 and /wd4710 disables warning C4711/C4710
 
 cmake -G "NMake Makefiles" ^
-      -DCMAKE_INSTALL_PREFIX=%PREFIX%\Library\bin ^
+      -DCMAKE_INSTALL_PREFIX=%PREFIX% ^
       -DCMAKE_PREFIX_PATH=%PREFIX% ^
       -DCMAKE_LIBRARY_PATH=%PREFIX%\Library\lib ^
       -DCMAKE_INCLUDE_PATH=%PREFIX%\Library\include ^
@@ -43,8 +43,9 @@ if errorlevel 1 exit 1
 
 cmake --build . --target calciteserver_thrift initdb omnisci_server omnisql mapd_java_components StreamImporter KafkaImporter --config Release
 if errorlevel 1 exit 1
-cmake --install . --component "exe" --prefix %PREFIX%\Library\bin
-MOVE %PREFIX%\Library\bin\initdb.exe %PREFIX%\Library\bin\omnisci_initdb.exe
+
+cmake --install . --component "exe" --prefix %PREFIX%
+COPY %PREFIX%\initdb.exe %PREFIX%\omnisci_initdb.exe
 if errorlevel 1 exit 1
 
 popd
