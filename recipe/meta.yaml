@@ -227,24 +227,25 @@ outputs:
         {% endfor %}
         # Try using the activation scripts.
         - |
-          if [[ -x "$(command -v omnisql)" ]]  # [unix]
-          then
+          if [[ -x "$(command -v omnisql)" ]]                                                 # [unix]
+          then                                                                                # [unix]
             echo "Found omnisql in PATH"
-          else
+          else                                                                                # [unix]
             echo "omnisql not found in PATH(=$PATH)" && exit 1
-          fi
-          source ${PREFIX}/etc/conda/deactivate.d/{{ PKG_NAME }}_deactivate.sh
-          if [[ -x "$(command -v omnisql)" ]]
-          then
+          fi                                                                                  # [unix]
+          source ${PREFIX}/etc/conda/deactivate.d/{{ PKG_NAME }}_deactivate.sh                # [unix]
+          if [[ -x "$(command -v omnisql)" ]]                                                 # [unix]
+          then                                                                                # [unix]
             echo "Unexpectedly found omnisql in PATH(=$PATH) after deactivation"  && exit 1
-          else
+          else                                                                                # [unix]
             echo "omnisql not in PATH after deactivation"
-          fi
-          source ${PREFIX}/etc/conda/activate.d/{{ PKG_NAME }}_activate.sh
+          fi                                                                                  # [unix]
+          source ${PREFIX}/etc/conda/activate.d/{{ PKG_NAME }}_activate.sh                    # [unix]
         # Test installation
-        - omnisql -v
+        - omnisql -v            # [unix]
         - which omnisci_initdb  # [unix]
         - which omnisci_server  # [unix]
+        - omnisql.exe -v        # [win]
         - gcm omnisci_server    # [win]
         - gcm initdb            # [win]
         - gcm omnisql           # [win]
