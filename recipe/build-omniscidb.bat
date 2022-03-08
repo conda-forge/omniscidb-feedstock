@@ -45,7 +45,7 @@ cmake --build . --target calciteserver_thrift initdb omnisci_server omnisql mapd
 if errorlevel 1 exit 1
 
 cmake --install . --component "exe" --prefix %PREFIX%
-COPY %PREFIX%\initdb.exe %PREFIX%\omnisci_initdb.exe
+COPY %PREFIX%\bin\initdb.exe %PREFIX%\bin\omnisci_initdb.exe
 if errorlevel 1 exit 1
 
 popd
