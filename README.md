@@ -16,12 +16,8 @@ Documentation: https://www.omnisci.com/docs/latest/
 OmniSciDB is an in-memory, column store, SQL relational database
 that was designed from the ground up to run on GPUs.
 
-This recipe provides the following packages:
-  omniscidb-commong
-  CUDA-enabled omniscidb, cpu and cuda builds
-  pyomniscdb
-  omniscidb embedding library, cpu and cuda builds
-  omniscidb-embedded Python extension module
+This recipe provides both CUDA enabled and CUDA disabled omniscidb
+packages.
 
 
 Current build status
@@ -42,17 +38,17 @@ Current build status
         <table>
           <thead><tr><th>Variant</th><th>Status</th></tr></thead>
           <tbody><tr>
+              <td>linux_64_c_compiler_version10cuda_compiler_versionNonecxx_compiler_version10</td>
+              <td>
+                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=9937&branchName=master">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/omniscidb-feedstock?branchName=master&jobName=linux&configuration=linux_64_c_compiler_version10cuda_compiler_versionNonecxx_compiler_version10" alt="variant">
+                </a>
+              </td>
+            </tr><tr>
               <td>linux_64_c_compiler_version9cuda_compiler_version11.0cxx_compiler_version9</td>
               <td>
                 <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=9937&branchName=master">
                   <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/omniscidb-feedstock?branchName=master&jobName=linux&configuration=linux_64_c_compiler_version9cuda_compiler_version11.0cxx_compiler_version9" alt="variant">
-                </a>
-              </td>
-            </tr><tr>
-              <td>linux_64_c_compiler_version9cuda_compiler_versionNonecxx_compiler_version9</td>
-              <td>
-                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=9937&branchName=master">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/omniscidb-feedstock?branchName=master&jobName=linux&configuration=linux_64_c_compiler_version9cuda_compiler_versionNonecxx_compiler_version9" alt="variant">
                 </a>
               </td>
             </tr><tr>

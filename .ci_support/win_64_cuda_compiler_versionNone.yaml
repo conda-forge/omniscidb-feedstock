@@ -30,6 +30,8 @@ libpng:
 - '1.6'
 librdkafka:
 - '1.7'
+ncurses:
+- '6'
 pin_run_as_build:
   boost-cpp:
     max_pin: x.x.x
