@@ -274,9 +274,10 @@ outputs:
 
   - name: pyomniscidb
     version: {{ version }}
-    script: build-pyomniscidb.sh
+    script: build-pyomniscidb.sh   # [linux64]
+    script: build-pyomniscidb.bat  # [win]
     build:
-      skip: true  # [cuda_compiler_version in ("11.0",) or not linux64]
+      skip: true  # [cuda_compiler_version in ("11.0",)]
       string: {{ py_build_string }}
       noarch: python
       run_exports:
