@@ -246,9 +246,6 @@ outputs:
         - which omnisci_initdb    # [unix]
         - which omnisci_server    # [unix]
         - omnisql.exe -v          # [win]
-        - gcm omnisci_server.exe  # [win]
-        - gcm initdb.exe          # [win]
-        - gcm omnisql.exe         # [win]
         - |
           if [ -x "$(command -v nvidia-smi)" ]; then  # [unix and cuda_compiler_version not in (undefined, "None")]
             mkdir data && omnisci_initdb data         # [unix and cuda_compiler_version not in (undefined, "None")]
