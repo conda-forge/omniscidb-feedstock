@@ -1,10 +1,10 @@
-From 09940da0ae6d3653e664ebb80f2a427835d59231 Mon Sep 17 00:00:00 2001
+From aaf0476f5d22ed42379cf46ce5b46efbf9ce66e4 Mon Sep 17 00:00:00 2001
 From: Guilherme Leobas <guilhermeleobas@gmail.com>
-Date: Fri, 25 Feb 2022 01:09:14 -0300
+Date: Thu, 10 Mar 2022 00:40:54 -0300
 Subject: [PATCH] Fix Windows build
 
 ---
- CMakeLists.txt                                 | 10 ++++++----
+ CMakeLists.txt                                 | 12 +++++++++---
  Catalog/OptionsContainer.h                     |  2 +-
  DataMgr/BufferMgr/BufferMgr.h                  |  3 +++
  .../AbstractFileStorageDataWrapper.cpp         |  4 ++--
@@ -13,14 +13,14 @@ Subject: [PATCH] Fix Windows build
  StringDictionary/DictRef.h                     |  1 +
  StringDictionary/StringDictionary.cpp          |  6 ++++++
  ThirdParty/rapidjson/rapidjson/document.h      | 17 +++++++++++++++++
- ThirdParty/sqlite3/CMakeLists.txt              |  2 +-
+ ThirdParty/sqlite3/CMakeLists.txt              |  6 +++++-
  ThirdParty/sqlite3/sqlite3.c                   |  2 +-
  ThriftHandler/CommandLineOptions.cpp           |  1 +
  UdfCompiler/UdfCompiler.cpp                    |  2 +-
- 13 files changed, 54 insertions(+), 22 deletions(-)
+ 13 files changed, 61 insertions(+), 21 deletions(-)
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index dfda618784..8e212d9eab 100644
+index bef1af9a53..361c6000b9 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -8,7 +8,7 @@ if(DEFINED ENV{CONDA_PREFIX})
@@ -43,21 +43,16 @@ index dfda618784..8e212d9eab 100644
    # Adding `--sysroot=...` resolves `no member named 'signbit' in the global namespace` error:
    set(CMAKE_SYSROOT "$ENV{CONDA_BUILD_SYSROOT}")
  endif(DEFINED ENV{CONDA_PREFIX})
-@@ -389,7 +391,7 @@ if(MSVC)
-   option(ENABLE_NO_WINWARNINGS "disable most windows warnings" ON)
-   add_compile_definitions("NOMINMAX")
-   if(ENABLE_NO_WINWARNINGS)
--    add_compile_definitions("_STL_EXTRA_DISABLED_WARNINGS=4146 4242 4244 4267 4355 4365 4458 4624 4820 4996 5204 5219" "NOMINMAX")
-+    add_compile_definitions("_STL_EXTRA_DISABLED_WARNINGS=4146 4242 4244 4267 4355 4365 4458 4624 4820 4996 5204 5219 4571 4582 4583 4623 4625 4626 4710 4711 4774 5026 5027" "NOMINMAX")
-     # disable 4702 unreachable code warning
-     # with /Qspectre set, disable the warning C5045
-     add_compile_options(/W0 /wd4702 /wd5045)
-@@ -922,7 +924,7 @@ add_custom_target(rerun_cmake ALL
+@@ -922,7 +924,11 @@ add_custom_target(rerun_cmake ALL
    )
  add_dependencies(omnisci_server rerun_cmake)
  
 -target_link_libraries(omnisci_server mapd_thrift thrift_handler ${MAPD_LIBRARIES} ${Boost_LIBRARIES} ${CMAKE_DL_LIBS} ${CUDA_LIBRARIES} ${PROFILER_LIBS} ${ZLIB_LIBRARIES} ${LOCALE_LINK_FLAG})
-+target_link_libraries(omnisci_server mapd_thrift thrift_handler sqlite3 ${MAPD_LIBRARIES} ${Boost_LIBRARIES} ${CMAKE_DL_LIBS} ${CUDA_LIBRARIES} ${PROFILER_LIBS} ${ZLIB_LIBRARIES} ${LOCALE_LINK_FLAG})
++if(DEFINED ENV{CONDA_PREFIX})
++  target_link_libraries(omnisci_server mapd_thrift thrift_handler ${MAPD_LIBRARIES} ${Boost_LIBRARIES} ${CMAKE_DL_LIBS} ${CUDA_LIBRARIES} ${PROFILER_LIBS} ${ZLIB_LIBRARIES} ${LOCALE_LINK_FLAG})
++else()
++  target_link_libraries(omnisci_server mapd_thrift thrift_handler sqlite3 ${MAPD_LIBRARIES} ${Boost_LIBRARIES} ${CMAKE_DL_LIBS} ${CUDA_LIBRARIES} ${PROFILER_LIBS} ${ZLIB_LIBRARIES} ${LOCALE_LINK_FLAG})
++endif()
  
  target_link_libraries(initdb mapd_thrift thrift_handler ${MAPD_LIBRARIES} ${Boost_LIBRARIES} ${CMAKE_DL_LIBS}
      ${CUDA_LIBRARIES} ${PROFILER_LIBS} ${ZLIB_LIBRARIES} ${BLOSC_LIBRARIES}
@@ -234,15 +229,19 @@ index eb4be3a38e..90bb46ed92 100644
 +
  #endif // RAPIDJSON_DOCUMENT_H_
 diff --git a/ThirdParty/sqlite3/CMakeLists.txt b/ThirdParty/sqlite3/CMakeLists.txt
-index 8cc388235e..660e141fc9 100644
+index 8cc388235e..066ef8d2b2 100644
 --- a/ThirdParty/sqlite3/CMakeLists.txt
 +++ b/ThirdParty/sqlite3/CMakeLists.txt
-@@ -6,5 +6,5 @@ else()
+@@ -6,5 +6,9 @@ else()
    set_source_files_properties(sqlite3.c PROPERTIES COMPILE_FLAGS "-O0 -Wno-unused-value")
  endif()
  
 -add_library(sqlite3 sqlite3.c sqlite3.h)
-+add_library(sqlite3 SHARED sqlite3.c sqlite3.h)
++if(DEFINED ENV{CONDA_PREFIX})
++  add_library(sqlite3 SHARED sqlite3.c sqlite3.h)
++else()
++  add_library(sqlite3 sqlite3.c sqlite3.h)
++endif()
  target_link_libraries(sqlite3 ${CMAKE_DL_LIBS})
 diff --git a/ThirdParty/sqlite3/sqlite3.c b/ThirdParty/sqlite3/sqlite3.c
 index 38874ce409..31125ebdc1 100644
