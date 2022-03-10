@@ -1,10 +1,10 @@
-From aaf0476f5d22ed42379cf46ce5b46efbf9ce66e4 Mon Sep 17 00:00:00 2001
+From c8cae02153b03d4a85af1d184e82dcf12129c300 Mon Sep 17 00:00:00 2001
 From: Guilherme Leobas <guilhermeleobas@gmail.com>
-Date: Thu, 10 Mar 2022 00:40:54 -0300
+Date: Thu, 10 Mar 2022 18:19:41 -0300
 Subject: [PATCH] Fix Windows build
 
 ---
- CMakeLists.txt                                 | 12 +++++++++---
+ CMakeLists.txt                                 |  6 ++++--
  Catalog/OptionsContainer.h                     |  2 +-
  DataMgr/BufferMgr/BufferMgr.h                  |  3 +++
  .../AbstractFileStorageDataWrapper.cpp         |  4 ++--
@@ -17,10 +17,10 @@ Subject: [PATCH] Fix Windows build
  ThirdParty/sqlite3/sqlite3.c                   |  2 +-
  ThriftHandler/CommandLineOptions.cpp           |  1 +
  UdfCompiler/UdfCompiler.cpp                    |  2 +-
- 13 files changed, 61 insertions(+), 21 deletions(-)
+ 13 files changed, 56 insertions(+), 20 deletions(-)
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index bef1af9a53..361c6000b9 100644
+index bef1af9a53..95c2ba023c 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -8,7 +8,7 @@ if(DEFINED ENV{CONDA_PREFIX})
@@ -43,19 +43,6 @@ index bef1af9a53..361c6000b9 100644
    # Adding `--sysroot=...` resolves `no member named 'signbit' in the global namespace` error:
    set(CMAKE_SYSROOT "$ENV{CONDA_BUILD_SYSROOT}")
  endif(DEFINED ENV{CONDA_PREFIX})
-@@ -922,7 +924,11 @@ add_custom_target(rerun_cmake ALL
-   )
- add_dependencies(omnisci_server rerun_cmake)
- 
--target_link_libraries(omnisci_server mapd_thrift thrift_handler ${MAPD_LIBRARIES} ${Boost_LIBRARIES} ${CMAKE_DL_LIBS} ${CUDA_LIBRARIES} ${PROFILER_LIBS} ${ZLIB_LIBRARIES} ${LOCALE_LINK_FLAG})
-+if(DEFINED ENV{CONDA_PREFIX})
-+  target_link_libraries(omnisci_server mapd_thrift thrift_handler ${MAPD_LIBRARIES} ${Boost_LIBRARIES} ${CMAKE_DL_LIBS} ${CUDA_LIBRARIES} ${PROFILER_LIBS} ${ZLIB_LIBRARIES} ${LOCALE_LINK_FLAG})
-+else()
-+  target_link_libraries(omnisci_server mapd_thrift thrift_handler sqlite3 ${MAPD_LIBRARIES} ${Boost_LIBRARIES} ${CMAKE_DL_LIBS} ${CUDA_LIBRARIES} ${PROFILER_LIBS} ${ZLIB_LIBRARIES} ${LOCALE_LINK_FLAG})
-+endif()
- 
- target_link_libraries(initdb mapd_thrift thrift_handler ${MAPD_LIBRARIES} ${Boost_LIBRARIES} ${CMAKE_DL_LIBS}
-     ${CUDA_LIBRARIES} ${PROFILER_LIBS} ${ZLIB_LIBRARIES} ${BLOSC_LIBRARIES}
 diff --git a/Catalog/OptionsContainer.h b/Catalog/OptionsContainer.h
 index da92e454b0..9a6ba6d55c 100644
 --- a/Catalog/OptionsContainer.h
