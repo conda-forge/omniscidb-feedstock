@@ -10,8 +10,8 @@ cxx_compiler_version:          # [unix]
   - 9                          # [linux64]
 cgo_compiler:
   - go-cgo
-cgo_compiler_version:          # [unix]
-  - 1.15                       # [linux64]
+# cgo_compiler_version:          # [unix]
+#   - 1.15                       # [linux64]
 cuda_compiler:
   - nvcc
 cuda_compiler_version:

@@ -3,13 +3,11 @@ boost_cpp:
 c_compiler:
 - gcc
 c_compiler_version:
-- '9'
+- '10'
 cdt_name:
 - cos6
 cgo_compiler:
 - go-cgo
-cgo_compiler_version:
-- '1.15'
 channel_sources:
 - conda-forge
 channel_targets:
@@ -21,7 +19,7 @@ cuda_compiler_version:
 cxx_compiler:
 - gxx
 cxx_compiler_version:
-- '9'
+- '10'
 docker_image:
 - quay.io/condaforge/linux-anvil-cos7-x86_64
 fmt:
