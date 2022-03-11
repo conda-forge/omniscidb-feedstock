@@ -1,7 +1,7 @@
 {% set version = "5.10.2" %}  # PEP 386
 {% set source_version = version %}
 {% set base_version = version %}
-{% set number = "2" %}
+{% set number = "3" %}
 {% set cuda_enabled = cuda_compiler_version is not undefined and cuda_compiler_version == '11.0' %}
 {% set build_ext_version = "1.0.0" %}
 {% set build_ext = "cuda" if cuda_enabled else "cpu" %}
@@ -36,11 +36,14 @@ outputs:
   - name: omniscidb-common
     version: {{ version }}
     script: build-omniscidb.sh  # [linux64]
+    script: build-omniscidb-common.bat  # [win]
     build:
       string: {{ build_string }}
       # cpu-only omniscidb-common for cuda is required only for
       # building cuda-enabled omniscidb
-      skip: true  # [cuda_compiler_version not in (undefined, "None", "11.0") or not linux64]
+      skip: true  # [cuda_compiler_version not in (undefined, "None", "11.0")]
+      skip: true  # [osx]
+      skip: true  # [win and cuda_compiler_version != "None"]
       run_exports:
         - {{ pin_subpackage('omniscidb-common',  max_pin='x.x.x') }}
       ignore_run_exports:
@@ -77,12 +80,12 @@ outputs:
         # so that one could run cmake for generating *.bc, and other
         # common data files.
         - arrow-cpp ={{ arrow_version }}=*cpu
-        - bisonpp
+        - bisonpp  # [linux64]
         - blosc
         - boost-cpp
         - clangdev {{ llvm_version }}
         - double-conversion
-        - flex
+        - flex  # [linux64]
         - fmt
         - geos
         - glog
@@ -93,37 +96,58 @@ outputs:
         - libpng
         - librdkafka
         - thrift-cpp {{ thrift_version }}
+        - winflexbison  # [win]
     test:
       commands:
         # Test installation
         # doc
-        - test -f ${PREFIX}/share/doc/omnisci/LICENSE.md
+        - test -f ${PREFIX}/share/doc/omnisci/LICENSE.md  # [linux64]
+        - if not exist %PREFIX\share\doc\omnisci\LICENSE.md exit 1  # [win]
         # data
-        - test -d ${PREFIX}/{{ install_base }}/ThirdParty/gdal-data
+        - test -d ${PREFIX}/{{ install_base }}/ThirdParty/gdal-data  # [linux64]
+        - if not exist %PREFIX%\ThirdParty\gdal-data exit 1  # [win]
         # thrift
-        - test -f ${PREFIX}/{{ install_base }}/completion_hints.thrift
-        - test -f ${PREFIX}/{{ install_base }}/omnisci.thrift
-        - test -f ${PREFIX}/{{ install_base }}/common.thrift
-        - test -f ${PREFIX}/{{ install_base }}/QueryEngine/serialized_result_set.thrift
-        - test -f ${PREFIX}/{{ install_base }}/QueryEngine/extension_functions.thrift
+        - test -f ${PREFIX}/{{ install_base }}/completion_hints.thrift  # [linux64]
+        - test -f ${PREFIX}/{{ install_base }}/omnisci.thrift  # [linux64]
+        - test -f ${PREFIX}/{{ install_base }}/common.thrift  # [linux64]
+        - test -f ${PREFIX}/{{ install_base }}/QueryEngine/serialized_result_set.thrift  # [linux64]
+        - test -f ${PREFIX}/{{ install_base }}/QueryEngine/extension_functions.thrift  # [linux64]
+        - if not exist %PREFIX%\completion_hints.thrift exit 1  # [win]
+        - if not exist %PREFIX%\omnisci.thrift exit 1  # [win]
+        - if not exist %PREFIX%\common.thrift exit 1  # [win]
+        - if not exist %PREFIX%\QueryEngine/serialized_result_set.thrift exit 1  # [win]
+        - if not exist %PREFIX%\QueryEngine/extension_functions.thrift exit 1  # [win]
         # includes
-        - test -f ${PREFIX}/include/omnisci/Shared/funcannotations.h
-        - test -f ${PREFIX}/include/omnisci/Shared/InlineNullValues.h
-        - test -f ${PREFIX}/include/omnisci/Logger/Logger.h
+        - test -f ${PREFIX}/include/omnisci/Shared/funcannotations.h  # [linux64]
+        - test -f ${PREFIX}/include/omnisci/Shared/InlineNullValues.h  # [linux64]
+        - test -f ${PREFIX}/include/omnisci/Logger/Logger.h  # [linux64]
+        - if not exist %PREFIX%\include\omnisci\Shared\funcannotations.h exit 1  # [win]
+        - if not exist %PREFIX%\include\omnisci\Shared\InlineNullValues.h exit 1  # [win]
+        - if not exist %PREFIX%\include\omnisci\Logger\Logger.h exit 1  # [win]
         # QE
-        - test -f ${PREFIX}/include/omnisci/QueryEngine/OmniSciTypes.h
-        - test -f ${PREFIX}/{{ install_base }}/QueryEngine/RuntimeFunctions.bc
-        - test -f ${PREFIX}/{{ install_base }}/QueryEngine/RuntimeFunctions.bc
-        - test -f ${PREFIX}/{{ install_base }}/QueryEngine/ExtensionFunctions.ast
+        - test -f ${PREFIX}/include/omnisci/QueryEngine/OmniSciTypes.h  # [linux64]
+        - test -f ${PREFIX}/{{ install_base }}/QueryEngine/RuntimeFunctions.bc  # [linux64]
+        - test -f ${PREFIX}/{{ install_base }}/QueryEngine/GeosRuntime.bc  # [linux64]
+        - test -f ${PREFIX}/{{ install_base }}/QueryEngine/ExtensionFunctions.ast  # [linux64]
+        - if not exist %PREFIX%\include\omnisci\QueryEngine\OmniSciTypes.h exit 1  # [win]
+        - if not exist %PREFIX%\QueryEngine\RuntimeFunctions.bc exit 1  # [win]
+        - if not exist %PREFIX%\QueryEngine\GeosRuntime.bc exit 1  # [win]
+        - if not exist %PREFIX%\QueryEngine\ExtensionFunctions.ast exit 1  # [win]
         # jar
-        - test -f ${PREFIX}/{{ install_base }}/bin/omnisci-utility-{{ base_version }}.jar
-        - test -f ${PREFIX}/{{ install_base }}/bin/omnisci-jdbc-{{ base_version }}.jar
-        - test -f ${PREFIX}/{{ install_base }}/bin/calcite-1.0-SNAPSHOT-jar-with-dependencies.jar
+        - test -f ${PREFIX}/{{ install_base }}/bin/omnisci-utility-{{ base_version }}.jar  # [linux64]
+        - test -f ${PREFIX}/{{ install_base }}/bin/omnisci-jdbc-{{ base_version }}.jar  # [linux64]
+        - test -f ${PREFIX}/{{ install_base }}/bin/calcite-1.0-SNAPSHOT-jar-with-dependencies.jar  # [linux64]
+        - if not exist %PREFIX%\bin\omnisci-utility-{{ base_version }}.jar exit 1  # [win]
+        - if not exist %PREFIX%\bin\omnisci-jdbc-{{ base_version }}.jar exit 1  # [win]
+        - if not exist %PREFIX%\bin\calcite-1.0-SNAPSHOT-jar-with-dependencies.jar exit 1  # [win]
         # Unspecified
-        - test -f ${PREFIX}/{{ install_base }}/bin/startomnisci
-        - test -f ${PREFIX}/{{ install_base }}/bin/omnisci_insert_sample_data
+        - test -f ${PREFIX}/{{ install_base }}/bin/startomnisci  # [linux64]
+        - test -f ${PREFIX}/{{ install_base }}/bin/omnisci_insert_sample_data  # [linux64]
+        - if not exist %PREFIX%\bin\startomnisci.exe exit 1  # [win]
+        - if not exist %PREFIX%\bin\omnisci_insert_sample_data.exe exit 1  # [win]
         #
-        - test -f ${PREFIX}/{{ install_base }}/bin/generate_cert
+        - test -f ${PREFIX}/{{ install_base }}/bin/generate_cert  # [linux64]
+        - if not exist %PREFIX%\bin\generate_cert exit 1  # [win]
 
   - name: omniscidb
     version: {{ version }}
@@ -167,12 +191,12 @@ outputs:
         - maven
       host:
         - arrow-cpp ={{ arrow_version }}=*{{ build_ext }}
-        - bisonpp  # [not win]
+        - bisonpp  # [linux64]
         - blosc
         - boost-cpp
         - clangdev {{ llvm_version }}
         - double-conversion
-        - flex  # [not win]
+        - flex  # [linux64]
         - fmt
         - gflags
         - glog
@@ -184,8 +208,8 @@ outputs:
         - libkml
         - libpng
         - librdkafka
-        - ncurses   # [not win]
-        - openldap  # [not win]
+        - ncurses   # [linux64]
+        - openldap  # [linux64]
         # Workaround https://github.com/mamba-org/boa/issues/119 :
         - openssl 1.1.1*
         - snappy
