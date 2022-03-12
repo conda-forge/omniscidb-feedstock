@@ -1,10 +1,10 @@
-From c8cae02153b03d4a85af1d184e82dcf12129c300 Mon Sep 17 00:00:00 2001
+From ccd291e114fb912987d9e6c90d28abc7e6b919eb Mon Sep 17 00:00:00 2001
 From: Guilherme Leobas <guilhermeleobas@gmail.com>
-Date: Thu, 10 Mar 2022 18:19:41 -0300
+Date: Sat, 12 Mar 2022 00:11:28 -0300
 Subject: [PATCH] Fix Windows build
 
 ---
- CMakeLists.txt                                 |  6 ++++--
+ CMakeLists.txt                                 |  8 +++++---
  Catalog/OptionsContainer.h                     |  2 +-
  DataMgr/BufferMgr/BufferMgr.h                  |  3 +++
  .../AbstractFileStorageDataWrapper.cpp         |  4 ++--
@@ -17,10 +17,10 @@ Subject: [PATCH] Fix Windows build
  ThirdParty/sqlite3/sqlite3.c                   |  2 +-
  ThriftHandler/CommandLineOptions.cpp           |  1 +
  UdfCompiler/UdfCompiler.cpp                    |  2 +-
- 13 files changed, 56 insertions(+), 20 deletions(-)
+ 13 files changed, 57 insertions(+), 21 deletions(-)
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index bef1af9a53..95c2ba023c 100644
+index bef1af9a53..270567b27d 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -8,7 +8,7 @@ if(DEFINED ENV{CONDA_PREFIX})
@@ -43,6 +43,15 @@ index bef1af9a53..95c2ba023c 100644
    # Adding `--sysroot=...` resolves `no member named 'signbit' in the global namespace` error:
    set(CMAKE_SYSROOT "$ENV{CONDA_BUILD_SYSROOT}")
  endif(DEFINED ENV{CONDA_PREFIX})
+@@ -389,7 +391,7 @@ if(MSVC)
+   option(ENABLE_NO_WINWARNINGS "disable most windows warnings" ON)
+   add_compile_definitions("NOMINMAX")
+   if(ENABLE_NO_WINWARNINGS)
+-    add_compile_definitions("_STL_EXTRA_DISABLED_WARNINGS=4146 4242 4244 4267 4355 4365 4458 4624 4820 4996 5204 5219" "NOMINMAX")
++    add_compile_definitions("_STL_EXTRA_DISABLED_WARNINGS=4146 4242 4244 4267 4355 4365 4458 4624 4820 4996 5204 5219 4571 4582 4583 4623 4625 4626 4710 4711 4774 5026 5027" "NOMINMAX")
+     # disable 4702 unreachable code warning
+     # with /Qspectre set, disable the warning C5045
+     add_compile_options(/W0 /wd4702 /wd5045)
 diff --git a/Catalog/OptionsContainer.h b/Catalog/OptionsContainer.h
 index da92e454b0..9a6ba6d55c 100644
 --- a/Catalog/OptionsContainer.h
