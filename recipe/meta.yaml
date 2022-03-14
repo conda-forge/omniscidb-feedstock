@@ -96,6 +96,8 @@ outputs:
         - libgdal
         - libpng
         - librdkafka
+        - tbb
+        - tbb-devel
         - thrift-cpp {{ thrift_version }}
         - winflexbison  # [win]
     test:
