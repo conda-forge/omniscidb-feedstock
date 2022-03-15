@@ -44,13 +44,13 @@ if errorlevel 1 exit 1
 cmake --build . --target QueryEngineFunctionsTargets mapd_java_components generate_cert_target --config Release
 if errorlevel 1 exit 1
 
-cmake --install build --component "include" --prefix %PREFIX%
-cmake --install build --component "doc" --prefix %PREFIX%\share\doc\omnisci
-cmake --install build --component "data" --prefix %PREFIX%
-cmake --install build --component "thrift" --prefix %PREFIX%
-cmake --install build --component "QE" --prefix %PREFIX%
-cmake --install build --component "jar" --prefix %PREFIX%
-cmake --install build --component "Unspecified" --prefix %PREFIX%
+cmake --install . --component "include" --prefix %PREFIX%
+cmake --install . --component "doc" --prefix %PREFIX%\share\doc\omnisci
+cmake --install . --component "data" --prefix %PREFIX%
+cmake --install . --component "thrift" --prefix %PREFIX%
+cmake --install . --component "QE" --prefix %PREFIX%
+cmake --install . --component "jar" --prefix %PREFIX%
+cmake --install . --component "Unspecified" --prefix %PREFIX%
 if errorlevel 1 exit 1
 
 COPY %PREFIX%\startomnisci.exe %PREFIX%\bin\startomnisci.exe
