@@ -53,8 +53,8 @@ cmake --install . --component "jar" --prefix %PREFIX%
 cmake --install . --component "Unspecified" --prefix %PREFIX%
 if errorlevel 1 exit 1
 
-COPY %PREFIX%\startomnisci.exe %PREFIX%\bin\startomnisci.exe
-COPY %PREFIX%\insert_sample_data.exe %PREFIX%\bin\omnisci_insert_sample_data.exe
+MKLINK %PREFIX%\startomnisci %PREFIX%\bin\startomnisci
+MKLINK %PREFIX%\insert_sample_data %PREFIX%\bin\omnisci_insert_sample_data
 if errorlevel 1 exit 1
 
 popd
