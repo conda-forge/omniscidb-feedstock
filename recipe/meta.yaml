@@ -105,7 +105,7 @@ outputs:
         # Test installation
         # doc
         - test -f ${PREFIX}/share/doc/omnisci/LICENSE.md  # [linux64]
-        - if not exist %PREFIX\share\doc\omnisci\LICENSE.md exit 1  # [win]
+        - if not exist %PREFIX%\share\doc\omnisci\LICENSE.md exit 1  # [win]
         # data
         - test -d ${PREFIX}/{{ install_base }}/ThirdParty/gdal-data  # [linux64]
         - if not exist %PREFIX%\ThirdParty\gdal-data exit 1  # [win]
