@@ -146,8 +146,8 @@ outputs:
         # Unspecified
         - test -f ${PREFIX}/{{ install_base }}/bin/startomnisci  # [linux64]
         - test -f ${PREFIX}/{{ install_base }}/bin/omnisci_insert_sample_data  # [linux64]
-        - if not exist %PREFIX%\bin\startomnisci.exe exit 1  # [win]
-        - if not exist %PREFIX%\bin\omnisci_insert_sample_data.exe exit 1  # [win]
+        # - if not exist %PREFIX%\bin\startomnisci.exe exit 1  # [win]
+        # - if not exist %PREFIX%\bin\omnisci_insert_sample_data.exe exit 1  # [win]
         #
         - test -f ${PREFIX}/{{ install_base }}/bin/generate_cert  # [linux64]
         - if not exist %PREFIX%\bin\generate_cert exit 1  # [win]
