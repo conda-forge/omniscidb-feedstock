@@ -80,12 +80,12 @@ outputs:
         # so that one could run cmake for generating *.bc, and other
         # common data files.
         - arrow-cpp ={{ arrow_version }}=*cpu
-        - bisonpp  # [linux64]
+        - bisonpp  # [unix]
         - blosc
         - boost-cpp
         - clangdev {{ llvm_version }}
         - double-conversion
-        - flex  # [linux64]
+        - flex  # [unix]
         - fmt
         - geos
         - glog
@@ -96,60 +96,59 @@ outputs:
         - libgdal
         - libpng
         - librdkafka
-        - tbb
-        - tbb-devel
+        - tbb  # [win]
+        - tbb-devel  # [win]
         - thrift-cpp {{ thrift_version }}
         - winflexbison  # [win]
     test:
       commands:
         # Test installation
         # doc
-        - test -f ${PREFIX}/share/doc/omnisci/LICENSE.md  # [linux64]
+        - test -f ${PREFIX}/share/doc/omnisci/LICENSE.md  # [unix]
         - if not exist %PREFIX%\share\doc\omnisci\LICENSE.md exit 1  # [win]
         # data
-        - test -d ${PREFIX}/{{ install_base }}/ThirdParty/gdal-data  # [linux64]
+        - test -d ${PREFIX}/{{ install_base }}/ThirdParty/gdal-data  # [unix]
         - if not exist %PREFIX%\ThirdParty\gdal-data exit 1  # [win]
         # thrift
-        - test -f ${PREFIX}/{{ install_base }}/completion_hints.thrift  # [linux64]
-        - test -f ${PREFIX}/{{ install_base }}/omnisci.thrift  # [linux64]
-        - test -f ${PREFIX}/{{ install_base }}/common.thrift  # [linux64]
-        - test -f ${PREFIX}/{{ install_base }}/QueryEngine/serialized_result_set.thrift  # [linux64]
-        - test -f ${PREFIX}/{{ install_base }}/QueryEngine/extension_functions.thrift  # [linux64]
+        - test -f ${PREFIX}/{{ install_base }}/completion_hints.thrift  # [unix]
+        - test -f ${PREFIX}/{{ install_base }}/omnisci.thrift  # [unix]
+        - test -f ${PREFIX}/{{ install_base }}/common.thrift  # [unix]
+        - test -f ${PREFIX}/{{ install_base }}/QueryEngine/serialized_result_set.thrift  # [unix]
+        - test -f ${PREFIX}/{{ install_base }}/QueryEngine/extension_functions.thrift  # [unix]
         - if not exist %PREFIX%\completion_hints.thrift exit 1  # [win]
         - if not exist %PREFIX%\omnisci.thrift exit 1  # [win]
         - if not exist %PREFIX%\common.thrift exit 1  # [win]
         - if not exist %PREFIX%\QueryEngine/serialized_result_set.thrift exit 1  # [win]
         - if not exist %PREFIX%\QueryEngine/extension_functions.thrift exit 1  # [win]
         # includes
-        - test -f ${PREFIX}/include/omnisci/Shared/funcannotations.h  # [linux64]
-        - test -f ${PREFIX}/include/omnisci/Shared/InlineNullValues.h  # [linux64]
-        - test -f ${PREFIX}/include/omnisci/Logger/Logger.h  # [linux64]
+        - test -f ${PREFIX}/include/omnisci/Shared/funcannotations.h  # [unix]
+        - test -f ${PREFIX}/include/omnisci/Shared/InlineNullValues.h  # [unix]
+        - test -f ${PREFIX}/include/omnisci/Logger/Logger.h  # [unix]
         - if not exist %PREFIX%\Shared\funcannotations.h exit 1  # [win]
         - if not exist %PREFIX%\Shared\InlineNullValues.h exit 1  # [win]
         - if not exist %PREFIX%\Logger\Logger.h exit 1  # [win]
         # QE
-        - test -f ${PREFIX}/include/omnisci/QueryEngine/OmniSciTypes.h  # [linux64]
-        - test -f ${PREFIX}/{{ install_base }}/QueryEngine/RuntimeFunctions.bc  # [linux64]
-        - test -f ${PREFIX}/{{ install_base }}/QueryEngine/GeosRuntime.bc  # [linux64]
-        - test -f ${PREFIX}/{{ install_base }}/QueryEngine/ExtensionFunctions.ast  # [linux64]
+        - test -f ${PREFIX}/include/omnisci/QueryEngine/OmniSciTypes.h  # [unix]
+        - test -f ${PREFIX}/{{ install_base }}/QueryEngine/RuntimeFunctions.bc  # [unix]
+        - test -f ${PREFIX}/{{ install_base }}/QueryEngine/GeosRuntime.bc  # [unix]
+        - test -f ${PREFIX}/{{ install_base }}/QueryEngine/ExtensionFunctions.ast  # [unix]
         - if not exist %PREFIX%\QueryEngine\OmniSciTypes.h exit 1  # [win]
         - if not exist %PREFIX%\QueryEngine\RuntimeFunctions.bc exit 1  # [win]
         - if not exist %PREFIX%\QueryEngine\GeosRuntime.bc exit 1  # [win]
         - if not exist %PREFIX%\QueryEngine\ExtensionFunctions.ast exit 1  # [win]
         # jar
-        - test -f ${PREFIX}/{{ install_base }}/bin/omnisci-utility-{{ base_version }}.jar  # [linux64]
-        - test -f ${PREFIX}/{{ install_base }}/bin/omnisci-jdbc-{{ base_version }}.jar  # [linux64]
-        - test -f ${PREFIX}/{{ install_base }}/bin/calcite-1.0-SNAPSHOT-jar-with-dependencies.jar  # [linux64]
+        - test -f ${PREFIX}/{{ install_base }}/bin/omnisci-utility-{{ base_version }}.jar  # [unix]
+        - test -f ${PREFIX}/{{ install_base }}/bin/omnisci-jdbc-{{ base_version }}.jar  # [unix]
+        - test -f ${PREFIX}/{{ install_base }}/bin/calcite-1.0-SNAPSHOT-jar-with-dependencies.jar  # [unix]
         - if not exist %PREFIX%\bin\omnisci-utility-{{ base_version }}.jar exit 1  # [win]
         - if not exist %PREFIX%\bin\omnisci-jdbc-{{ base_version }}.jar exit 1  # [win]
         - if not exist %PREFIX%\bin\calcite-1.0-SNAPSHOT-jar-with-dependencies.jar exit 1  # [win]
         # Unspecified
-        - test -f ${PREFIX}/{{ install_base }}/bin/startomnisci  # [linux64]
-        - test -f ${PREFIX}/{{ install_base }}/bin/omnisci_insert_sample_data  # [linux64]
-        # - if not exist %PREFIX%\bin\startomnisci.exe exit 1  # [win]
-        # - if not exist %PREFIX%\bin\omnisci_insert_sample_data.exe exit 1  # [win]
+        # startomnisci and insert_sample_data are bash scripts
+        - test -f ${PREFIX}/{{ install_base }}/bin/startomnisci  # [unix]
+        - test -f ${PREFIX}/{{ install_base }}/bin/omnisci_insert_sample_data  # [unix]
         #
-        - test -f ${PREFIX}/{{ install_base }}/bin/generate_cert  # [linux64]
+        - test -f ${PREFIX}/{{ install_base }}/bin/generate_cert  # [unix]
         - if not exist %PREFIX%\bin\generate_cert exit 1  # [win]
 
   - name: omniscidb
