@@ -53,6 +53,6 @@ cmake --install . --component "jar" --prefix %PREFIX%
 cmake --install . --component "Unspecified" --prefix %PREFIX%
 if errorlevel 1 exit 1
 
-dir %PREFIX%\bin\
+dir %PREFIX%\
 
 popd
