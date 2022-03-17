@@ -193,12 +193,12 @@ outputs:
         - maven
       host:
         - arrow-cpp ={{ arrow_version }}=*{{ build_ext }}
-        - bisonpp  # [linux64]
+        - bisonpp  # [unix]
         - blosc
         - boost-cpp
         - clangdev {{ llvm_version }}
         - double-conversion
-        - flex  # [linux64]
+        - flex  # [unix]
         - fmt
         - gflags
         - glog
@@ -210,8 +210,8 @@ outputs:
         - libkml
         - libpng
         - librdkafka
-        - ncurses   # [linux64]
-        - openldap  # [linux64]
+        - ncurses   # [unix]
+        - openldap  # [unix]
         # Workaround https://github.com/mamba-org/boa/issues/119 :
         - openssl 1.1.1*
         - snappy
