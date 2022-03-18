@@ -25,7 +25,7 @@ cmake -G "NMake Makefiles" ^
       -DBZ2_LIBRARY=%PREFIX%\Library\lib\libbz2.lib ^
       -DGDAL_LIBRARIES=%PREFIX%\Library\lib\gdal_i.lib^
       -DGDAL_INCLUDE_DIR=%PREFIX%\Library\include ^
-      -DCMAKE_CXX_FLAGS="/MP /W0 /wd4596 /wd4710 /wd4711 -DBOOST_ALL_DYN_LINK=1 -DBOOST_PROGRAM_OPTIONS_DYN_LINK=1" ^
+      -DCMAKE_CXX_FLAGS="/MP /W0 /wd4625 /wd4596 /wd4710 /wd4711 -DBOOST_ALL_DYN_LINK=1 -DBOOST_PROGRAM_OPTIONS_DYN_LINK=1" ^
       -DBoost_USE_STATIC_LIBS=OFF ^
       -DENABLE_FOLLY=OFF ^
       -DENABLE_TESTS=OFF ^
@@ -41,11 +41,16 @@ cmake -G "NMake Makefiles" ^
       "%SRC_DIR%"
 if errorlevel 1 exit 1
 
-cmake --build . --target calciteserver_thrift initdb omnisci_server omnisql mapd_java_components StreamImporter KafkaImporter --config Release
+cmake --build . --target QueryEngineFunctionsTargets mapd_java_components generate_cert_target --config Release
 if errorlevel 1 exit 1
 
-cmake --install . --component "exe" --prefix %PREFIX%
-COPY %PREFIX%\bin\initdb.exe %PREFIX%\bin\omnisci_initdb.exe
+cmake --install . --component "include" --prefix %PREFIX%
+cmake --install . --component "doc" --prefix %PREFIX%\share\doc\omnisci
+cmake --install . --component "data" --prefix %PREFIX%
+cmake --install . --component "thrift" --prefix %PREFIX%
+cmake --install . --component "QE" --prefix %PREFIX%
+cmake --install . --component "jar" --prefix %PREFIX%
+cmake --install . --component "Unspecified" --prefix %PREFIX%
 if errorlevel 1 exit 1
 
 popd
