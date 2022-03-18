@@ -25,7 +25,7 @@ cmake -G "NMake Makefiles" ^
       -DBZ2_LIBRARY=%PREFIX%\Library\lib\libbz2.lib ^
       -DGDAL_LIBRARIES=%PREFIX%\Library\lib\gdal_i.lib^
       -DGDAL_INCLUDE_DIR=%PREFIX%\Library\include ^
-      -DCMAKE_CXX_FLAGS="/MP /w0 /wd4625 /wd4596 /wd4710 /wd4711 -DBOOST_ALL_DYN_LINK=1 -DBOOST_PROGRAM_OPTIONS_DYN_LINK=1" ^
+      -DCMAKE_CXX_FLAGS="/MP /W0 /wd4625 /wd4596 /wd4710 /wd4711 -DBOOST_ALL_DYN_LINK=1 -DBOOST_PROGRAM_OPTIONS_DYN_LINK=1" ^
       -DBoost_USE_STATIC_LIBS=OFF ^
       -DENABLE_FOLLY=OFF ^
       -DENABLE_TESTS=OFF ^
