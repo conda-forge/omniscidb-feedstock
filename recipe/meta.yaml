@@ -1,7 +1,7 @@
 {% set version = "5.10.2" %}  # PEP 386
 {% set source_version = version %}
 {% set base_version = version %}
-{% set number = "3" %}
+{% set number = "4" %}
 {% set cuda_enabled = cuda_compiler_version is not undefined and cuda_compiler_version == '11.0' %}
 {% set build_ext_version = "1.0.0" %}
 {% set build_ext = "cuda" if cuda_enabled else "cpu" %}
@@ -230,7 +230,7 @@ outputs:
         - openjdk 8.*
         - xz
         - zlib
-        - {{ pin_subpackage('omniscidb-common',  max_pin='x.x.x') }}  # [not win]
+        - {{ pin_subpackage('omniscidb-common',  max_pin='x.x.x') }}
       run_constrained:
         - arrow-cpp-proc {{ arrow_proc_version }} {{ build_ext }}
         - cudatoolkit >=11.0  # [cuda_compiler_version not in (undefined, "None")]
