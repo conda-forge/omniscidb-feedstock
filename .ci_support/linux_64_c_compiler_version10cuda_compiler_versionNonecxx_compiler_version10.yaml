@@ -41,13 +41,13 @@ libpng:
 librdkafka:
 - '1.7'
 libthrift:
-- 0.15.0
+- 0.16.0
 ncurses:
 - '6'
 numpy:
 - '1.21'
-- '1.18'
-- '1.18'
+- '1.19'
+- '1.19'
 - '1.19'
 pin_run_as_build:
   boost-cpp:
