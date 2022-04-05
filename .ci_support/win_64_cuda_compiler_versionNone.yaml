@@ -33,7 +33,7 @@ libpng:
 librdkafka:
 - '1.7'
 libthrift:
-- 0.15.0
+- 0.16.0
 ncurses:
 - '6'
 pin_run_as_build:
