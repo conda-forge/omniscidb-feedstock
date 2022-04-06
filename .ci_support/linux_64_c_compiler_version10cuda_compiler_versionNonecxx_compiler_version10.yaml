@@ -29,7 +29,7 @@ geos:
 gflags:
 - '2.2'
 glog:
-- '0.5'
+- '0.6'
 libarchive:
 - '3.5'
 libgdal:
