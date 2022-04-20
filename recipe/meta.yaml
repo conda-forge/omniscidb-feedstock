@@ -1,4 +1,4 @@
-{% set version = "5.10.2" %}  # PEP 386
+{% set version = "6.0.0" %}  # PEP 386
 {% set source_version = version %}
 {% set base_version = version %}
 {% set number = "6" %}
@@ -23,7 +23,7 @@ package:
 
 source:
   url: https://github.com/omnisci/omniscidb/archive/v{{ source_version }}.tar.gz
-  sha256: c800f768c52a06bc6c1f9140cae427becc3adea0bd3947b80cc703afdeef91b8
+  sha256: a36d91227135e9ec8641b5f46e80927aaafce117f3446933dd7f392c9659996e
   patches:
     - 0002-Fix-Windows-build.patch  # [win]
 
@@ -153,7 +153,7 @@ outputs:
 
   - name: omniscidb
     version: {{ version }}
-    script: build-omniscidb.sh   # [linux64]
+    script: build-omniscidb.sh  # [linux64]
     script: build-omniscidb.bat  # [win]
     build:
       string: {{ build_string_ext }}
@@ -162,8 +162,7 @@ outputs:
       skip: true  # [win and cuda_compiler_version != "None"]
       missing_dso_whitelist:
         - '*/libcuda.*'  # [cuda_compiler_version not in (undefined, "None")]
-      track_features:
-        {{ "- arrow-cuda" if cuda_enabled else "" }}
+      track_features: {{ "- arrow-cuda" if cuda_enabled else "" }}
       ignore_run_exports:
         - cudatoolkit    # [cuda_compiler_version not in (undefined, "None")]
         - fmt
@@ -300,7 +299,7 @@ outputs:
 
   - name: pyomniscidb
     version: {{ version }}
-    script: build-pyomniscidb.sh   # [linux64]
+    script: build-pyomniscidb.sh  # [linux64]
     script: build-pyomniscidb.bat  # [win]
     build:
       skip: true  # [cuda_compiler_version in ("11.0",)]
@@ -345,8 +344,7 @@ outputs:
       skip: true  # [cuda_compiler_version not in (undefined, "None", "11.0") or not linux64]
       missing_dso_whitelist:
         - '*/libcuda.*'  # [cuda_compiler_version not in (undefined, "None")]
-      track_features:
-        {{ "- arrow-cuda" if cuda_enabled else "" }}
+      track_features: {{ "- arrow-cuda" if cuda_enabled else "" }}
       ignore_run_exports:
         - cudatoolkit    # [cuda_compiler_version not in (undefined, "None")]
         - fmt
@@ -445,8 +443,7 @@ outputs:
       skip: true  # [cuda_compiler_version not in (undefined, "None", "11.0") or not linux64]
       missing_dso_whitelist:
         - '*/libcuda.*'  # [cuda_compiler_version not in (undefined, "None")]
-      track_features:
-        {{ "- arrow-cuda" if cuda_enabled else "" }}
+      track_features: {{ "- arrow-cuda" if cuda_enabled else "" }}
       ignore_run_exports:
         - arrow-cpp {{ arrow_version }}
         - blosc
