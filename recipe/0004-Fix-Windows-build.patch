@@ -1,0 +1,39 @@
+From d838867d16475b2e1a3ef47c529288737b4f44a3 Mon Sep 17 00:00:00 2001
+From: Guilherme Leobas <gleobas@quansight.com>
+Date: Wed, 20 Apr 2022 21:14:35 +0000
+Subject: [PATCH] win
+
+---
+ CMakeLists.txt                                 | 2 +-
+ DataMgr/ForeignStorage/ArrowForeignStorage.cpp | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index ac3a002389..2859170130 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -476,7 +476,7 @@ if(MSVC)
+   # If a future vcpkg release causes the reverse error message, then this line should be removed.
+   add_compile_definitions("BOOST_USE_WINAPI_VERSION=0x0601") #=BOOST_WINAPI_VERSION_WIN7
+   if(ENABLE_NO_WINWARNINGS)
+-    add_compile_definitions("_STL_EXTRA_DISABLED_WARNINGS=4146 4242 4244 4267 4355 4365 4458 4624 4820 4996 5204 5219" "NOMINMAX")
++    add_compile_definitions("_STL_EXTRA_DISABLED_WARNINGS=4146 4242 4244 4267 4355 4365 4458 4624 4820 4996 5204 5219 4571 4582 4583 4623 4625 4626 4710 4711 4774 5026 5027" "NOMINMAX")
+     # disable 4702 unreachable code warning
+     # with /Qspectre set, disable the warning C5045
+     add_compile_options(/W0 /wd4702 /wd5045)
+diff --git a/DataMgr/ForeignStorage/ArrowForeignStorage.cpp b/DataMgr/ForeignStorage/ArrowForeignStorage.cpp
+index 1ccf18d8a8..df172ca976 100644
+--- a/DataMgr/ForeignStorage/ArrowForeignStorage.cpp
++++ b/DataMgr/ForeignStorage/ArrowForeignStorage.cpp
+@@ -999,7 +999,7 @@ void ArrowCsvForeignStorage::registerTable(Catalog_Namespace::Catalog* catalog,
+     df_td = df_td_owned.get();
+   }
+ 
+-#ifdef ENABLE_ARROW_4 || defined(_WIN32)
++#if defined(ENABLE_ARROW_4) || defined(_WIN32)
+   auto io_context = arrow::io::default_io_context();
+ #else
+   auto io_context = arrow::default_memory_pool();
+-- 
+2.25.1
+

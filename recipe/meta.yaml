@@ -22,10 +22,11 @@ package:
   version: {{ version }}
 
 source:
-  # url: https://github.com/heavyai/heavydb/archive/v{{ source_version }}.tar.gz
-  # url: https://github.com/heavyai/heavydb/archive/refs/heads/rc/v6.0.0.zip
-  url : https://github.com/guilhermeleobas/heavydb/archive/refs/heads/guilhermeleobas/conda-forge-fixes.zip
-  sha256: b9ec5de31e68bdf6efae2177717790907704299067d753d818f13e29605c4d66
+  url: https://github.com/heavyai/heavydb/archive/v{{ source_version }}.tar.gz
+  sha256: a36d91227135e9ec8641b5f46e80927aaafce117f3446933dd7f392c9659996e
+  patches:
+    - 0003-Fix-HeavyDBE-build.patch
+    - 0004-Fix-Windows-build.patch  # [win]
 
 build:
   number: {{ number }}
@@ -500,6 +501,7 @@ outputs:
         - libpng
         - librdkafka
         - numpy
+        - pip
         - pyarrow ={{ arrow_version }}=*{{ build_ext }}
         - python
         - pytest
