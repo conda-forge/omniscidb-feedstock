@@ -23,8 +23,9 @@ package:
 
 source:
   # url: https://github.com/heavyai/heavydb/archive/v{{ source_version }}.tar.gz
-  url: https://github.com/heavyai/heavydb/archive/refs/heads/rc/v6.0.0.zip
-  sha256: 2c65bda2807af0394615495abbb44e7a3d79527b949389f4f27836b42a604beb
+  # url: https://github.com/heavyai/heavydb/archive/refs/heads/rc/v6.0.0.zip
+  url : https://github.com/guilhermeleobas/heavydb/archive/refs/heads/guilhermeleobas/conda-forge-fixes.zip
+  sha256: b9ec5de31e68bdf6efae2177717790907704299067d753d818f13e29605c4d66
 
 build:
   number: {{ number }}
