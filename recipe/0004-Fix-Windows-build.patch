@@ -1,4 +1,4 @@
-From b221b5f7cb1019ce854a7ea3d06610d957d2e353 Mon Sep 17 00:00:00 2001
+From 3f18f5bab192f4c412cbd0487eaae6ff993d6a25 Mon Sep 17 00:00:00 2001
 From: Guilherme Leobas <gleobas@quansight.com>
 Date: Thu, 21 Apr 2022 02:19:24 +0000
 Subject: [PATCH] win
@@ -9,7 +9,8 @@ Subject: [PATCH] win
  QueryEngine/FromTableReordering.cpp           | 20 +++++++++----------
  QueryEngine/JoinHashTable/HashJoin.h          |  2 +-
  .../JoinHashTable/RangeJoinHashTable.cpp      |  2 +-
- 5 files changed, 14 insertions(+), 14 deletions(-)
+ ThriftHandler/RenderHandler.h                 |  1 +
+ 6 files changed, 15 insertions(+), 14 deletions(-)
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
 index ac3a002389..2859170130 100644
@@ -147,6 +148,18 @@ index 60523121f4..6158ae3e1a 100644
            ? ExecutorDeviceType::GPU
            : ExecutorDeviceType::CPU,
        1,
+diff --git a/ThriftHandler/RenderHandler.h b/ThriftHandler/RenderHandler.h
+index 8cd485a16b..8dfe4ea32d 100644
+--- a/ThriftHandler/RenderHandler.h
++++ b/ThriftHandler/RenderHandler.h
+@@ -25,6 +25,7 @@
+ 
+ #include "Shared/SystemParameters.h"
+ #include "gen-cpp/Heavy.h"
++#include "cleanup_global_namespace.h"
+ 
+ class DBHandler;
+ 
 -- 
 2.25.1
 
