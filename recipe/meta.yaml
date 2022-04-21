@@ -243,9 +243,9 @@ outputs:
         - test -f ${PREFIX}/{{ install_base }}/bin/omnisql         # [unix]
         - test -f ${PREFIX}/{{ install_base }}/bin/KafkaImporter   # [unix]
         - test -f ${PREFIX}/{{ install_base }}/bin/StreamImporter  # [unix]
-        - if not exist %PREFIX%\bin\omnisci_server.exe exit 1     # [win]
-        - if not exist %PREFIX%\bin\omnisci_initdb.exe exit 1     # [win]
-        - if not exist %PREFIX%\bin\omnisql.exe exit 1            # [win]
+        - if not exist %PREFIX%\bin\heavydb.exe exit 1     # [win]
+        - if not exist %PREFIX%\bin\initheavy.exe exit 1   # [win]
+        - if not exist %PREFIX%\bin\heavysql.exe exit 1    # [win]
 
         # Verify the activation scripts are in-place.
         {% for state in ["activate", "deactivate"] %}
@@ -271,7 +271,7 @@ outputs:
         - omnisql -v              # [unix]
         - which omnisci_initdb    # [unix]
         - which omnisci_server    # [unix]
-        - omnisql.exe -v          # [win]
+        - heavysql.exe -v          # [win]
         - |
           if [ -x "$(command -v nvidia-smi)" ]; then  # [unix and cuda_compiler_version not in (undefined, "None")]
             mkdir data && omnisci_initdb data         # [unix and cuda_compiler_version not in (undefined, "None")]
