@@ -1,14 +1,14 @@
-From 6db504fbf361d88443ab8e555954e65093f4391e Mon Sep 17 00:00:00 2001
+From 8309c9c7f068fa4e2224b4f48faa3cf9f97239b4 Mon Sep 17 00:00:00 2001
 From: Guilherme Leobas <gleobas@quansight.com>
 Date: Thu, 21 Apr 2022 02:19:24 +0000
 Subject: [PATCH] win
 
 ---
- CMakeLists.txt                                 | 2 +-
- DataMgr/ForeignStorage/ArrowForeignStorage.cpp | 2 +-
- QueryEngine/FromTableReordering.cpp            | 6 +++---
- QueryEngine/JoinHashTable/HashJoin.h           | 2 +-
- 4 files changed, 6 insertions(+), 6 deletions(-)
+ CMakeLists.txt                                |  2 +-
+ .../ForeignStorage/ArrowForeignStorage.cpp    |  2 +-
+ QueryEngine/FromTableReordering.cpp           | 20 +++++++++----------
+ QueryEngine/JoinHashTable/HashJoin.h          |  2 +-
+ 4 files changed, 13 insertions(+), 13 deletions(-)
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
 index ac3a002389..2859170130 100644
@@ -37,7 +37,7 @@ index 1ccf18d8a8..df172ca976 100644
  #else
    auto io_context = arrow::default_memory_pool();
 diff --git a/QueryEngine/FromTableReordering.cpp b/QueryEngine/FromTableReordering.cpp
-index af0e65eabd..80c4f9c592 100644
+index af0e65eabd..5650fac8e9 100644
 --- a/QueryEngine/FromTableReordering.cpp
 +++ b/QueryEngine/FromTableReordering.cpp
 @@ -55,13 +55,13 @@ std::tuple<cost_t, cost_t, InnerQualDecision> get_join_qual_cost(
@@ -57,6 +57,69 @@ index af0e65eabd..80c4f9c592 100644
    }
    InnerQualDecision inner_qual_decision = InnerQualDecision::UNKNOWN;
    if (executor) {
+@@ -247,7 +247,7 @@ std::vector<node_t> traverse_join_cost_graph(
+       // KEEP: return the existing table permutation and related cvs (column variables)
+       // SWAP: change the starting table of the table reordering logic and relevant
+       // columns' rte index
+-      enum class Decision { IGNORE, KEEP, SWAP };
++      enum class Decision { IGNORE_, KEEP, SWAP };
+ 
+       auto analyze_join_qual = [&start,
+                                 &remaining_nest_levels,
+@@ -258,7 +258,7 @@ std::vector<node_t> traverse_join_cost_graph(
+                                               const std::shared_ptr<Analyzer::Expr>& rhs,
+                                               ColvarSet& rhs_colvar_set) {
+         if (!lhs || !rhs || lhs_colvar_set.empty() || rhs_colvar_set.empty()) {
+-          return std::make_pair(Decision::IGNORE, start);
++          return std::make_pair(Decision::IGNORE_, start);
+         }
+ 
+         auto alternative_it = std::find_if(
+@@ -268,7 +268,7 @@ std::vector<node_t> traverse_join_cost_graph(
+         CHECK(alternative_it != remaining_nest_levels.end());
+         auto alternative_rte = *alternative_it;
+ 
+-        Decision decision = Decision::IGNORE;
++        Decision decision = Decision::IGNORE_;
+         // inner col's rte should be larger than outer col
+         int inner_rte = -1;
+         int outer_rte = -1;
+@@ -313,7 +313,7 @@ std::vector<node_t> traverse_join_cost_graph(
+               // but ignore swapping when inner's cardinality is larger than that of
+               // outer's / otherwise swap inner and outer (to use the valid inner)
+               decision = is_outer_col_valid && inner_cardinality > outer_cardinality
+-                             ? Decision::IGNORE
++                             ? Decision::IGNORE_
+                              : Decision::SWAP;
+             } else {
+               CHECK_EQ(inner_rte, static_cast<int>(alternative_rte));
+@@ -321,7 +321,7 @@ std::vector<node_t> traverse_join_cost_graph(
+               if (compare_node(inner_rte, start)) {
+                 // but outer table is larger than the current inner
+                 // so we can exploit the existing table reordering logic
+-                decision = Decision::IGNORE;
++                decision = Decision::IGNORE_;
+               } else {
+                 // and outer table is smaller than the current inner
+                 // so we do not need to reorder the table starting from the inner
+@@ -336,7 +336,7 @@ std::vector<node_t> traverse_join_cost_graph(
+         } else if (decision == Decision::SWAP) {
+           return std::make_pair(decision, alternative_rte);
+         }
+-        return std::make_pair(Decision::IGNORE, start);
++        return std::make_pair(Decision::IGNORE_, start);
+       };
+ 
+       auto collect_colvars = [](const std::shared_ptr<Analyzer::Expr> expr,
+@@ -370,7 +370,7 @@ std::vector<node_t> traverse_join_cost_graph(
+           auto& rhs_exprs = rhs_exp->getTuple();
+           CHECK_EQ(lhs_exprs.size(), rhs_exprs.size());
+           for (size_t i = 0; i < lhs_exprs.size(); ++i) {
+-            Decision decision{Decision::IGNORE};
++            Decision decision{Decision::IGNORE_};
+             int alternative_rte_idx = -1;
+             ColvarSet lhs_colvar_set(Analyzer::ColumnVar::colvar_comp);
+             ColvarSet rhs_colvar_set(Analyzer::ColumnVar::colvar_comp);
 diff --git a/QueryEngine/JoinHashTable/HashJoin.h b/QueryEngine/JoinHashTable/HashJoin.h
 index 76d0dd7d58..f71b24dfd2 100644
 --- a/QueryEngine/JoinHashTable/HashJoin.h
