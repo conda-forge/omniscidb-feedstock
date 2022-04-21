@@ -1,27 +1,26 @@
-About omniscidb-ext
-===================
+About heavydb-ext
+=================
 
-Home: https://www.omnisci.com/
+Home: https://heavy.ai
 
 Package license: Apache-2.0
 
 Feedstock license: [BSD-3-Clause](https://github.com/conda-forge/omniscidb-feedstock/blob/main/LICENSE.txt)
 
-Summary: The OmniSci database
+Summary: The HeavyDB database
 
-Development: https://github.com/omnisci/omniscidb
+Development: https://github.com/heavyai/heavydb
 
-Documentation: https://www.omnisci.com/docs/latest/
+Documentation: https://docs.heavy.ai/
 
-OmniSciDB is an in-memory, column store, SQL relational database
+HeavyDB is an in-memory, column store, SQL relational database
 that was designed from the ground up to run on GPUs.
 
 This recipe provides the following packages:
-  omniscidb-commong
-  CUDA-enabled omniscidb, cpu and cuda builds
-  pyomniscdb
-  omniscidb embedding library, cpu and cuda builds
-  omniscidb-embedded Python extension module
+  heavydb-common CUDA-enabled heavydb, cpu and cuda builds
+  pyheavydb Python connector
+  heavydbe embedding library, cpu and cuda builds
+  pyheavydbe-embedded Python extension module
 
 
 Current build status
@@ -55,13 +54,6 @@ Current build status
                   <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/omniscidb-feedstock?branchName=main&jobName=linux&configuration=linux_64_c_compiler_version9cuda_compiler_version11.0cxx_compiler_version9" alt="variant">
                 </a>
               </td>
-            </tr><tr>
-              <td>win_64_cuda_compiler_versionNone</td>
-              <td>
-                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=9937&branchName=main">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/omniscidb-feedstock?branchName=main&jobName=win&configuration=win_64_cuda_compiler_versionNone" alt="variant">
-                </a>
-              </td>
             </tr>
           </tbody>
         </table>
@@ -75,57 +67,55 @@ Current release info
 
 | Name | Downloads | Version | Platforms |
 | --- | --- | --- | --- |
-| [![Conda Recipe](https://img.shields.io/badge/recipe-omniscidb-green.svg)](https://anaconda.org/conda-forge/omniscidb) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/omniscidb.svg)](https://anaconda.org/conda-forge/omniscidb) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/omniscidb.svg)](https://anaconda.org/conda-forge/omniscidb) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/omniscidb.svg)](https://anaconda.org/conda-forge/omniscidb) |
-| [![Conda Recipe](https://img.shields.io/badge/recipe-omniscidb--common-green.svg)](https://anaconda.org/conda-forge/omniscidb-common) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/omniscidb-common.svg)](https://anaconda.org/conda-forge/omniscidb-common) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/omniscidb-common.svg)](https://anaconda.org/conda-forge/omniscidb-common) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/omniscidb-common.svg)](https://anaconda.org/conda-forge/omniscidb-common) |
-| [![Conda Recipe](https://img.shields.io/badge/recipe-omniscidbe-green.svg)](https://anaconda.org/conda-forge/omniscidbe) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/omniscidbe.svg)](https://anaconda.org/conda-forge/omniscidbe) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/omniscidbe.svg)](https://anaconda.org/conda-forge/omniscidbe) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/omniscidbe.svg)](https://anaconda.org/conda-forge/omniscidbe) |
-| [![Conda Recipe](https://img.shields.io/badge/recipe-pyomniscidb-green.svg)](https://anaconda.org/conda-forge/pyomniscidb) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/pyomniscidb.svg)](https://anaconda.org/conda-forge/pyomniscidb) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/pyomniscidb.svg)](https://anaconda.org/conda-forge/pyomniscidb) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/pyomniscidb.svg)](https://anaconda.org/conda-forge/pyomniscidb) |
-| [![Conda Recipe](https://img.shields.io/badge/recipe-pyomniscidbe-green.svg)](https://anaconda.org/conda-forge/pyomniscidbe) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/pyomniscidbe.svg)](https://anaconda.org/conda-forge/pyomniscidbe) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/pyomniscidbe.svg)](https://anaconda.org/conda-forge/pyomniscidbe) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/pyomniscidbe.svg)](https://anaconda.org/conda-forge/pyomniscidbe) |
+| [![Conda Recipe](https://img.shields.io/badge/recipe-heavydb-green.svg)](https://anaconda.org/conda-forge/heavydb) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/heavydb.svg)](https://anaconda.org/conda-forge/heavydb) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/heavydb.svg)](https://anaconda.org/conda-forge/heavydb) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/heavydb.svg)](https://anaconda.org/conda-forge/heavydb) |
+| [![Conda Recipe](https://img.shields.io/badge/recipe-heavydb--common-green.svg)](https://anaconda.org/conda-forge/heavydb-common) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/heavydb-common.svg)](https://anaconda.org/conda-forge/heavydb-common) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/heavydb-common.svg)](https://anaconda.org/conda-forge/heavydb-common) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/heavydb-common.svg)](https://anaconda.org/conda-forge/heavydb-common) |
+| [![Conda Recipe](https://img.shields.io/badge/recipe-pyheavydb-green.svg)](https://anaconda.org/conda-forge/pyheavydb) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/pyheavydb.svg)](https://anaconda.org/conda-forge/pyheavydb) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/pyheavydb.svg)](https://anaconda.org/conda-forge/pyheavydb) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/pyheavydb.svg)](https://anaconda.org/conda-forge/pyheavydb) |
 
-Installing omniscidb-ext
-========================
+Installing heavydb-ext
+======================
 
-Installing `omniscidb-ext` from the `conda-forge` channel can be achieved by adding `conda-forge` to your channels with:
+Installing `heavydb-ext` from the `conda-forge` channel can be achieved by adding `conda-forge` to your channels with:
 
 ```
 conda config --add channels conda-forge
 conda config --set channel_priority strict
 ```
 
-Once the `conda-forge` channel has been enabled, `omniscidb, omniscidb-common, omniscidbe, pyomniscidb, pyomniscidbe` can be installed with `conda`:
+Once the `conda-forge` channel has been enabled, `heavydb, heavydb-common, pyheavydb` can be installed with `conda`:
 
 ```
-conda install omniscidb omniscidb-common omniscidbe pyomniscidb pyomniscidbe
-```
-
-or with `mamba`:
-
-```
-mamba install omniscidb omniscidb-common omniscidbe pyomniscidb pyomniscidbe
-```
-
-It is possible to list all of the versions of `omniscidb` available on your platform with `conda`:
-
-```
-conda search omniscidb --channel conda-forge
+conda install heavydb heavydb-common pyheavydb
 ```
 
 or with `mamba`:
 
 ```
-mamba search omniscidb --channel conda-forge
+mamba install heavydb heavydb-common pyheavydb
+```
+
+It is possible to list all of the versions of `heavydb` available on your platform with `conda`:
+
+```
+conda search heavydb --channel conda-forge
+```
+
+or with `mamba`:
+
+```
+mamba search heavydb --channel conda-forge
 ```
 
 Alternatively, `mamba repoquery` may provide more information:
 
 ```
 # Search all versions available on your platform:
-mamba repoquery search omniscidb --channel conda-forge
+mamba repoquery search heavydb --channel conda-forge
 
-# List packages depending on `omniscidb`:
-mamba repoquery whoneeds omniscidb --channel conda-forge
+# List packages depending on `heavydb`:
+mamba repoquery whoneeds heavydb --channel conda-forge
 
-# List dependencies of `omniscidb`:
-mamba repoquery depends omniscidb --channel conda-forge
+# List dependencies of `heavydb`:
+mamba repoquery depends heavydb --channel conda-forge
 ```
 
 
@@ -170,17 +160,17 @@ Terminology
                   produce the finished article (built conda distributions)
 
 
-Updating omniscidb-ext-feedstock
-================================
+Updating heavydb-ext-feedstock
+==============================
 
-If you would like to improve the omniscidb-ext recipe or build a new
+If you would like to improve the heavydb-ext recipe or build a new
 package version, please fork this repository and submit a PR. Upon submission,
 your changes will be run on the appropriate platforms to give the reviewer an
 opportunity to confirm that the changes result in a successful build. Once
 merged, the recipe will be re-built and uploaded automatically to the
 `conda-forge` channel, whereupon the built conda packages will be available for
 everybody to install and use from the `conda-forge` channel.
-Note that all branches in the conda-forge/omniscidb-ext-feedstock are
+Note that all branches in the conda-forge/heavydb-ext-feedstock are
 immediately built and any created packages are uploaded, so PRs should be based
 on branches in forks and branches in the main repository should only be used to
 build distinct package versions.
@@ -199,5 +189,5 @@ Feedstock Maintainers
 * [@guilhermeleobas](https://github.com/guilhermeleobas/)
 * [@jclay](https://github.com/jclay/)
 * [@pearu](https://github.com/pearu/)
-* [@xmnlab](https://github.com/xmnlab/)
+* [@tupui](https://github.com/tupui/)
 
