@@ -303,7 +303,7 @@ outputs:
     build:
       skip: true  # [cuda_compiler_version in ("11.0",)]
       noarch: python
-      script: python -m pip install -vv --no-deps python/.
+      script: python -m pip install -vv --no-deps python
       run_exports:
         - {{ pin_subpackage('pyheavydb',  max_pin='x.x.x') }}
     requirements:
@@ -344,6 +344,7 @@ outputs:
     script: build-heavydb.sh
     build:
       string: {{ build_string_ext }}
+      skip: true  # [cuda_compiler_version not in (undefined, "None", "11.0") or not linux64]
       skip: true
       missing_dso_whitelist:
         - '*/libcuda.*'  # [cuda_compiler_version not in (undefined, "None")]
@@ -444,7 +445,8 @@ outputs:
     script: build-heavydb.sh
     build:
       string: {{ py_build_string_ext }}
-      skip: true
+      skip: true  # [cuda_compiler_version not in (undefined, "None", "11.0") or not linux64]
+      skip: true  # temporarily skipping pyheavydbe build
       missing_dso_whitelist:
         - '*/libcuda.*'  # [cuda_compiler_version not in (undefined, "None")]
       track_features:
