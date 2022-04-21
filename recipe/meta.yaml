@@ -30,7 +30,7 @@ source:
 
 build:
   number: {{ number }}
-  skip: true  # [cuda_compiler_version not in (undefined, "None", "11.0")]
+  skip: true  # [cuda_compiler_version not in (undefined, "None", "11.0") or not linux64]
 
 outputs:
 
@@ -340,205 +340,205 @@ outputs:
       requires:
         - pip
 
-  - name: heavydbe
-    version: {{ version }}
-    script: build-heavydb.sh
-    build:
-      string: {{ build_string_ext }}
-      skip: true  # [cuda_compiler_version not in (undefined, "None", "11.0") or not linux64]
-      missing_dso_whitelist:
-        - '*/libcuda.*'  # [cuda_compiler_version not in (undefined, "None")]
-      track_features:
-        {{ "- arrow-cuda" if cuda_enabled else "" }}
-      ignore_run_exports:
-        - cudatoolkit    # [cuda_compiler_version not in (undefined, "None")]
-        - fmt
-        - glog
-        - libclang-cpp
-        - librdkafka
-        - ncurses
-        - zlib
-      rpaths:
-        - lib/
-        # fixes "not found" in `ldd $PREFIX/lib/libDBEngine.so` output
-        - {{ install_base }}/lib
-      run_exports:
-        - {{ pin_subpackage('heavydbe',  max_pin='x.x.x') }}
-    requirements:
-      build:
-        # c compiler is specified here to get run constraint pins correct, presumably..
-        - {{ compiler('c') }}
-        - {{ compiler('cgo') }}
-        - {{ compiler('cxx') }}
-        - {{ compiler("cuda") }}  # [cuda_compiler_version not in (undefined, "None")]
-        - clangdev {{ llvm_version }}
-        # clang++ is used for generating the bytecodes of extension functions
-        - clangxx {{ llvm_version }}
-        - cmake
-        - llvmdev {{ llvm_version }}
-        - make
-        - ninja
-        - maven
-      host:
-        - arrow-cpp ={{ arrow_version }}=*{{ build_ext }}
-        - bisonpp
-        - blosc
-        - boost-cpp
-        - clangdev {{ llvm_version }}
-        - double-conversion
-        - flex
-        - fmt
-        - glog
-        - llvmdev {{ llvm_version }}
-        - llvm {{ llvm_version }}
-        - libarchive
-        - libgdal
-        - libpng
-        - librdkafka
-        - tbb
-        - tbb-devel
-        - thrift-cpp {{ thrift_version }}
-      run:
-        - arrow-cpp-proc {{ arrow_proc_version }} {{ build_ext }}
-        - boost-cpp
-        - bzip2
-        # omnscidb Load-time UDF support calls clang++
-        - gxx_{{ target_platform }}
-        - {{ pin_compatible('libclang-cpp', max_pin='x.x') }}
-        - ncurses
-        - openjdk 8.*
-        - xz
-        - zlib
-        - {{ pin_subpackage('heavydb-common',  max_pin='x.x.x') }}
-      run_constrained:
-        - arrow-cpp-proc {{ arrow_proc_version }} {{ build_ext }}
-        - cudatoolkit >=11.0  # [cuda_compiler_version not in (undefined, "None")]
-
-    test:
-      commands:
-        # Test installation
-        - test -f ${PREFIX}/lib/libDBEngine.so
-        # Verify the activation scripts are in-place.
-        {% for state in ["activate", "deactivate"] %}
-        - test -f "${PREFIX}/etc/conda/{{ state }}.d/{{ PKG_NAME }}_{{ state }}.sh"
-        {% endfor %}
-        - |
-          source ${PREFIX}/etc/conda/activate.d/{{ PKG_NAME }}_activate.sh
-          test -n "${HEAVYAI_ROOT_PATH+x}"
-          ldd ${PREFIX}/lib/libDBEngine.so
-
-    about:
-      home: https://heavy.ai
-      license: Apache-2.0
-      license_family: APACHE
-      license_file: LICENSE.md
-      summary: The HeavyDB database
-
-      description: |
-        HeavyDB is an in-memory, column store, SQL relational database
-        that was designed from the ground up to run on GPUs.
-      doc_url: https://docs.heavy.ai/
-      dev_url: https://github.com/heavyai/heavydb
-
-  - name: pyheavydbe
-    version: {{ version }}
-    script: build-heavydb.sh
-    build:
-      string: {{ py_build_string_ext }}
-      skip: true  # [cuda_compiler_version not in (undefined, "None", "11.0") or not linux64]
-      missing_dso_whitelist:
-        - '*/libcuda.*'  # [cuda_compiler_version not in (undefined, "None")]
-      track_features:
-        {{ "- arrow-cuda" if cuda_enabled else "" }}
-      ignore_run_exports:
-        - arrow-cpp {{ arrow_version }}
-        - blosc
-        - cudatoolkit    # [cuda_compiler_version not in (undefined, "None")]
-        - double-conversion
-        - fmt
-        - glog
-        - libarchive
-        - libgdal
-        - libllvm{{ llvm_version }}
-        - libpng
-        - librdkafka
-        - libthrift {{ thrift_version }}
-        - pyarrow {{ arrow_version }}
-        - python
-        - tbb
-      run_exports:
-        - {{ pin_subpackage('pyheavydbe',  max_pin='x.x.x') }}
-    requirements:
-      build:
-        # c compiler is specified here to get run constraint pins correct, presumably..
-        - {{ compiler('c') }}
-        - {{ compiler('cgo') }}
-        - {{ compiler('cxx') }}
-        - {{ compiler("cuda") }}  # [cuda_compiler_version not in (undefined, "None")]
-        - clangdev {{ llvm_version }}
-        # clang++ is used for generating the bytecodes of extension functions
-        - clangxx {{ llvm_version }}
-        - cmake
-        - llvmdev {{ llvm_version }}
-        - make
-        - ninja
-        - maven
-      host:
-        - arrow-cpp ={{ arrow_version }}=*{{ build_ext }}
-        - bisonpp
-        - blosc
-        - boost-cpp
-        - clangdev {{ llvm_version }}
-        - cython
-        - double-conversion
-        - flex
-        - fmt
-        - glog
-        - llvmdev {{ llvm_version }}
-        - llvm {{ llvm_version }}
-        - libarchive
-        - libgdal
-        - libpng
-        - librdkafka
-        - numpy
-        - pip
-        - pyarrow ={{ arrow_version }}=*{{ build_ext }}
-        - python
-        - pytest
-        - tbb
-        - tbb-devel
-        - thrift-cpp {{ thrift_version }}
-        - {{ pin_subpackage('heavydbe', exact=True) }}
-      run:
-        - arrow-cpp-proc {{ arrow_proc_version }} {{ build_ext }}
-        - pyarrow ={{ arrow_version }}=*{{ build_ext }}
-        - python
-        - tbb4py
-        - {{ pin_subpackage('heavydbe', exact=True) }}
-    test:
-      requires:
-        - pytest
-        - numpy
-        - pandas
-      imports:
-        - heavydbe
-      source_files:
-        - Embedded/test/test_exceptions.py
-      commands:
-        - pytest -sv Embedded/test/test_exceptions.py
-
-    about:
-      home: https://heavy.ai
-      license: Apache-2.0
-      license_family: APACHE
-      license_file: LICENSE.md
-      summary: The HeavyDB database
-
-      description: |
-        HeavyDB is an in-memory, column store, SQL relational database
-        that was designed from the ground up to run on GPUs.
-      doc_url: https://docs.heavy.ai/
-      dev_url: https://github.com/heavyai/heavydb
+#  - name: heavydbe
+#    version: {{ version }}
+#    script: build-heavydb.sh
+#    build:
+#      string: {{ build_string_ext }}
+#      skip: true  # [cuda_compiler_version not in (undefined, "None", "11.0") or not linux64]
+#      missing_dso_whitelist:
+#        - '*/libcuda.*'  # [cuda_compiler_version not in (undefined, "None")]
+#      track_features:
+#        {{ "- arrow-cuda" if cuda_enabled else "" }}
+#      ignore_run_exports:
+#        - cudatoolkit    # [cuda_compiler_version not in (undefined, "None")]
+#        - fmt
+#        - glog
+#        - libclang-cpp
+#        - librdkafka
+#        - ncurses
+#        - zlib
+#      rpaths:
+#        - lib/
+#        # fixes "not found" in `ldd $PREFIX/lib/libDBEngine.so` output
+#        - {{ install_base }}/lib
+#      run_exports:
+#        - {{ pin_subpackage('heavydbe',  max_pin='x.x.x') }}
+#    requirements:
+#      build:
+#        # c compiler is specified here to get run constraint pins correct, presumably..
+#        - {{ compiler('c') }}
+#        - {{ compiler('cgo') }}
+#        - {{ compiler('cxx') }}
+#        - {{ compiler("cuda") }}  # [cuda_compiler_version not in (undefined, "None")]
+#        - clangdev {{ llvm_version }}
+#        # clang++ is used for generating the bytecodes of extension functions
+#        - clangxx {{ llvm_version }}
+#        - cmake
+#        - llvmdev {{ llvm_version }}
+#        - make
+#        - ninja
+#        - maven
+#      host:
+#        - arrow-cpp ={{ arrow_version }}=*{{ build_ext }}
+#        - bisonpp
+#        - blosc
+#        - boost-cpp
+#        - clangdev {{ llvm_version }}
+#        - double-conversion
+#        - flex
+#        - fmt
+#        - glog
+#        - llvmdev {{ llvm_version }}
+#        - llvm {{ llvm_version }}
+#        - libarchive
+#        - libgdal
+#        - libpng
+#        - librdkafka
+#        - tbb
+#        - tbb-devel
+#        - thrift-cpp {{ thrift_version }}
+#      run:
+#        - arrow-cpp-proc {{ arrow_proc_version }} {{ build_ext }}
+#        - boost-cpp
+#        - bzip2
+#        # omnscidb Load-time UDF support calls clang++
+#        - gxx_{{ target_platform }}
+#        - {{ pin_compatible('libclang-cpp', max_pin='x.x') }}
+#        - ncurses
+#        - openjdk 8.*
+#        - xz
+#        - zlib
+#        - {{ pin_subpackage('heavydb-common',  max_pin='x.x.x') }}
+#      run_constrained:
+#        - arrow-cpp-proc {{ arrow_proc_version }} {{ build_ext }}
+#        - cudatoolkit >=11.0  # [cuda_compiler_version not in (undefined, "None")]
+#
+#    test:
+#      commands:
+#        # Test installation
+#        - test -f ${PREFIX}/lib/libDBEngine.so
+#        # Verify the activation scripts are in-place.
+#        {% for state in ["activate", "deactivate"] %}
+#        - test -f "${PREFIX}/etc/conda/{{ state }}.d/{{ PKG_NAME }}_{{ state }}.sh"
+#        {% endfor %}
+#        - |
+#          source ${PREFIX}/etc/conda/activate.d/{{ PKG_NAME }}_activate.sh
+#          test -n "${HEAVYAI_ROOT_PATH+x}"
+#          ldd ${PREFIX}/lib/libDBEngine.so
+#
+#    about:
+#      home: https://heavy.ai
+#      license: Apache-2.0
+#      license_family: APACHE
+#      license_file: LICENSE.md
+#      summary: The HeavyDB database
+#
+#      description: |
+#        HeavyDB is an in-memory, column store, SQL relational database
+#        that was designed from the ground up to run on GPUs.
+#      doc_url: https://docs.heavy.ai/
+#      dev_url: https://github.com/heavyai/heavydb
+#
+#  - name: pyheavydbe
+#    version: {{ version }}
+#    script: build-heavydb.sh
+#    build:
+#      string: {{ py_build_string_ext }}
+#      skip: true  # [cuda_compiler_version not in (undefined, "None", "11.0") or not linux64]
+#      missing_dso_whitelist:
+#        - '*/libcuda.*'  # [cuda_compiler_version not in (undefined, "None")]
+#      track_features:
+#        {{ "- arrow-cuda" if cuda_enabled else "" }}
+#      ignore_run_exports:
+#        - arrow-cpp {{ arrow_version }}
+#        - blosc
+#        - cudatoolkit    # [cuda_compiler_version not in (undefined, "None")]
+#        - double-conversion
+#        - fmt
+#        - glog
+#        - libarchive
+#        - libgdal
+#        - libllvm{{ llvm_version }}
+#        - libpng
+#        - librdkafka
+#        - libthrift {{ thrift_version }}
+#        - pyarrow {{ arrow_version }}
+#        - python
+#        - tbb
+#      run_exports:
+#        - {{ pin_subpackage('pyheavydbe',  max_pin='x.x.x') }}
+#    requirements:
+#      build:
+#        # c compiler is specified here to get run constraint pins correct, presumably..
+#        - {{ compiler('c') }}
+#        - {{ compiler('cgo') }}
+#        - {{ compiler('cxx') }}
+#        - {{ compiler("cuda") }}  # [cuda_compiler_version not in (undefined, "None")]
+#        - clangdev {{ llvm_version }}
+#        # clang++ is used for generating the bytecodes of extension functions
+#        - clangxx {{ llvm_version }}
+#        - cmake
+#        - llvmdev {{ llvm_version }}
+#        - make
+#        - ninja
+#        - maven
+#      host:
+#        - arrow-cpp ={{ arrow_version }}=*{{ build_ext }}
+#        - bisonpp
+#        - blosc
+#        - boost-cpp
+#        - clangdev {{ llvm_version }}
+#        - cython
+#        - double-conversion
+#        - flex
+#        - fmt
+#        - glog
+#        - llvmdev {{ llvm_version }}
+#        - llvm {{ llvm_version }}
+#        - libarchive
+#        - libgdal
+#        - libpng
+#        - librdkafka
+#        - numpy
+#        - pip
+#        - pyarrow ={{ arrow_version }}=*{{ build_ext }}
+#        - python
+#        - pytest
+#        - tbb
+#        - tbb-devel
+#        - thrift-cpp {{ thrift_version }}
+#        - {{ pin_subpackage('heavydbe', exact=True) }}
+#      run:
+#        - arrow-cpp-proc {{ arrow_proc_version }} {{ build_ext }}
+#        - pyarrow ={{ arrow_version }}=*{{ build_ext }}
+#        - python
+#        - tbb4py
+#        - {{ pin_subpackage('heavydbe', exact=True) }}
+#    test:
+#      requires:
+#        - pytest
+#        - numpy
+#        - pandas
+#      imports:
+#        - heavydbe
+#      source_files:
+#        - Embedded/test/test_exceptions.py
+#      commands:
+#        - pytest -sv Embedded/test/test_exceptions.py
+#
+#    about:
+#      home: https://heavy.ai
+#      license: Apache-2.0
+#      license_family: APACHE
+#      license_file: LICENSE.md
+#      summary: The HeavyDB database
+#
+#      description: |
+#        HeavyDB is an in-memory, column store, SQL relational database
+#        that was designed from the ground up to run on GPUs.
+#      doc_url: https://docs.heavy.ai/
+#      dev_url: https://github.com/heavyai/heavydb
 
 about:
   home: https://heavy.ai
