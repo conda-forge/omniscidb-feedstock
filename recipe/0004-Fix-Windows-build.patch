@@ -1,4 +1,4 @@
-From 3f18f5bab192f4c412cbd0487eaae6ff993d6a25 Mon Sep 17 00:00:00 2001
+From e123a99dbba055ec8277fcb6157772e1ca810f36 Mon Sep 17 00:00:00 2001
 From: Guilherme Leobas <gleobas@quansight.com>
 Date: Thu, 21 Apr 2022 02:19:24 +0000
 Subject: [PATCH] win
@@ -149,14 +149,14 @@ index 60523121f4..6158ae3e1a 100644
            : ExecutorDeviceType::CPU,
        1,
 diff --git a/ThriftHandler/RenderHandler.h b/ThriftHandler/RenderHandler.h
-index 8cd485a16b..8dfe4ea32d 100644
+index 8cd485a16b..ccbe03cbcc 100644
 --- a/ThriftHandler/RenderHandler.h
 +++ b/ThriftHandler/RenderHandler.h
 @@ -25,6 +25,7 @@
  
  #include "Shared/SystemParameters.h"
  #include "gen-cpp/Heavy.h"
-+#include "cleanup_global_namespace.h"
++#include "Shared/cleanup_global_namespace.h"
  
  class DBHandler;
  
