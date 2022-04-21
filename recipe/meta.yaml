@@ -122,6 +122,8 @@ outputs:
         - if not exist %PREFIX%\QueryEngine/serialized_result_set.thrift exit 1  # [win]
         - if not exist %PREFIX%\QueryEngine/extension_functions.thrift exit 1  # [win]
         # includes
+        - ls ${PREFIX}/include/heavyai  # [unix]
+        - ls ${PREFIX}/include/heavydb  # [unix]
         - test -f ${PREFIX}/include/heavyai/Shared/funcannotations.h  # [unix]
         - test -f ${PREFIX}/include/heavyai/Shared/InlineNullValues.h  # [unix]
         - test -f ${PREFIX}/include/heavyai/Logger/Logger.h  # [unix]

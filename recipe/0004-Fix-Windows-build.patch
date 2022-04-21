@@ -1,12 +1,14 @@
-From d838867d16475b2e1a3ef47c529288737b4f44a3 Mon Sep 17 00:00:00 2001
+From 6db504fbf361d88443ab8e555954e65093f4391e Mon Sep 17 00:00:00 2001
 From: Guilherme Leobas <gleobas@quansight.com>
-Date: Wed, 20 Apr 2022 21:14:35 +0000
+Date: Thu, 21 Apr 2022 02:19:24 +0000
 Subject: [PATCH] win
 
 ---
  CMakeLists.txt                                 | 2 +-
  DataMgr/ForeignStorage/ArrowForeignStorage.cpp | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ QueryEngine/FromTableReordering.cpp            | 6 +++---
+ QueryEngine/JoinHashTable/HashJoin.h           | 2 +-
+ 4 files changed, 6 insertions(+), 6 deletions(-)
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
 index ac3a002389..2859170130 100644
@@ -34,6 +36,40 @@ index 1ccf18d8a8..df172ca976 100644
    auto io_context = arrow::io::default_io_context();
  #else
    auto io_context = arrow::default_memory_pool();
+diff --git a/QueryEngine/FromTableReordering.cpp b/QueryEngine/FromTableReordering.cpp
+index af0e65eabd..80c4f9c592 100644
+--- a/QueryEngine/FromTableReordering.cpp
++++ b/QueryEngine/FromTableReordering.cpp
+@@ -55,13 +55,13 @@ std::tuple<cost_t, cost_t, InnerQualDecision> get_join_qual_cost(
+         std::regex_match(func_name, geo_func_match, geo_func_regex)) {
+       const auto rhs_cost = GEO_TYPE_COSTS[geo_types_for_func[0]];
+       const auto lhs_cost = GEO_TYPE_COSTS[geo_types_for_func[1]];
+-      return {lhs_cost, rhs_cost, InnerQualDecision::IGNORE};
++      return {lhs_cost, rhs_cost, InnerQualDecision::IGNORE_};
+     }
+-    return {200, 200, InnerQualDecision::IGNORE};
++    return {200, 200, InnerQualDecision::IGNORE_};
+   }
+   const auto bin_oper = dynamic_cast<const Analyzer::BinOper*>(qual);
+   if (!bin_oper || !IS_EQUIVALENCE(bin_oper->get_optype())) {
+-    return {200, 200, InnerQualDecision::IGNORE};
++    return {200, 200, InnerQualDecision::IGNORE_};
+   }
+   InnerQualDecision inner_qual_decision = InnerQualDecision::UNKNOWN;
+   if (executor) {
+diff --git a/QueryEngine/JoinHashTable/HashJoin.h b/QueryEngine/JoinHashTable/HashJoin.h
+index 76d0dd7d58..f71b24dfd2 100644
+--- a/QueryEngine/JoinHashTable/HashJoin.h
++++ b/QueryEngine/JoinHashTable/HashJoin.h
+@@ -49,7 +49,7 @@ class TableMustBeReplicated : public std::runtime_error {
+                            "' must be replicated.") {}
+ };
+ 
+-enum class InnerQualDecision { IGNORE = 0, UNKNOWN, LHS, RHS };
++enum class InnerQualDecision { IGNORE_ = 0, UNKNOWN, LHS, RHS };
+ 
+ #ifndef __CUDACC__
+ inline std::ostream& operator<<(std::ostream& os, InnerQualDecision const decision) {
 -- 
 2.25.1
 
