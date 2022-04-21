@@ -30,7 +30,7 @@ source:
 
 build:
   number: {{ number }}
-  skip: true  # [cuda_compiler_version not in (undefined, "None", "11.0") or not linux64]
+  skip: true  # [cuda_compiler_version not in (undefined, "None", "11.0")]
 
 outputs:
 
