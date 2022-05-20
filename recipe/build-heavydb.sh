@@ -156,7 +156,7 @@ case "$PKG_NAME" in
         echo "Building heavydb"
         if [[ "$BUILD_EXT" == "cuda" ]]
         then
-            ninja initheavy heavydb heavysql StreamImporter KafkaImporter QueryEngine/cuda_mapd_rt.fatbin
+            ninja initheavy heavydb heavysql StreamImporter KafkaImporter QueryEngineCudaTargets
         else
             ninja initheavy heavydb heavysql StreamImporter KafkaImporter
         fi
