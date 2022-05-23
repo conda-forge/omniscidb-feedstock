@@ -156,8 +156,8 @@ case "$PKG_NAME" in
         echo "Building heavydb"
         if [[ "$BUILD_EXT" == "cuda" ]]
         then
+            ninja initheavy heavydb heavysql StreamImporter KafkaImporter
             ninja QueryEngineCudaTargets
-            ninja initheavy heavydb heavysql StreamImporter KafkaImporter QueryEngine/cuda_mapd_rt.fatbin QueryEngine/CudaTableFunctions.a
         else
             ninja initheavy heavydb heavysql StreamImporter KafkaImporter
         fi
@@ -239,6 +239,7 @@ EOF
     heavydb)
         echo "Installing heavydb"
         cmake --install build --component "exe" --prefix $PREFIX/$INSTALL_BASE
+        cmake --install build --component "QE" --prefix $PREFIX/$INSTALL_BASE
 
         cd $PREFIX/$INSTALL_BASE/bin
         cd -
